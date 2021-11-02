@@ -1,4 +1,5 @@
 const connection = require("./connection");
-const Project = require("./models/Project");
+const ToDo = require("./models/to-do");
+const Invoice = require("./models/invoice");
 
-module.exports = { connection, Project };
+module.exports = { connection, ToDo, Invoice };

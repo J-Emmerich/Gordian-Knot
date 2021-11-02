@@ -9,6 +9,7 @@ module.exports = (methods) => {
     res.status(200).json(project);
     res.end();
   }
+
   async function saveProject(req, res) {
     try {
       const project = req.body;
@@ -19,6 +20,7 @@ module.exports = (methods) => {
       res.status(500).send(err.message);
     }
   }
+
   return {
     fetchCurrentProject,
     saveProject
