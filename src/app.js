@@ -8,6 +8,7 @@ const invoiceMethods = require("./data/invoice-methods");
 const cors = require("cors");
 const app = express();
 
+// Delete everything from DB
 const { cleanAndLog } = require("./helpers/clean-and-log");
 
 //create a server object:
