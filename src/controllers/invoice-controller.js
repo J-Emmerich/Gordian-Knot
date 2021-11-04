@@ -1,8 +1,14 @@
-const { fetchAll, fetchInvoice, saveInvoice } = require("./invoice-use-cases");
+const {
+  fetchInvoices,
+  fetchInvoice,
+  saveInvoice,
+  editInvoice
+} = require("./invoice-use-cases");
 
 module.exports = (methods) => {
   async function fetchOne(req, res) {
     try {
+      console.log("::::::::::::::::::::here::::::::::::");
       const id = req.params.id;
       let invoice = await fetchInvoice(methods, id);
       res.status(200).json(invoice);
@@ -12,10 +18,10 @@ module.exports = (methods) => {
     }
   }
 
-  async function fetchInvoices(req, res) {
+  async function fetchAll(req, res) {
     try {
-      const invoices = await fetchAll(methods);
-      res.send(invoices);
+      const invoices = await fetchInvoices(methods);
+      res.status(200).json(invoices);
     } catch (error) {
       res.send(error.message);
     }
@@ -24,13 +30,24 @@ module.exports = (methods) => {
   async function saveToPdf(req, res) {
     try {
       const newInvoice = req.body;
+      console.log(req.body);
       const invoice = await saveInvoice(methods, newInvoice);
       // await saveToPdf(invoice._id, invoice.invoiceNumber); // File System
-      res.status(204).send(invoice);
+      res.status(204).json(invoice);
     } catch (err) {
       res.send(err.message);
     }
   }
-
-  return { fetchInvoices, fetchOne, saveToPdf };
+  async function editOne(req, res) {
+    try {
+      const id = req.params.id;
+      const newInvoice = req.body;
+      console.log("At controller", id, newInvoice.articles);
+      const editedInvoice = await editInvoice(methods, newInvoice, id);
+      res.status(200).json(editedInvoice);
+    } catch (err) {
+      res.send(err.message);
+    }
+  }
+  return { fetchAll, fetchOne, saveToPdf, editOne };
 };

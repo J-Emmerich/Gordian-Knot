@@ -1,13 +1,13 @@
 const express = require("express");
 const invoiceController = require("../controllers/invoice-controller");
-console.log("this is the controler", invoiceController);
 
 const invoiceRouter = (methods) => {
   const router = express.Router();
   const controller = invoiceController(methods);
 
-  router.get("/", controller.fetchInvoices);
+  router.get("/", controller.fetchAll);
   router.get("/:id", controller.fetchOne);
+  router.put("/:id", controller.editOne);
   router.post("/", controller.saveToPdf);
 
   return router;

@@ -29,4 +29,14 @@ async function create(invoice) {
   }
 }
 
-module.exports = { find, create, findOne };
+async function editOne(newInvoice, id) {
+  try {
+    const invoice = await Invoice.replaceOne({ _id: id }, newInvoice);
+    console.log("On database", invoice);
+    return invoice;
+  } catch (err) {
+    return err;
+  }
+}
+
+module.exports = { find, create, findOne, editOne };
