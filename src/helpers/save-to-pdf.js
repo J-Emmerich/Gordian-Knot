@@ -1,13 +1,14 @@
 const puppeteer = require("puppeteer");
 const path = require("path");
 
-const frontEndBase = "https://gordianknot.xyz";
+const frontEndBase = "http://localhost:3000";
 const finalPath = path.join(__dirname, "../../output");
 const saveToPdf = async (id, name) => {
   try {
+    console.log(id, name)
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto(`${frontEndBase}/pdf/${id}`, {
+    await page.goto(`${frontEndBase}/topdf/${id}`, {
       waitUntil: "networkidle2"
     });
     await page.emulateMediaType("screen");

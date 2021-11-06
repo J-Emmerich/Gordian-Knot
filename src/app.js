@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require("express");
 const dashboardRouter = require("./routes/dashboard");
 const invoiceRouter = require("./routes/invoice-generator");

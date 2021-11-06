@@ -2,19 +2,20 @@
   "name": "gordian-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/app.js"
   },
   "dependencies": {
     "cors": "2.8.5",
+    "dotenv": "^10.0.0",
     "express": "4.17.1",
     "mongodb": "4.1.1",
     "mongoose": "6.0.5",
     "puppeteer": "10.4.0"
   },
   "devDependencies": {
-    "nodemon": "1.18.4"
+    "nodemon": "^2.0.14"
   },
   "keywords": []
 }

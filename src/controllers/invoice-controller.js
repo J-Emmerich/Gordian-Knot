@@ -5,6 +5,10 @@ const {
   editInvoice
 } = require("./invoice-use-cases");
 
+const saveToPdf= require("../helpers/save-to-pdf");
+const path = require("path");
+const root = path.join(__dirname, '../../output');
+
 module.exports = (methods) => {
   async function fetchOne(req, res) {
     try {
@@ -51,12 +55,14 @@ module.exports = (methods) => {
 
   async function fetchPdf(req, res) {
     try {
-      const pdfId = req.params.id;
-      console.log(pdfId);
-      // await saveToPdf(invoice._id, invoice.invoiceNumber); // File System
-      res.status(200).send("lets say it's good");
+      console.log(req.params)
+      const {id} = req.params;
+      const invoice = await fetchInvoice(methods, id);
+      await saveToPdf(id, invoice.invoiceNumber); // File System 
+      res.download(`${root}/${invoice.invoiceNumber}.pdf`)
     } catch (err) {
-      res.send(err.message);
+      console.log(err)
+      res.status(500).send(err.message);
     }
   }
   return { fetchAll, fetchOne, saveOne, editOne, fetchPdf };
