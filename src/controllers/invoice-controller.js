@@ -2,7 +2,8 @@ const {
   fetchInvoices,
   fetchInvoice,
   saveInvoice,
-  editInvoice
+  editInvoice,
+  deleteInvoice,
 } = require("./invoice-use-cases");
 
 const saveToPdf= require("../helpers/save-to-pdf");
@@ -53,6 +54,17 @@ module.exports = (methods) => {
     }
   }
 
+async function deleteOne(req, res){
+  try {
+const { id } = req.params;
+const deleted = await deleteInvoice(methods, id);
+res.status(200).send("deleted");
+
+  } catch (err){
+    res.send(err.message);
+  }
+}
+
   async function fetchPdf(req, res) {
     try {
       console.log(req.params)
@@ -65,5 +77,5 @@ module.exports = (methods) => {
       res.status(500).send(err.message);
     }
   }
-  return { fetchAll, fetchOne, saveOne, editOne, fetchPdf };
+  return { fetchAll, fetchOne, saveOne, editOne, deleteOne, fetchPdf };
 };

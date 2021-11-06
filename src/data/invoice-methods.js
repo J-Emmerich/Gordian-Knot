@@ -39,4 +39,12 @@ async function editOne(newInvoice, id) {
   }
 }
 
-module.exports = { find, create, findOne, editOne };
+async function deleteOne(id) {
+  try {
+const deleted = await Invoice.deleteOne({_id: id}, {});
+  } catch (err) {
+    return err
+  }
+}
+
+module.exports = { find, create, findOne, editOne, deleteOne };

@@ -9,6 +9,7 @@ const invoiceRouter = (methods) => {
   router.get("/:id", controller.fetchOne);
   router.put("/:id", controller.editOne);
   router.post("/", controller.saveOne);
+  router.delete("/:id", controller.deleteOne);
   router.get("/download/:id", controller.fetchPdf);
 
   return router;

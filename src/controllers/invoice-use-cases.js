@@ -36,10 +36,19 @@ async function editInvoice(methods, newInvoice, id) {
     return err;
   }
 }
-
+async function deleteInvoice(methods, id) {
+  try {
+const deleted = await methods.deleteOne(id);
+   console.log("at deleteInvoice", deleted, "this was found");
+return deleted;
+  } catch (err) {
+    return err;
+  }
+}
 module.exports = {
   fetchInvoices,
   fetchInvoice,
   saveInvoice,
-  editInvoice
+  editInvoice,
+  deleteInvoice
 };
