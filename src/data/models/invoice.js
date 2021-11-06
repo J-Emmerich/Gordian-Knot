@@ -4,7 +4,6 @@ const formatDate = require("../../helpers/format-date");
 const invoiceSchema = mongoose.Schema({
   invoiceNumber: String,
   invoiceDate: Date,
-  invoiceDue: Date,
   orderNumber: String,
   articles: [
     {
@@ -20,17 +19,7 @@ const invoiceSchema = mongoose.Schema({
   invoiceTotal: mongoose.Types.Decimal128,
   invoiceSubTotal: mongoose.Types.Decimal128,
   invoiceTax: mongoose.Types.Decimal128,
-  client: {
-    clientName: String,
-    clientPhone: String,
-    clientEmail: String,
-    address: {
-      address: String,
-      city: String,
-      postalCode: String,
-      countryCode: String
-    }
-  }
+  clientName: String
 });
 
 invoiceSchema.set("toJSON", {
