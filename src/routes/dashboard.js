@@ -8,5 +8,4 @@ const dashboardRouter = (methods) => {
   router.post("/", controller.saveProject);
   return router;
 };
-console.log("this is the dashboardRouter", dashboardRouter);
 module.exports = dashboardRouter;

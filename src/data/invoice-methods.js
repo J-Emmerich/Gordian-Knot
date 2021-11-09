@@ -12,7 +12,7 @@ async function find() {
 
 async function findOne(id) {
   try {
-    const invoice = await Invoice.findById(id);
+    const invoice = await Invoice.findOne({ _id: id });
     return invoice;
   } catch (err) {
     return err;
@@ -41,9 +41,9 @@ async function editOne(newInvoice, id) {
 
 async function deleteOne(id) {
   try {
-const deleted = await Invoice.deleteOne({_id: id}, {});
+    const deleted = await Invoice.deleteOne({ _id: id }, {});
   } catch (err) {
-    return err
+    return err;
   }
 }
 

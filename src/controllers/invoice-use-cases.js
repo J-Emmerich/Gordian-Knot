@@ -11,7 +11,7 @@ async function fetchInvoices(methods) {
 async function fetchInvoice(methods, id) {
   try {
     const invoice = await methods.findOne(id);
-    // console.log("at fetch Invoice", invoice, "this was found");
+    console.log("at fetch Invoice", invoice, "this was found");
     return invoice;
   } catch (err) {
     return err;
@@ -38,9 +38,9 @@ async function editInvoice(methods, newInvoice, id) {
 }
 async function deleteInvoice(methods, id) {
   try {
-const deleted = await methods.deleteOne(id);
-   console.log("at deleteInvoice", deleted, "this was found");
-return deleted;
+    const deleted = await methods.deleteOne(id);
+    console.log("at deleteInvoice", deleted, "this was found");
+    return deleted;
   } catch (err) {
     return err;
   }

@@ -14,5 +14,5 @@ const invoiceRouter = (methods) => {
 
   return router;
 };
-console.log("this is the invoiceRouter", invoiceRouter);
+
 module.exports = invoiceRouter;
