@@ -13,10 +13,7 @@ const userSchema = mongoose.Schema({
   passwordHash: {
     type: String,
     minLengh: 3
-  },
-  rooms: [String],
-  currentSocket: String,
-  currentRoom: String
+  }
 });
 userSchema.plugin(uniqueValidator);
 userSchema.set("toJSON", {
