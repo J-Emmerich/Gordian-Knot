@@ -9,7 +9,7 @@ const authRouter = (methods) => {
 
   // Not available until app is on production
 
-  // router.post("/register", controller.register);
+  router.post("/register", controller.register);
   // router.post("/google/auth", controller.googleAuth);
 
   return router;

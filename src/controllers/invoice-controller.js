@@ -26,6 +26,7 @@ module.exports = (methods) => {
   async function fetchAll(req, res) {
     try {
       const invoices = await fetchInvoices(methods);
+      console.log(invoices);
       res.status(200).json(invoices);
     } catch (error) {
       res.send(error.message);

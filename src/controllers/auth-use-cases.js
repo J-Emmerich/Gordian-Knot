@@ -25,14 +25,19 @@ const registerUser = async (methods, username, password) => {
 const loginUser = async (methods, username, password) => {
   try {
     const user = await methods.findOne({ username });
-    const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
-    if (isPasswordCorrect) {
-      const payload = {
-        user: user.id
-      };
-      const token = jwt.sign(payload, JWTSECRET);
-      return { user, token };
-    } else throw new Error("Password don't match");
+    if (user) {
+      const isPasswordCorrect = await bcrypt.compare(
+        password,
+        user.passwordHash
+      );
+      if (isPasswordCorrect) {
+        const payload = {
+          user: user.id
+        };
+        const token = jwt.sign(payload, JWTSECRET);
+        return { user, token };
+      } else throw new Error("Password don't match");
+    } else throw new Error("No such user, my friend");
   } catch (err) {
     throw err;
   }
