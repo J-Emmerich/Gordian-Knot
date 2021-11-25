@@ -3,9 +3,7 @@ console.log("This is the model::::", ToDo);
 
 async function findOne(name) {
   try {
-    console.log(name, "this is name");
     const project = await ToDo.findOne({ name });
-    console.log(project, "this is project");
     return project;
   } catch (err) {
     throw new Error(err.message);
