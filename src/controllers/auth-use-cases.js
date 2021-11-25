@@ -11,8 +11,9 @@ const registerUser = async (methods, username, password) => {
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await methods.create({ username, passwordHash });
+
     const payload = {
-      user: user.id
+      user: user.username
     };
     const token = jwt.sign(payload, JWTSECRET);
 
@@ -25,6 +26,7 @@ const registerUser = async (methods, username, password) => {
 const loginUser = async (methods, username, password) => {
   try {
     const user = await methods.findOne({ username });
+
     if (user) {
       const isPasswordCorrect = await bcrypt.compare(
         password,
@@ -32,7 +34,7 @@ const loginUser = async (methods, username, password) => {
       );
       if (isPasswordCorrect) {
         const payload = {
-          user: user.id
+          user: user.username
         };
         const token = jwt.sign(payload, JWTSECRET);
         return { user, token };

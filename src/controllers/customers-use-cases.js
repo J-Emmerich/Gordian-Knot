@@ -1,7 +1,7 @@
 async function getCustomers(methods) {
   try {
     const customers = await methods.find();
-    // console.log(customers, "this is use cases customer");
+
     return customers;
   } catch (err) {
     console.log("Error at usecases, getCustomer:: ");

@@ -30,7 +30,7 @@ async function deleteOne(id) {
 async function editOne(newCustomer, id) {
   try {
     const customer = await Customer.replaceOne({ _id: id }, newCustomer);
-    console.log("On database", customer);
+
     return customer;
   } catch (err) {
     return err;

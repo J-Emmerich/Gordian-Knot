@@ -1,5 +1,4 @@
 const { ToDo } = require("./index");
-console.log("This is the model::::", ToDo);
 
 async function findOne(name) {
   try {
