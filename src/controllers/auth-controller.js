@@ -11,6 +11,7 @@ module.exports = (methods) => {
   const login = async (req, res) => {
     try {
       const { username, password } = req.body;
+
       const user = await loginUser(methods, username, password);
       res.status(200).json(user);
     } catch (err) {

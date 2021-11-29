@@ -1,7 +1,6 @@
 async function getProject(methods, name) {
   try {
     const project = await methods.findOne(name);
-    console.log(project, "this is use cases project");
     return project;
   } catch (err) {
     console.log("Error at usecases, getProject:: ");

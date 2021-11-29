@@ -1,5 +1,4 @@
 const { Invoice } = require("./index");
-console.log("This is the model::::", Invoice);
 
 async function find() {
   try {
