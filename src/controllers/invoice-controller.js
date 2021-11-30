@@ -7,6 +7,7 @@ const {
 } = require("./invoice-use-cases");
 
 const saveToPdf = require("../helpers/save-to-pdf");
+const { dayjsFormat } = require("../helpers/format-date");
 const path = require("path");
 const root = path.join(__dirname, "../../output");
 
@@ -36,8 +37,10 @@ module.exports = (methods) => {
   async function saveOne(req, res) {
     try {
       const newInvoice = req.body;
-      console.log(req.body);
-
+      console.log(newInvoice);
+      const date = dayjsFormat(newInvoice.invoiceDate);
+      newInvoice.invoiceDate = date;
+      console.log(newInvoice, "this after");
       const invoice = await saveInvoice(methods, newInvoice);
       res.status(204).json(invoice);
     } catch (err) {

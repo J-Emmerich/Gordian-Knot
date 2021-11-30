@@ -5,12 +5,14 @@ const {
   editBug
 } = require("./bug-tracker-use-cases");
 
-console.log(getBugs, "this should be a function");
 module.exports = (methods) => {
   async function fetchBugs(req, res) {
-    const customers = await getBugs(methods);
-    res.status(200).json(customers);
-    res.end();
+    try {
+      const customers = await getBugs(methods);
+      res.status(200).json(customers);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   }
 
   async function saveBug(req, res) {
