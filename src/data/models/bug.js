@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const bugSchema = new mongoose.Schema({
+  projectId: { type: String, required: true },
   descripcion: { type: String, required: true },
   estadoBug: String,
   severidad: String,

@@ -13,7 +13,8 @@ const userSchema = mongoose.Schema({
   passwordHash: {
     type: String,
     minLengh: 3
-  }
+  },
+  projects: [String]
 });
 userSchema.plugin(uniqueValidator);
 userSchema.set("toJSON", {
