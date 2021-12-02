@@ -12,6 +12,7 @@ const verify = async (req, res, next) => {
     console.log("We received on the middleware");
     if (user && user.username === username) {
       console.log("It has passed the test!");
+      req.user = user;
       next();
     } else {
       throw "No user";

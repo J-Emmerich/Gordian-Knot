@@ -8,7 +8,9 @@ const {
 console.log(getCustomers, "this should be a function");
 module.exports = (methods) => {
   async function fetchCustomers(req, res) {
-    const customers = await getCustomers(methods);
+    const user = req.user;
+
+    const customers = await getCustomers(methods, user);
     res.status(200).json(customers);
     res.end();
   }
@@ -16,8 +18,9 @@ module.exports = (methods) => {
   async function saveCustomer(req, res) {
     try {
       const customer = req.body;
+      const user = req.user;
       console.log(customer);
-      const newCustomer = await createCustomer(methods, customer);
+      const newCustomer = await createCustomer(methods, customer, user);
       console.log("POST successful", newCustomer);
       res.status(200).json(newCustomer);
     } catch (err) {
@@ -26,8 +29,9 @@ module.exports = (methods) => {
   }
   async function deleteOne(req, res) {
     try {
+      const user = req.user;
       const { id } = req.params;
-      const deleted = await deleteCustomer(methods, id);
+      const deleted = await deleteCustomer(methods, id, user);
       res.status(200).send("deleted");
     } catch (err) {
       res.send(err.message);
@@ -36,11 +40,12 @@ module.exports = (methods) => {
 
   async function editOne(req, res) {
     try {
+      const user = req.user;
       const id = req.params.id;
       console.log("id", id);
       const newCustomer = req.body;
 
-      const editedInvoice = await editCustomer(methods, newCustomer, id);
+      const editedInvoice = await editCustomer(methods, newCustomer, id, user);
       res.status(200).json(editedInvoice);
     } catch (err) {
       res.send(err.message);

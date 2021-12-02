@@ -13,7 +13,8 @@ const registerUser = async (methods, username, password) => {
     const user = await methods.create({ username, passwordHash });
 
     const payload = {
-      user: user.username
+      user: user.username,
+      projects: user.projects
     };
     const token = jwt.sign(payload, JWTSECRET);
 
@@ -34,10 +35,16 @@ const loginUser = async (methods, username, password) => {
       );
       if (isPasswordCorrect) {
         const payload = {
-          user: user.username
+          user: user.username,
+          projects: user.projects
         };
+        const returnedUser = {
+          _id: user._id,
+          username: user.username,
+          projects: user.projects
+        }; // So the password is not returned
         const token = jwt.sign(payload, JWTSECRET);
-        return { user, token };
+        return { user: returnedUser, token };
       } else throw new Error("Password don't match");
     } else throw new Error("No such user, my friend");
   } catch (err) {
