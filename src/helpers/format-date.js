@@ -1,3 +1,5 @@
+const dayjs = require("dayjs");
+const advancedFormat = require("dayjs/plugin/advancedFormat");
 function formatDate(dateToParse) {
   const date = new Date(dateToParse);
   const hour = date.getHours();
@@ -10,4 +12,9 @@ function formatDate(dateToParse) {
   return dateAsString;
 }
 
-module.exports = formatDate;
+dayjs.extend(advancedFormat);
+const dayjsFormat = (dateAsString) => {
+  return dayjs(dateAsString, "DD/MM/YYYY").format();
+};
+
+module.exports = { formatDate, dayjsFormat };
