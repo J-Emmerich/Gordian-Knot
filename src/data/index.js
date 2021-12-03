@@ -5,6 +5,7 @@ const User = require("./models/user");
 const Customer = require("./models/customer");
 const Bug = require("./models/bug");
 
+
 // Delete everything from the model.
 const { cleanAndLog } = require("../helpers/clean-and-log");
 // cleanAndLog(*model);

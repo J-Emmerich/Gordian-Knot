@@ -14,7 +14,8 @@ const userSchema = mongoose.Schema({
     type: String,
     minLengh: 3
   },
-  projects: [{ projectId: String, role: String }]
+  projects: [{ projectName:{type: String}, projectId: String, 
+    projectUsers: [{userId: String, role: String}] }]
 });
 userSchema.plugin(uniqueValidator);
 userSchema.set("toJSON", {
