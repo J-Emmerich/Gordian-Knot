@@ -29,7 +29,7 @@ module.exports = (methods) => {
     try {
       const user = req.user;
       const invoices = await fetchInvoices(methods, user);
-      console.log(invoices);
+      // console.log(invoices);
       res.status(200).json(invoices);
     } catch (error) {
       res.send(error.message);

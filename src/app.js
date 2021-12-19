@@ -26,7 +26,7 @@ const { cleanAndLog } = require("./helpers/clean-and-log");
 app.use(cors()); // <--- need to enable it to work with the front
 app.use(express.json());
 app.use("/auth", authRouter(userMethods));
-app.use(verifyToken.verify);
+// app.use(verifyToken.verify);
 app.use("/dashboard", dashboardRouter(toDoMethods));
 app.use("/pdf", invoiceRouter(invoiceMethods));
 app.use("/customer", customerRouter(customerMethods));
