@@ -8,10 +8,10 @@ async function getBugs(methods, user) {
   }
 }
 
-async function createBug(methods, customer) {
+async function createBug(methods, bug) {
   try {
-    const updatedProject = await methods.create(customer);
-    return updatedProject;
+    const newBug = await methods.create(bug);
+    return newBug;
   } catch (err) {
     return `error in use cases: ${err}`;
   }

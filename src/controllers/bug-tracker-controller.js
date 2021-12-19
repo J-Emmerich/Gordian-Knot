@@ -19,11 +19,13 @@ module.exports = (methods) => {
   async function saveBug(req, res) {
     try {
       const user = req.user;
-      const customer = req.body;
-      customer.reportedAt = Date.now();
-      const newCustomer = await createBug(methods, customer, user);
-      console.log("POST successful", newCustomer);
-      res.status(200).json(newCustomer);
+      const bug = req.body;
+      bug.projectId = user.currentProject;
+      bug.reportedAt = Date.now();
+      console.log(bug, "this received")
+      const newBug = await createBug(methods, bug);
+      console.log("POST successful", newBug);
+      res.status(200).json(newBug);
     } catch (err) {
       res.status(500).send(err.message);
     }
