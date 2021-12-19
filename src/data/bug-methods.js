@@ -1,8 +1,8 @@
 const { Bug } = require("./index");
 
-async function find() {
+async function find(projectId) {
   try {
-    const customers = await Bug.find({});
+    const customers = await Bug.find({projectId});
     return customers;
   } catch (err) {
     return err;

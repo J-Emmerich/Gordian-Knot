@@ -9,7 +9,6 @@ module.exports = (methods) => {
   async function fetchBugs(req, res) {
     try {
       const user = req.user;
-      console.log(user);
       const customers = await getBugs(methods, user);
       res.status(200).json(customers);
     } catch (err) {

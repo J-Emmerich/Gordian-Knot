@@ -1,5 +1,3 @@
-const user = require("../data/models/user");
-
 async function fetchAllProjects(methods, receivedUser) {
     try {
       const projects = await methods.findProjects({username: receivedUser.username});
