@@ -20,7 +20,6 @@ async function fetchInvoice(methods, id) {
 async function saveInvoice(methods, receivedInvoice) {
   try {
     const invoice = await methods.create(receivedInvoice);
-    // console.log("at saveInvoice", invoice, "this was found");
     return invoice;
   } catch (err) {
     return err;

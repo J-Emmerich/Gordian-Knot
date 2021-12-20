@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const toDoSchema = new mongoose.Schema({
   userId: { type: String, required: true },
+  projectId: String,
   name: { type: String, default: "New Project" },
   cards: [
     {
