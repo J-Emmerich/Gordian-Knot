@@ -1,18 +1,13 @@
 const express = require("express");
-const projectController = require("../controllers/project-controller");
+const userController = require("../controllers/user-controller");
 
-const projectRouter = (methods) => {
+const userRouter = (methods) => {
   const router = express.Router();
-  const controller = projectController(methods);
+  const controller = userController(methods);
 
-  router.get("/", controller.fetchAll);
-  router.get("/user", controller.fetchUser);
-  router.get("/:id", controller.fetchOne);
-  router.put("/:id", controller.editOne);
-  router.post("/", controller.saveOne);
-  router.delete("/:id", controller.deleteOne);
-
+  router.put("/", controller.editOne);
+  
   return router;
 };
 
-module.exports = projectRouter;
+module.exports = userRouter;

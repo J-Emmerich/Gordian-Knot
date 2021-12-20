@@ -43,6 +43,7 @@ module.exports = (methods) => {
       console.log(newInvoice);
       const date = dayjsFormat(newInvoice.invoiceDate);
       newInvoice.invoiceDate = date;
+      newInvoice.projectId = user.currentProject;
       console.log(newInvoice, "this after");
       const invoice = await saveInvoice(methods, newInvoice, user);
       res.status(204).json(invoice);

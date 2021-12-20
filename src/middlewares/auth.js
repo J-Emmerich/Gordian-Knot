@@ -13,6 +13,7 @@ const verify = async (req, res, next) => {
     if (user && user.username === username) {
       console.log("It has passed the test!");
       req.user = user;
+      req.currentProject = user.currentProject;
       next();
     } else {
       throw "No user";

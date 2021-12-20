@@ -5,7 +5,6 @@ const {
   editCustomer
 } = require("./customers-use-cases");
 
-console.log(getCustomers, "this should be a function");
 module.exports = (methods) => {
   async function fetchCustomers(req, res) {
     const user = req.user;
@@ -19,6 +18,7 @@ module.exports = (methods) => {
     try {
       const customer = req.body;
       const user = req.user;
+      customer.projectId = user.currentProject;
       console.log(customer);
       const newCustomer = await createCustomer(methods, customer, user);
       console.log("POST successful", newCustomer);

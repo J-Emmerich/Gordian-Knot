@@ -8,6 +8,7 @@ const invoiceRouter = require("./routes/invoice");
 const authRouter = require("./routes/auth");
 const customerRouter = require("./routes/customer");
 const bugRouter = require("./routes/bug-tracker");
+const projectRouter = require("./routes/project");
 const userRouter = require("./routes/user");
 
 const toDoMethods = require("./data/to-do-methods");
@@ -26,13 +27,14 @@ const { cleanAndLog } = require("./helpers/clean-and-log");
 app.use(cors()); // <--- need to enable it to work with the front
 app.use(express.json());
 app.use("/auth", authRouter(userMethods));
-// app.use(verifyToken.verify);
+app.use(verifyToken.verify);
 app.use("/dashboard", dashboardRouter(toDoMethods));
 app.use("/pdf", invoiceRouter(invoiceMethods));
 app.use("/customer", customerRouter(customerMethods));
 app.use("/bugtracker", bugRouter(bugMethods));
-app.use("/project", userRouter(userMethods));
+app.use("/project", projectRouter(userMethods));
+app.use("/user", userRouter(userMethods));
 
 app.listen(8080, () => {
-  console.log("Server is lsistening to the port 8080");
+  console.log("Server is listening to the port 8080");
 });
