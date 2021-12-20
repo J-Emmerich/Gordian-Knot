@@ -1,2 +1,1 @@
-# GK-dash-Back
-Created with CodeSandbox
+# Backend of Gordian Knot, a ERP-CRM for small business. 
