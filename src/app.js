@@ -28,8 +28,8 @@ app.use(cors()); // <--- need to enable it to work with the front
 app.use(express.json());
 app.use("/auth", authRouter(userMethods));
 app.use(verifyToken.verify);
-app.use("/dashboard", dashboardRouter(toDoMethods));
 app.use("/pdf", invoiceRouter(invoiceMethods));
+app.use("/dashboard", dashboardRouter(toDoMethods));
 app.use("/customer", customerRouter(customerMethods));
 app.use("/bugtracker", bugRouter(bugMethods));
 app.use("/project", projectRouter(userMethods));
