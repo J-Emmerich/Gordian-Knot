@@ -1,7 +1,7 @@
 async function fetchInvoices(methods, user) {
   try {
     const invoices = await methods.find(user.currentProject);
-    // console.log("at fetch all", invoices, "this was found");
+    // console.log("at fetc h all", invoices, "this was found");
     return invoices;
   } catch (err) {
     return err;
