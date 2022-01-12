@@ -1,8 +1,8 @@
 const puppeteer = require("puppeteer");
 const path = require("path");
 
-const frontEndBase = "http://localhost:3000";
-const finalPath = path.join(__dirname, "../../output");
+const frontEndBase = "https//gordianknot.xyz";
+const finalPath = path.join(__dirname, "../../client/output");
 const saveToPdf = async (id, name) => {
   try {
     console.log(id, name)
