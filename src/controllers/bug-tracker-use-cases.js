@@ -1,6 +1,6 @@
-async function getBugs(methods) {
+async function getBugs(methods, user) {
   try {
-    const customers = await methods.find();
+    const customers = await methods.find(user.currentProject);
     // console.log(customers, "this is use cases customer");
     return customers;
   } catch (err) {
@@ -8,10 +8,10 @@ async function getBugs(methods) {
   }
 }
 
-async function createBug(methods, customer) {
+async function createBug(methods, bug) {
   try {
-    const updatedProject = await methods.create(customer);
-    return updatedProject;
+    const newBug = await methods.create(bug);
+    return newBug;
   } catch (err) {
     return `error in use cases: ${err}`;
   }

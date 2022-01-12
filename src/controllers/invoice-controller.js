@@ -28,8 +28,8 @@ module.exports = (methods) => {
   async function fetchAll(req, res) {
     try {
       const user = req.user;
-      const invoices = await fetchInvoices(methods, user);
-      console.log(invoices);
+      let invoices = await fetchInvoices(methods, user);
+      
       res.status(200).json(invoices);
     } catch (error) {
       res.send(error.message);
@@ -43,6 +43,7 @@ module.exports = (methods) => {
       console.log(newInvoice);
       const date = dayjsFormat(newInvoice.invoiceDate);
       newInvoice.invoiceDate = date;
+      newInvoice.projectId = user.currentProject;
       console.log(newInvoice, "this after");
       const invoice = await saveInvoice(methods, newInvoice, user);
       res.status(204).json(invoice);
@@ -77,11 +78,12 @@ module.exports = (methods) => {
 
   async function fetchPdf(req, res) {
     try {
+      console.log("token", req.token)
       const user = req.user;
       console.log(req.params);
       const { id } = req.params;
       const invoice = await fetchInvoice(methods, id, user);
-      await saveToPdf(id, invoice.invoiceNumber); // File System
+      await saveToPdf(id, invoice.invoiceNumber, req.token); // File System
       res.download(`${root}/${invoice.invoiceNumber}.pdf`);
     } catch (err) {
       console.log(err);

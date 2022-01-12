@@ -41,7 +41,8 @@ const loginUser = async (methods, username, password) => {
         const returnedUser = {
           _id: user._id,
           username: user.username,
-          projects: user.projects
+          projects: user.projects,
+          currentProject: user.currentProject
         }; // So the password is not returned
         const token = jwt.sign(payload, JWTSECRET);
         return { user: returnedUser, token };

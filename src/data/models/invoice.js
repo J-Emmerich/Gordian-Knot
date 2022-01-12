@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { formatDate } = require("../../helpers/format-date");
 
 const invoiceSchema = mongoose.Schema({
-  projectId: { type: String, required: true },
+  projectId: { type: String },
   invoiceNumber: String,
   invoiceDate: Date,
   orderNumber: String,
