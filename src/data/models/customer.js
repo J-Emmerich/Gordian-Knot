@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const customerSchema = new mongoose.Schema({
-  projectId: { type: String, required: true },
+  projectId: { type: String },
   name: { type: String, required: true },
   estadoContrato: String,
   modeloContrato: String,

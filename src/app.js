@@ -21,6 +21,7 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'client/build'))); 
 app.use(express.json());
+
 app.use("/api/auth", authRouter(userMethods));
 app.use(verifyToken.verify);
 app.use("/api/pdf", invoiceRouter(invoiceMethods));
@@ -38,4 +39,5 @@ app.get('*', (req,res) =>{
 
 app.listen(3000, () => {
   console.log("Server is listening to the port 3000");
+
 });

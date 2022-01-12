@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
-const projectSchema = new mongoose.Schema({
+const toDoSchema = new mongoose.Schema({
   userId: { type: String, required: true },
+  projectId: String,
   name: { type: String, default: "New Project" },
   cards: [
     {
@@ -16,4 +17,4 @@ const projectSchema = new mongoose.Schema({
   tasks: [{ id: String, name: String, content: String }]
 });
 
-module.exports = mongoose.model("Project", projectSchema);
+module.exports = mongoose.model("ToDo", toDoSchema);

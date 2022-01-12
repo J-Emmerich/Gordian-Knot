@@ -1,4 +1,5 @@
 const { User } = require("./index");
+const user = require("./models/user");
 
 const create = async ({ username, passwordHash }) => {
   try {
@@ -61,6 +62,16 @@ async function editProject(newProject, id) {
   }
 }
 
+async function editUserCurrentProject(currentProject, user){
+  try {
+const editedUser = await User.findOneAndUpdate({username: user.username}, {currentProject: currentProject}, {new: true})
+console.log(editedUser, "this is the edited user");
+return editedUser  
+} catch (err) {
+    console.log(err)
+  }
+}
+
 async function deleteProject(id) {
   try {
     // const deleted = await User.deleteOne({ _id: id }, {});
@@ -79,5 +90,6 @@ module.exports = {
   addProject,
   editProject,
   deleteProject,
-  findProjects
+  findProjects,
+  editUserCurrentProject
 };

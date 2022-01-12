@@ -1,8 +1,8 @@
 const { Invoice } = require("./index");
 
-async function find() {
+async function find(projectId) {
   try {
-    const invoices = await Invoice.find({});
+    const invoices = await Invoice.find({projectId});
     return invoices;
   } catch (err) {
     return err;

@@ -9,10 +9,11 @@ const verify = async (req, res, next) => {
     });
     const username = decodedToken.payload.user;
     const user = await methods.findOne({ username });
-    console.log("We received on the middleware");
+    
     if (user && user.username === username) {
-      console.log("It has passed the test!");
+      req.token = token
       req.user = user;
+      req.currentProject = user.currentProject;
       next();
     } else {
       throw "No user";

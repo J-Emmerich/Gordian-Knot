@@ -1,7 +1,7 @@
-async function fetchInvoices(methods) {
+async function fetchInvoices(methods, user) {
   try {
-    const invoices = await methods.find({});
-    // console.log("at fetch all", invoices, "this was found");
+    const invoices = await methods.find(user.currentProject);
+    // console.log("at fetc h all", invoices, "this was found");
     return invoices;
   } catch (err) {
     return err;
@@ -20,7 +20,6 @@ async function fetchInvoice(methods, id) {
 async function saveInvoice(methods, receivedInvoice) {
   try {
     const invoice = await methods.create(receivedInvoice);
-    // console.log("at saveInvoice", invoice, "this was found");
     return invoice;
   } catch (err) {
     return err;
