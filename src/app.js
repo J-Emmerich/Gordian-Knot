@@ -17,24 +17,27 @@ const userMethods = require("./data/user-methods");
 const customerMethods = require("./data/customer-methods");
 const bugMethods = require("./data/bug-methods");
 
-const cors = require("cors");
 const app = express();
 
-// Delete everything from DB
-const { cleanAndLog } = require("./helpers/clean-and-log");
-
-//create a server object:
-app.use(cors()); // <--- need to enable it to work with the front
+app.use(express.static(path.join(__dirname, 'client/build'))); 
 app.use(express.json());
-app.use("/auth", authRouter(userMethods));
-app.use(verifyToken.verify);
-app.use("/pdf", invoiceRouter(invoiceMethods));
-app.use("/dashboard", dashboardRouter(toDoMethods));
-app.use("/customer", customerRouter(customerMethods));
-app.use("/bugtracker", bugRouter(bugMethods));
-app.use("/project", projectRouter(userMethods));
-app.use("/user", userRouter(userMethods));
 
-app.listen(8080, () => {
-  console.log("Server is listening to the port 8080");
+app.use("/api/auth", authRouter(userMethods));
+app.use(verifyToken.verify);
+app.use("/api/pdf", invoiceRouter(invoiceMethods));
+app.use("/api/dashboard", dashboardRouter(toDoMethods));
+app.use("/api/customer", customerRouter(customerMethods));
+app.use("/api/bugtracker", bugRouter(bugMethods));
+app.use("/api/project", projectRouter(userMethods));
+app.use("/api/user", userRouter(userMethods));
+
+// Handles any requests that don't match the ones above
+app.get('*', (req,res) =>{
+  res.sendFile(path.join(__dirname+'../client/build/index.html'));
+});
+
+
+app.listen(3000, () => {
+  console.log("Server is listening to the port 3000");
+
 });
