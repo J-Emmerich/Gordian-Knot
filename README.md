@@ -1,4 +1,4 @@
-# Gordian Backend
+# Backend of Gordian Knot, a ERP-CRM for small business. 
 
 This is the back end of Gordian-Knot WebApp. 
 Gordian Knot is a ERP-CRM for small-business that is still on prototype stage. 
@@ -12,4 +12,3 @@ Gordian Knot is a ERP-CRM for small-business that is still on prototype stage.
 
 #
 The backend is built in Node.js, it uses Puppetter for the pdf rendering, Express for the server/routing. MongoDB and Mongoose for the data. Authentication with JWT. Is built with clean-architecture in mind. I'm working now to make it more stable and secure, get a good log system and gracefully deal with errors.
- 
