@@ -1,6 +1,6 @@
-require("dotenv").config();
+require("dotenv").config({path: '../.env'});
 const express = require("express");
-
+const path = require("path");
 const verifyToken = require("./middlewares/auth");
 
 const dashboardRouter = require("./routes/dashboard");
@@ -19,25 +19,23 @@ const bugMethods = require("./data/bug-methods");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'client/build'))); 
+app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
-
 app.use("/api/auth", authRouter(userMethods));
-app.use(verifyToken.verify);
-app.use("/api/pdf", invoiceRouter(invoiceMethods));
-app.use("/api/dashboard", dashboardRouter(toDoMethods));
-app.use("/api/customer", customerRouter(customerMethods));
-app.use("/api/bugtracker", bugRouter(bugMethods));
-app.use("/api/project", projectRouter(userMethods));
-app.use("/api/user", userRouter(userMethods));
+app.use("/api/pdf", verifyToken.verify, invoiceRouter(invoiceMethods));
+app.use("/api/dashboard", verifyToken.verify, dashboardRouter(toDoMethods));
+app.use("/api/customer", verifyToken.verify, customerRouter(customerMethods));
+app.use("/api/bugtracker", verifyToken.verify, bugRouter(bugMethods));
+app.use("/api/project", verifyToken.verify, projectRouter(userMethods));
+app.use("/api/user", verifyToken.verify, userRouter(userMethods));
 
-// Handles any requests that don't match the ones above
+
 app.get('*', (req,res) =>{
   res.sendFile(path.join(__dirname+'../client/build/index.html'));
 });
 
 
-app.listen(3000, () => {
-  console.log("Server is listening to the port 3000");
+app.listen(3001, () => {
+  console.log("Server is listening to the port 3001");
 
 });

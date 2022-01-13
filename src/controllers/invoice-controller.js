@@ -9,7 +9,7 @@ const {
 const saveToPdf = require("../helpers/save-to-pdf");
 const { dayjsFormat } = require("../helpers/format-date");
 const path = require("path");
-const root = path.join(__dirname, "../../output");
+const root = path.join(__dirname, "../../client/output");
 
 module.exports = (methods) => {
   async function fetchOne(req, res) {
