@@ -31,11 +31,11 @@ app.use("/api/user", verifyToken.verify, userRouter(userMethods));
 
 
 app.get('*', (req,res) =>{
-  res.sendFile(path.join(__dirname+'../client/build/index.html'));
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
 
-app.listen(3001, () => {
-  console.log("Server is listening to the port 3001");
+app.listen(3000, () => {
+  console.log("Server is listening to the port 3000");
 
 });
