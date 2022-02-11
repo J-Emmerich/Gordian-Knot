@@ -3,7 +3,7 @@ const {
   registerUser,
   googleVerify,
   findOneAndUpdate
-} = require("./auth-use-cases");
+} = require("../use-cases/auth-use-cases");
 const jwt = require("jsonwebtoken");
 const { JWTSECRET } = process.env;
 
@@ -12,7 +12,6 @@ module.exports = (methods) => {
     try {
       const { username, password } = req.body;
       const user = await loginUser(methods, username, password);
-      console.log(user, "this the user in login");
       res.status(200).json(user);
     } catch (err) {
       res.status(400).json({ msg: err.message });

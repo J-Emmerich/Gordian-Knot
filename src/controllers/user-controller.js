@@ -1,4 +1,4 @@
-const {editCurrentProject} = require("./user-use-cases");
+const {editCurrentProject} = require("../use-cases/user-use-cases");
 
 module.exports = (methods) => {
     async function editOne(req, res) {
@@ -6,7 +6,6 @@ module.exports = (methods) => {
           const user = req.user;
 
           const currentProject = req.body;
-    console.log(currentProject, "***********this current")
           const editedUser = await editCurrentProject(methods, currentProject._id, user);
           res.status(200).json(editedUser);
         } catch (err) {

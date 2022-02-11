@@ -4,10 +4,10 @@ const {
     editProject,
     deleteProject,
     findUser
-  } = require("./project-use-cases");
+  } = require("../use-cases/project-use-cases");
   
   const path = require("path");
-const { findUserAndUpdate } = require("./auth-use-cases");
+const { findUserAndUpdate } = require("../use-cases/auth-use-cases");
   const root = path.join(__dirname, "../../output");
   
   module.exports = (methods) => {
@@ -18,7 +18,6 @@ const { findUserAndUpdate } = require("./auth-use-cases");
             const updatedUser = await findUser(methods, user)
             res.status(200).json(updatedUser);
         } catch(err) {
-            console.log(err);
             res.status(500).end();
         }
     }
@@ -30,7 +29,6 @@ const { findUserAndUpdate } = require("./auth-use-cases");
         let invoice = await fetchProject(methods, id, user);
         res.status(200).json(invoice);
       } catch (err) {
-        console.log(err);
         res.status(500).end();
       }
     }
@@ -50,7 +48,6 @@ const { findUserAndUpdate } = require("./auth-use-cases");
         const user = req.user;
         const newProject = req.body;
         const userUpdated = await addProject(methods, newProject, user);
-        console.log(userUpdated, "im sending this")
         res.status(204).json(userUpdated);
       } catch (err) {
         res.send(err.message);
@@ -60,7 +57,6 @@ const { findUserAndUpdate } = require("./auth-use-cases");
       try {
         const user = req.user;
         const id = req.params.id;
-        console.log("id", id);
         const newInvoice = req.body;
   
         const editedInvoice = await editProject(methods, newInvoice, id, user);

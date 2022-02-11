@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const methods = require("../data/user-methods");
+const methods = require("../data/methods/user-methods");
 
 const verify = async (req, res, next) => {
   try {
