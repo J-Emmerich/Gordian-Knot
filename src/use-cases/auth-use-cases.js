@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const { JWTSECRET } = process.env;
 const { OAuth2Client } = require("google-auth-library");
 const googleClient = new OAuth2Client(process.env.GOOGLE_ID);
-console.log(JWTSECRET, "JWTSECRET")
 const registerUser = async (methods, username, password) => {
   try {
     if (password.length < 3) {

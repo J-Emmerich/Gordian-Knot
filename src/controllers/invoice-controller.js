@@ -16,11 +16,9 @@ module.exports = (methods) => {
     try {
       const user = req.user;
       const id = req.params.id;
-      console.log("id", id);
       let invoice = await fetchInvoice(methods, id, user);
       res.status(200).json(invoice);
     } catch (err) {
-      console.log(err);
       res.status(500).end();
     }
   }
@@ -53,7 +51,6 @@ module.exports = (methods) => {
     try {
       const user = req.user;
       const id = req.params.id;
-      console.log("id", id);
       const newInvoice = req.body;
 
       const editedInvoice = await editInvoice(methods, newInvoice, id, user);
@@ -76,15 +73,12 @@ module.exports = (methods) => {
 
   async function fetchPdf(req, res) {
     try {
-      console.log("token", req.token)
       const user = req.user;
-      console.log(req.params);
       const { id } = req.params;
       const invoice = await fetchInvoice(methods, id, user);
       await saveToPdf(id, invoice.invoiceNumber, req.token); // File System
       res.download(`${root}/${invoice.invoiceNumber}.pdf`);
     } catch (err) {
-      console.log(err);
       res.status(500).send(err.message);
     }
   }
