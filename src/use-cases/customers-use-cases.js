@@ -28,7 +28,6 @@ async function deleteCustomer(methods, id) {
 async function editCustomer(methods, newInvoice, id) {
   try {
     const invoice = await methods.editOne(newInvoice, id);
-    console.log("at editCustomer");
     return invoice;
   } catch (err) {
     return err;

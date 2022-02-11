@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
-const methods = require("../data/methods/user-methods");
+const methods = require("../data/methods/setting-methods");
 
-const verify = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1]; // <- Get everything after the blank space
+    const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWTSECRET, {
       complete: true
     });
@@ -19,10 +19,11 @@ const verify = async (req, res, next) => {
       throw "No user";
     }
   } catch (error) {
+    console.log(error)
     res.status(401).json({
       error: new Error(error)
     });
   }
 };
 
-module.exports = { verify };
+module.exports = { verifyToken };

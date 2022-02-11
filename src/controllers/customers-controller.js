@@ -10,7 +10,7 @@ module.exports = (methods) => {
     const user = req.user;
 
     const customers = await getCustomers(methods, user);
-    res.status(200).json(customers);
+    res.status(200).json({success: true, data: customers});
     res.end();
   }
 
@@ -20,7 +20,7 @@ module.exports = (methods) => {
       const user = req.user;
       customer.projectId = user.currentProject;
       const newCustomer = await createCustomer(methods, customer, user);
-      res.status(200).json(newCustomer);
+      res.status(200).json({success: true, data: newCustomer});
     } catch (err) {
       res.status(500).send(err.message);
     }
@@ -29,8 +29,8 @@ module.exports = (methods) => {
     try {
       const user = req.user;
       const { id } = req.params;
-      const deleted = await deleteCustomer(methods, id, user);
-      res.status(200).send("deleted");
+      await deleteCustomer(methods, id, user);
+      res.status(200).json({success: true, data: "User deleted"});
     } catch (err) {
       res.send(err.message);
     }
@@ -41,9 +41,8 @@ module.exports = (methods) => {
       const user = req.user;
       const id = req.params.id;
       const newCustomer = req.body;
-
-      const editedInvoice = await editCustomer(methods, newCustomer, id, user);
-      res.status(200).json(editedInvoice);
+      const editedCustomer = await editCustomer(methods, newCustomer, id, user);
+      res.status(200).json({success: true, data: editedCustomer});
     } catch (err) {
       res.send(err.message);
     }
