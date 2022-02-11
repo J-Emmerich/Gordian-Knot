@@ -17,7 +17,7 @@ module.exports = (methods) => {
       const user = req.user;
       const id = req.params.id;
       let invoice = await fetchInvoice(methods, id, user);
-      res.status(200).json(invoice);
+      res.status(200).json({success: true, data: invoice});
     } catch (err) {
       res.status(500).end();
     }
@@ -28,7 +28,7 @@ module.exports = (methods) => {
       const user = req.user;
       let invoices = await fetchInvoices(methods, user);
       
-      res.status(200).json(invoices);
+      res.status(200).json({success: true, data: invoices});
     } catch (error) {
       res.send(error.message);
     }
@@ -42,7 +42,7 @@ module.exports = (methods) => {
       newInvoice.invoiceDate = date;
       newInvoice.projectId = user.currentProject;
       const invoice = await saveInvoice(methods, newInvoice, user);
-      res.status(204).json(invoice);
+      res.status(204).json({success: true, data: invoice});
     } catch (err) {
       res.send(err.message);
     }
@@ -54,7 +54,7 @@ module.exports = (methods) => {
       const newInvoice = req.body;
 
       const editedInvoice = await editInvoice(methods, newInvoice, id, user);
-      res.status(200).json(editedInvoice);
+      res.status(200).json({success: true, data: editedInvoice});
     } catch (err) {
       res.send(err.message);
     }
@@ -65,7 +65,7 @@ module.exports = (methods) => {
       const user = req.user;
       const { id } = req.params;
       const deleted = await deleteInvoice(methods, id, user);
-      res.status(200).send("deleted");
+      res.status(200).json({success: true, data: "deleted"});
     } catch (err) {
       res.send(err.message);
     }

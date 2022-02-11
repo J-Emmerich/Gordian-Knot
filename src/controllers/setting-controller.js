@@ -3,11 +3,11 @@ const {
     addProject,
     editProject,
     deleteProject,
-    findUser
-  } = require("../use-cases/project-use-cases");
+    findUser,
+    editCurrentProject
+  } = require("../use-cases/setting-use-cases");
   
   const path = require("path");
-const { findUserAndUpdate } = require("../use-cases/auth-use-cases");
   const root = path.join(__dirname, "../../output");
   
   module.exports = (methods) => {
@@ -16,7 +16,7 @@ const { findUserAndUpdate } = require("../use-cases/auth-use-cases");
         try {
             const user = req.user;
             const updatedUser = await findUser(methods, user)
-            res.status(200).json(updatedUser);
+            res.status(200).json({success: true, data: updatedUser});
         } catch(err) {
             res.status(500).end();
         }
@@ -26,8 +26,8 @@ const { findUserAndUpdate } = require("../use-cases/auth-use-cases");
       try {
         const user = req.user;
         const id = req.params.id;
-        let invoice = await fetchProject(methods, id, user);
-        res.status(200).json(invoice);
+        let project = await fetchProject(methods, id, user);
+        res.status(200).json({success: true, data: project});
       } catch (err) {
         res.status(500).end();
       }
@@ -37,7 +37,7 @@ const { findUserAndUpdate } = require("../use-cases/auth-use-cases");
       try {
         const user = req.user;
         const projects = await fetchAllProjects(methods, user);
-        res.status(200).json(projects);
+        res.status(200).json({success: true, data: projects});
       } catch (error) {
         res.send(error.message);
       }
@@ -48,7 +48,7 @@ const { findUserAndUpdate } = require("../use-cases/auth-use-cases");
         const user = req.user;
         const newProject = req.body;
         const userUpdated = await addProject(methods, newProject, user);
-        res.status(204).json(userUpdated);
+        res.status(204).json({success: true, data: userUpdated});
       } catch (err) {
         res.send(err.message);
       }
@@ -57,26 +57,36 @@ const { findUserAndUpdate } = require("../use-cases/auth-use-cases");
       try {
         const user = req.user;
         const id = req.params.id;
-        const newInvoice = req.body;
-  
-        const editedInvoice = await editProject(methods, newInvoice, id, user);
-        res.status(200).json(editedInvoice);
+        const newProject = req.body;
+        const editedProject = await editProject(methods, newProject, id, user);
+        res.status(200).json({success: true, data: editedProject});
       } catch (err) {
         res.send(err.message);
       }
     }
-  
+
+    async function editCurrentOne(req, res) {
+      try {
+        const user = req.user;
+        const currentProject = req.body;
+        const editedCurrentProject = await editCurrentProject(methods, currentProject._id, user);
+        res.status(200).json({success: true, data: editedCurrentProject});
+      } catch (err) {
+        res.send(err.message);
+      }
+    }
+
     async function deleteOne(req, res) {
       try {
         const user = req.user;
         const { id } = req.params;
-        const deleted = await deleteProject(methods, id, user);
-        res.status(200).send("deleted");
+      await deleteProject(methods, id, user);
+        res.status(200).json({success: true, data: "deleted"});
       } catch (err) {
         res.send(err.message);
       }
     }
   
-    return { fetchUser, fetchAll, fetchOne, saveOne, editOne, deleteOne };
+    return { fetchUser, fetchAll, fetchOne, saveOne, editOne, editCurrentOne, deleteOne };
   };
   

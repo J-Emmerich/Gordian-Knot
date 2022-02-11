@@ -7,16 +7,6 @@ async function fetchAllProjects(methods, receivedUser) {
     }
   }
   
-//   async function fetchProject(methods, id, user) {
-//     try {
-//       const project = await methods.findOne(id);
-//       console.log("at fetch project", project, "this was found");
-//       return project;
-//     } catch (err) {
-//       return err;
-//     }
-//   }
-
 async function findUser(methods, receivedUser) {
   try {
     const user = await methods.findOne({ username: receivedUser.username });
@@ -27,9 +17,7 @@ async function findUser(methods, receivedUser) {
 }
   async function addProject(methods, receivedProject, user) {
     try {
-      console.log("here on save");
       const updatedUser = await methods.addProject(receivedProject, user);
-      console.log("here returning from save")
       return updatedUser;
     } catch (err) {
       return err;
@@ -54,11 +42,20 @@ async function findUser(methods, receivedUser) {
       return err;
     }
   }
+  async function editCurrentProject(methods, currentProject, user) {
+    try {
+      const newUser = await methods.editUserCurrentProject(currentProject, user);
+      return newUser;
+    } catch (err) {
+      return err;
+    }
+  }
   module.exports = {
     addProject,
     editProject,
     deleteProject,
     fetchAllProjects,
-    findUser
+    findUser,
+    editCurrentProject
   };
   

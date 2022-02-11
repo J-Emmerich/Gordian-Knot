@@ -1,8 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { JWTSECRET } = process.env;
-const { OAuth2Client } = require("google-auth-library");
-const googleClient = new OAuth2Client(process.env.GOOGLE_ID);
+
 const registerUser = async (methods, username, password) => {
   try {
     if (password.length < 3) {
@@ -10,7 +9,6 @@ const registerUser = async (methods, username, password) => {
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await methods.create({ username, passwordHash });
-
     const payload = {
       user: user.username,
       projects: user.projects
@@ -52,31 +50,8 @@ const loginUser = async (methods, username, password) => {
   }
 };
 
-const googleVerify = async (token) => {
-  try {
-    const verify = await googleClient.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_ID
-    });
-    const payload = verify.getPayload();
-    return payload;
-  } catch (err) {
-    throw err;
-  }
-};
-
-const findUserAndUpdate = async (methods, googleToken) => {
-  try {
-    const user = await methods.findOneAndUpdate(googleToken);
-    return user;
-  } catch (err) {
-    return err;
-  }
-};
 
 module.exports = {
   registerUser,
   loginUser,
-  googleVerify,
-  findUserAndUpdate
 };
