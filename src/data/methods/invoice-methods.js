@@ -31,7 +31,6 @@ async function create(invoice) {
 async function editOne(newInvoice, id) {
   try {
     const invoice = await Invoice.replaceOne({ _id: id }, newInvoice);
-    console.log("On database", invoice);
     return invoice;
   } catch (err) {
     return err;

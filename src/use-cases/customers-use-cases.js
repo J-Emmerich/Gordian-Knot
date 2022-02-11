@@ -19,7 +19,6 @@ async function createCustomer(methods, customer) {
 async function deleteCustomer(methods, id) {
   try {
     const deleted = await methods.deleteOne(id);
-    console.log("at deleteCustomer", deleted, "this was found");
     return deleted;
   } catch (err) {
     return err;

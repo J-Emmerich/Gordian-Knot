@@ -19,9 +19,7 @@ module.exports = (methods) => {
       const customer = req.body;
       const user = req.user;
       customer.projectId = user.currentProject;
-      console.log(customer);
       const newCustomer = await createCustomer(methods, customer, user);
-      console.log("POST successful", newCustomer);
       res.status(200).json(newCustomer);
     } catch (err) {
       res.status(500).send(err.message);
@@ -42,7 +40,6 @@ module.exports = (methods) => {
     try {
       const user = req.user;
       const id = req.params.id;
-      console.log("id", id);
       const newCustomer = req.body;
 
       const editedInvoice = await editCustomer(methods, newCustomer, id, user);

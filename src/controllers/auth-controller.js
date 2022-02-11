@@ -12,7 +12,6 @@ module.exports = (methods) => {
     try {
       const { username, password } = req.body;
       const user = await loginUser(methods, username, password);
-      console.log(user, "this the user in login");
       res.status(200).json(user);
     } catch (err) {
       res.status(400).json({ msg: err.message });
@@ -22,11 +21,9 @@ module.exports = (methods) => {
   const register = async (req, res) => {
     try {
       const { username, password } = req.body;
-      console.log("hello im here")
       const user = await registerUser(methods, username, password);
       res.status(200).json(user);
     } catch (err) {
-      console.log(err)
       res.status(400).json({ msg: err.message });
     }
   };

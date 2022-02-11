@@ -1,5 +1,4 @@
-// require("dotenv").config({path: '../.env'}); <<<<----- production
-require("dotenv").config();
+require("dotenv").config({path: '../.env'}); // adjust path on development
 const express = require("express");
 const path = require("path");
 const verifyToken = require("./middlewares/auth");

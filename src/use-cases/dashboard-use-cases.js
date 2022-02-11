@@ -9,10 +9,7 @@ async function getProject(methods, user) {
 
 async function createOrUpdate(methods, project) {
   try {
-    
-    console.log(project, "this on use cases")
     const updatedProject = await methods.findOneAndUpdate(project);
-    console.log(updatedProject, "this on use cases")
     return updatedProject;
   } catch (err) {
     return `error in use cases: ${err}`;

@@ -55,7 +55,6 @@ const user = await User.findOne({ username: receivedUser.username });
 async function editProject(newProject, id) {
   try {
     const project = await User.replaceOne({ _id: id }, newProject);
-    console.log("On database", project);
     return project;
   } catch (err) {
     return err;
@@ -65,7 +64,6 @@ async function editProject(newProject, id) {
 async function editUserCurrentProject(currentProject, user){
   try {
 const editedUser = await User.findOneAndUpdate({username: user.username}, {currentProject: currentProject}, {new: true})
-console.log(editedUser, "this is the edited user");
 return editedUser  
 } catch (err) {
     console.log(err)
