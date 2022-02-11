@@ -4,10 +4,10 @@ const {
     editProject,
     deleteProject,
     findUser
-  } = require("./project-use-cases");
+  } = require("../use-cases/project-use-cases");
   
   const path = require("path");
-const { findUserAndUpdate } = require("./auth-use-cases");
+const { findUserAndUpdate } = require("../use-cases/auth-use-cases");
   const root = path.join(__dirname, "../../output");
   
   module.exports = (methods) => {

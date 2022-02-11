@@ -2,7 +2,7 @@ const puppeteer = require("puppeteer");
 const path = require("path");
 
 
-const frontEndBase = "https://gordianknot.xyz";
+const frontEndBase = process.env.FRONTEND_PDF;
 
 const finalPath = path.join(__dirname, "../../client/output");
 const saveToPdf = async (id, name, token) => {

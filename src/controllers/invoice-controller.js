@@ -4,7 +4,7 @@ const {
   saveInvoice,
   editInvoice,
   deleteInvoice
-} = require("./invoice-use-cases");
+} = require("../use-cases/invoice-use-cases");
 
 const saveToPdf = require("../helpers/save-to-pdf");
 const { dayjsFormat } = require("../helpers/format-date");
@@ -40,11 +40,9 @@ module.exports = (methods) => {
     try {
       const user = req.user;
       const newInvoice = req.body;
-      console.log(newInvoice);
       const date = dayjsFormat(newInvoice.invoiceDate);
       newInvoice.invoiceDate = date;
       newInvoice.projectId = user.currentProject;
-      console.log(newInvoice, "this after");
       const invoice = await saveInvoice(methods, newInvoice, user);
       res.status(204).json(invoice);
     } catch (err) {
