@@ -3,7 +3,7 @@ const {
   createCustomer,
   deleteCustomer,
   editCustomer
-} = require("./customers-use-cases");
+} = require("../use-cases/customers-use-cases");
 
 module.exports = (methods) => {
   async function fetchCustomers(req, res) {

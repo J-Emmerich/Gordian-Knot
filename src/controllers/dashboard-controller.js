@@ -1,5 +1,5 @@
 // Adapter methods
-const { getProject, createOrUpdate } = require("./dashboard-use-cases");
+const { getProject, createOrUpdate } = require("../use-cases/dashboard-use-cases");
 
 module.exports = (methods) => {
   async function fetchCurrentProject(req, res) {

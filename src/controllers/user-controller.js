@@ -1,4 +1,4 @@
-const {editCurrentProject} = require("./user-use-cases");
+const {editCurrentProject} = require("../use-cases/user-use-cases");
 
 module.exports = (methods) => {
     async function editOne(req, res) {

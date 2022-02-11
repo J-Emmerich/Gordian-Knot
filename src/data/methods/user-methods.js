@@ -1,5 +1,5 @@
-const { User } = require("./index");
-const user = require("./models/user");
+const { User } = require("../index");
+const user = require("../models/user");
 
 const create = async ({ username, passwordHash }) => {
   try {
