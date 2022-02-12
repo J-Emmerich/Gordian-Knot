@@ -10,9 +10,9 @@ const customerSchema = new mongoose.Schema({
       petType: String,
       petName: String,
       petId: String,
-      comment: String
-    }
-  ]
+      comment: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model("Customer", customerSchema);

@@ -1,5 +1,4 @@
 const { User } = require("../index");
-const user = require("../models/user");
 
 const create = async ({ username, passwordHash }) => {
   try {
@@ -41,12 +40,16 @@ const findProjects = async ({ username }) => {
 };
 async function addProject(receivedProject, receivedUser) {
   try {
-   const update = await User.updateOne({username: receivedUser.username}, {$push: {projects: receivedProject}}, {upsert: true, rawResult: true})
-if(update.matchedCount !== 1){
-  throw Error("No user")
-}
-const user = await User.findOne({ username: receivedUser.username });
-   return user
+    const update = await User.updateOne(
+      { username: receivedUser.username },
+      { $push: { projects: receivedProject } },
+      { upsert: true, rawResult: true }
+    );
+    if (update.matchedCount !== 1) {
+      throw Error("No user");
+    }
+    const user = await User.findOne({ username: receivedUser.username });
+    return user;
   } catch (err) {
     return err;
   }
@@ -61,25 +64,27 @@ async function editProject(newProject, id) {
   }
 }
 
-async function editUserCurrentProject(currentProject, user){
+async function editUserCurrentProject(currentProject, user) {
   try {
-const editedUser = await User.findOneAndUpdate({username: user.username}, {currentProject: currentProject}, {new: true})
-return editedUser  
-} catch (err) {
-    console.log(err)
-  }
-}
-
-async function deleteProject(id) {
-  try {
-    // const deleted = await User.deleteOne({ _id: id }, {});
-    console.log("hey! This function does nothing :D")
+    const editedUser = await User.findOneAndUpdate(
+      { username: user.username },
+      { currentProject },
+      { new: true }
+    );
+    return editedUser;
   } catch (err) {
     return err;
   }
 }
 
-
+// async function deleteProject(id) {
+//   try {
+//     // const deleted = await User.deleteOne({ _id: id }, {});
+//     console.log("hey! This function does nothing :D");
+//   } catch (err) {
+//     return err;
+//   }
+// }
 
 module.exports = {
   create,
@@ -87,7 +92,6 @@ module.exports = {
   findOneAndUpdate,
   addProject,
   editProject,
-  deleteProject,
   findProjects,
-  editUserCurrentProject
+  editUserCurrentProject,
 };

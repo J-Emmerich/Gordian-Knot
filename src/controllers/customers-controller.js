@@ -2,35 +2,35 @@ const {
   getCustomers,
   createCustomer,
   deleteCustomer,
-  editCustomer
+  editCustomer,
 } = require("../use-cases/customers-use-cases");
 
 module.exports = (methods) => {
   async function fetchCustomers(req, res) {
-    const user = req.user;
+    const { user } = req;
 
     const customers = await getCustomers(methods, user);
-    res.status(200).json({success: true, data: customers});
+    res.status(200).json({ success: true, data: customers });
     res.end();
   }
 
   async function saveCustomer(req, res) {
     try {
       const customer = req.body;
-      const user = req.user;
+      const { user } = req;
       customer.projectId = user.currentProject;
       const newCustomer = await createCustomer(methods, customer, user);
-      res.status(200).json({success: true, data: newCustomer});
+      res.status(200).json({ success: true, data: newCustomer });
     } catch (err) {
       res.status(500).send(err.message);
     }
   }
   async function deleteOne(req, res) {
     try {
-      const user = req.user;
+      const { user } = req;
       const { id } = req.params;
       await deleteCustomer(methods, id, user);
-      res.status(200).json({success: true, data: "User deleted"});
+      res.status(200).json({ success: true, data: "User deleted" });
     } catch (err) {
       res.send(err.message);
     }
@@ -38,11 +38,11 @@ module.exports = (methods) => {
 
   async function editOne(req, res) {
     try {
-      const user = req.user;
-      const id = req.params.id;
+      const { user } = req;
+      const { id } = req.params;
       const newCustomer = req.body;
       const editedCustomer = await editCustomer(methods, newCustomer, id, user);
-      res.status(200).json({success: true, data: editedCustomer});
+      res.status(200).json({ success: true, data: editedCustomer });
     } catch (err) {
       res.send(err.message);
     }
@@ -52,6 +52,6 @@ module.exports = (methods) => {
     fetchCustomers,
     saveCustomer,
     deleteOne,
-    editOne
+    editOne,
   };
 };

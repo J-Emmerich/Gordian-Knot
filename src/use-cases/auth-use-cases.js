@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 const { JWTSECRET } = process.env;
 
 const registerUser = async (methods, username, password) => {
@@ -11,13 +12,13 @@ const registerUser = async (methods, username, password) => {
     const user = await methods.create({ username, passwordHash });
     const payload = {
       user: user.username,
-      projects: user.projects
+      projects: user.projects,
     };
     const token = jwt.sign(payload, JWTSECRET);
 
     return { user, token };
   } catch (err) {
-    throw err;
+    return err;
   }
 };
 
@@ -33,23 +34,23 @@ const loginUser = async (methods, username, password) => {
       if (isPasswordCorrect) {
         const payload = {
           user: user.username,
-          projects: user.projects
+          projects: user.projects,
         };
         const returnedUser = {
           _id: user._id,
           username: user.username,
           projects: user.projects,
-          currentProject: user.currentProject
+          currentProject: user.currentProject,
         }; // So the password is not returned
         const token = jwt.sign(payload, JWTSECRET);
         return { user: returnedUser, token };
-      } else throw new Error("Password don't match");
+      }
+      throw new Error("Password don't match");
     } else throw new Error("No such user, my friend");
   } catch (err) {
     throw err;
   }
 };
-
 
 module.exports = {
   registerUser,

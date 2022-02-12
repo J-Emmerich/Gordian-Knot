@@ -4,12 +4,10 @@ const mongoose = require("mongoose");
 const user = process.env.USER;
 const password = process.env.PASSWORD;
 
-
-// const uri = `mongodb+srv://${user}:${password}@cluster0.3dgxs.mongodb.net/gordian-knot?retryWrites=true&w=majority`;
 const uri = "mongodb://localhost:27017/imagine";
 const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 };
 
 mongoose.connect(uri, options);
