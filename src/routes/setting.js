@@ -1,19 +1,16 @@
 const express = require("express");
-const projectController = require("../controllers/setting-controller");
+const settingController = require("../controllers/setting-controller");
 
-const projectRouter = (methods) => {
+const settingRouter = (methods) => {
   const router = express.Router();
-  const controller = projectController(methods);
-
+  const controller = settingController(methods);
   router.get("/", controller.fetchAll);
   router.get("/user", controller.fetchUser);
-  router.get("/:id", controller.fetchOne);
   router.put("/", controller.editCurrentOne);
   router.put("/:id", controller.editOne);
   router.post("/", controller.saveOne);
-  router.delete("/:id", controller.deleteOne);
 
   return router;
 };
 
-module.exports = projectRouter;
+module.exports = settingRouter;

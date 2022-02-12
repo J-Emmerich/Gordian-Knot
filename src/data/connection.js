@@ -1,18 +1,20 @@
 process.stdin.resume();
 const mongoose = require("mongoose");
 
-const user = process.env.USER;
-const password = process.env.PASSWORD;
+const user = process.env.DB_USER;
+const password = process.env.DB_PASSWORD;
+const database = process.env.DB;
 
-
-// const uri = `mongodb+srv://${user}:${password}@cluster0.3dgxs.mongodb.net/gordian-knot?retryWrites=true&w=majority`;
-const uri = "mongodb://localhost:27017/imagine";
+const uri = `mongodb://${user}:${password}@localhost:27017/${database}?authSource=admin`;
 const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 };
-
-mongoose.connect(uri, options);
+try {
+  mongoose.connect(uri, options);
+} catch (error) {
+  console.error(error, "on connection error");
+}
 mongoose.connection.on("connected", () => {
   console.log("Connected to Mongoose");
 });

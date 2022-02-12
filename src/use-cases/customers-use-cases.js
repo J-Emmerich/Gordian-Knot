@@ -3,7 +3,7 @@ async function getCustomers(methods, user) {
     const customers = await methods.find(user.currentProject);
     return customers;
   } catch (err) {
-    console.log("Error at usecases, getCustomer:: ");
+    return err;
   }
 }
 

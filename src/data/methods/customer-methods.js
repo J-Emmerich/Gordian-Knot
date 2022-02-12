@@ -2,7 +2,7 @@ const { Customer } = require("../index");
 
 async function find(projectId) {
   try {
-    const customers = await Customer.find({projectId});
+    const customers = await Customer.find({ projectId });
     return customers;
   } catch (err) {
     return err;
@@ -41,5 +41,5 @@ module.exports = {
   find,
   create,
   deleteOne,
-  editOne
+  editOne,
 };

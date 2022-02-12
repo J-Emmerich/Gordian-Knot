@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const mongoose = require("mongoose");
 const { formatDate } = require("../../helpers/format-date");
 
@@ -14,13 +15,13 @@ const invoiceSchema = mongoose.Schema({
       isIncludedIVA: Boolean,
       quantity: Number,
       totalPrice: mongoose.Types.Decimal128,
-      vat: Number
-    }
+      vat: Number,
+    },
   ],
   invoiceTotal: mongoose.Types.Decimal128,
   invoiceSubTotal: mongoose.Types.Decimal128,
   invoiceTax: mongoose.Types.Decimal128,
-  clientName: String
+  clientName: String,
 });
 
 invoiceSchema.set("toJSON", {
@@ -35,7 +36,7 @@ invoiceSchema.set("toJSON", {
     returnedObject.invoiceTax = returnedObject.invoiceTax.toString();
     returnedObject.invoiceDate = formatDate(returnedObject.invoiceDate);
     returnedObject.invoiceDue = formatDate(returnedObject.invoiceDue);
-  }
+  },
 });
 
 const Invoice = mongoose.model("Invoice", invoiceSchema);

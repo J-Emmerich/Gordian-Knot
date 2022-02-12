@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
@@ -9,14 +10,19 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
     minLengh: 3,
-    unique: true
+    unique: true,
   },
   passwordHash: {
     type: String,
-    minLengh: 3
+    minLengh: 3,
   },
-  projects: [{ projectName:{type: String}, projectId: String, 
-    projectUsers: [{userId: String, role: String}] }]
+  projects: [
+    {
+      projectName: { type: String },
+      projectId: String,
+      projectUsers: [{ userId: String, role: String }],
+    },
+  ],
 });
 userSchema.plugin(uniqueValidator);
 userSchema.set("toJSON", {
@@ -25,7 +31,7 @@ userSchema.set("toJSON", {
     delete received._id;
     delete received.passwordHash;
     delete received.__v;
-  }
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
