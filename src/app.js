@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "../.env" }); // adjust path on development
+require("dotenv").config(/* { path: "../.env" } */); // adjust path on development
 
 const express = require("express");
 const path = require("path");

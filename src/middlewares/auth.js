@@ -16,6 +16,7 @@ const verifyToken = async (req, res, next) => {
       req.currentProject = user.currentProject;
       next();
     } else {
+      console.log("no user");
       throw new Error("No user");
     }
   } catch (error) {

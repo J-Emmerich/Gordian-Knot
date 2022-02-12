@@ -4,13 +4,16 @@ const mongoose = require("mongoose");
 const user = process.env.USER;
 const password = process.env.PASSWORD;
 
-const uri = "mongodb://localhost:27017/imagine";
+const uri = `mongodb://${user}:${password}@localhost:27017/imagine?authSource=admin`;
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
-
-mongoose.connect(uri, options);
+try {
+  mongoose.connect(uri, options);
+} catch (error) {
+  console.error(error, "on connection error");
+}
 mongoose.connection.on("connected", () => {
   console.log("Connected to Mongoose");
 });
