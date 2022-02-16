@@ -14,6 +14,7 @@ const userSchema = mongoose.Schema({
   },
   passwordHash: {
     type: String,
+    select: false,
     minLengh: 3,
   },
   projects: [
@@ -24,14 +25,6 @@ const userSchema = mongoose.Schema({
     },
   ],
 });
-userSchema.plugin(uniqueValidator);
-userSchema.set("toJSON", {
-  transform: (doc, received) => {
-    received.id = received._id;
-    delete received._id;
-    delete received.passwordHash;
-    delete received.__v;
-  },
-});
+userSchema.plugin(uniqueValidator, { type: "mongoose-unique-validator" });
 
 module.exports = mongoose.model("User", userSchema);

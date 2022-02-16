@@ -1,23 +1,23 @@
 const { loginUser, registerUser } = require("../use-cases/auth-use-cases");
 
 module.exports = (methods) => {
-  const login = async (req, res) => {
+  const login = async (req, res, next) => {
     try {
       const { username, password } = req.body;
       const user = await loginUser(methods, username, password);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      res.status(400).json({ msg: err.message });
+      next(err);
     }
   };
 
-  const register = async (req, res) => {
+  const register = async (req, res, next) => {
     try {
       const { username, password } = req.body;
       const user = await registerUser(methods, username, password);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      res.status(400).json({ msg: err.message });
+      next(err);
     }
   };
 

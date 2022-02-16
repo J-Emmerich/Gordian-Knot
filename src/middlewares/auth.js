@@ -20,10 +20,7 @@ const verifyToken = async (req, res, next) => {
       throw new Error("No user");
     }
   } catch (error) {
-    console.log(error);
-    res.status(401).json({
-      error: new Error(error),
-    });
+    next(error);
   }
 };
 

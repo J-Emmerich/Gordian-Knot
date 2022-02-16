@@ -1,5 +1,6 @@
 process.stdin.resume();
 const mongoose = require("mongoose");
+const { logError } = require("../middlewares/error-handler");
 
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
@@ -13,13 +14,21 @@ const options = {
 try {
   mongoose.connect(uri, options);
 } catch (error) {
-  console.error(error, "on connection error");
+  logError(error);
 }
+
 mongoose.connection.on("connected", () => {
   console.log("Connected to Mongoose");
 });
+
 mongoose.connection.on("disconnected", () => {
   console.log("Disconnected from Mongoose");
+});
+mongoose.connection.on("disconnecting", () => {
+  console.log("Disconnecting from Mongoose");
+});
+mongoose.connection.on("error", (err) => {
+  logError(err);
 });
 
 // Disconnect from mongoose when server is killed

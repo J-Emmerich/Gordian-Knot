@@ -8,7 +8,6 @@ const {
 module.exports = (methods) => {
   async function fetchCustomers(req, res) {
     const { user } = req;
-
     const customers = await getCustomers(methods, user);
     res.status(200).json({ success: true, data: customers });
     res.end();
