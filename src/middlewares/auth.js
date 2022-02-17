@@ -4,7 +4,7 @@ const methods = require("../data/methods/setting-methods");
 const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.verify(token, process.env.JWTSECRET, {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET, {
       complete: true,
     });
     const username = decodedToken.payload.user;

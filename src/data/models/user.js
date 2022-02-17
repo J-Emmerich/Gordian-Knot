@@ -17,6 +17,13 @@ const userSchema = mongoose.Schema({
     select: false,
     minLengh: 3,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  resetPasswordToken: String,
+resetPasswordExpire: String,
   projects: [
     {
       projectName: { type: String },

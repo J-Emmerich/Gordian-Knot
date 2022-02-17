@@ -1,4 +1,4 @@
-const { loginUser, registerUser } = require("../use-cases/auth-use-cases");
+const { loginUser, registerUser, userForgotPassword } = require("../use-cases/auth-use-cases");
 
 module.exports = (methods) => {
   const login = async (req, res, next) => {
@@ -13,8 +13,8 @@ module.exports = (methods) => {
 
   const register = async (req, res, next) => {
     try {
-      const { username, password } = req.body;
-      const user = await registerUser(methods, username, password);
+      const { username, password, email } = req.body;
+      const user = await registerUser(methods, username, password, email);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
       next(err);
@@ -23,9 +23,11 @@ module.exports = (methods) => {
 
   const forgotPassword = async (req, res, next) => {
     try {
+const {email} = req.body;
+await userForgotPassword(methods, email);
+res.status(200).json({success: true, data: "Email Sent"})
+} catch (err) {
 
-      res.status(200).json({succes: true, data: "This is forgot password token"})
-    } catch (err) {
       next(err);
     }
   }
