@@ -1,37 +1,21 @@
 async function getCustomers(methods, user) {
-  try {
-    const customers = await methods.find(user.currentProject);
-    return customers;
-  } catch (err) {
-    return err;
-  }
+  const customers = await methods.find(user.currentProject);
+  return customers;
 }
 
 async function createCustomer(methods, customer) {
-  try {
-    const updatedProject = await methods.create(customer);
-    return updatedProject;
-  } catch (err) {
-    return `error in use cases: ${err}`;
-  }
+  const updatedProject = await methods.create(customer);
+  return updatedProject;
 }
 
 async function deleteCustomer(methods, id) {
-  try {
-    const deleted = await methods.deleteOne(id);
-    return deleted;
-  } catch (err) {
-    return err;
-  }
+  const deleted = await methods.deleteOne(id);
+  return deleted;
 }
 
 async function editCustomer(methods, newInvoice, id) {
-  try {
-    const invoice = await methods.editOne(newInvoice, id);
-    return invoice;
-  } catch (err) {
-    return err;
-  }
+  const invoice = await methods.editOne(newInvoice, id);
+  return invoice;
 }
 
 module.exports = { getCustomers, createCustomer, deleteCustomer, editCustomer };

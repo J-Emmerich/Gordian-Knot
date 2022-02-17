@@ -6,11 +6,9 @@ const authRouter = (methods) => {
   const controller = authController(methods);
 
   router.post("/login", controller.login);
-
-  // Not available until app is on production
-
   router.post("/register", controller.register);
-  // router.post("/google/auth", controller.googleAuth);
+  router.post("/forgotpassword", controller.forgotPassword);
+  router.put("/resetpassword/:resetToken", controller.resetPassword);
 
   return router;
 };

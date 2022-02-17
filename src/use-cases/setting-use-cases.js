@@ -1,54 +1,30 @@
 async function fetchAllProjects(methods, receivedUser) {
-  try {
-    const projects = await methods.findProjects({
-      username: receivedUser.username,
-    });
-    return projects;
-  } catch (err) {
-    return err;
-  }
+  const projects = await methods.findProjects({
+    username: receivedUser.username,
+  });
+  return projects;
 }
 
 async function findUser(methods, receivedUser) {
-  try {
-    const user = await methods.findOne({ username: receivedUser.username });
-    return user;
-  } catch (err) {
-    return err;
-  }
+  const user = await methods.findOne({ username: receivedUser.username });
+  return user;
 }
 async function addProject(methods, receivedProject, user) {
-  try {
-    const updatedUser = await methods.addProject(receivedProject, user);
-    return updatedUser;
-  } catch (err) {
-    return err;
-  }
+  const updatedUser = await methods.addProject(receivedProject, user);
+  return updatedUser;
 }
 
 async function editProject(methods, newProject, id) {
-  try {
-    const project = await methods.editProject(newProject, id);
-    return project;
-  } catch (err) {
-    return err;
-  }
+  const project = await methods.editProject(newProject, id);
+  return project;
 }
 async function deleteProject(methods, id) {
-  try {
-    const deleted = await methods.deleteProject(id);
-    return deleted;
-  } catch (err) {
-    return err;
-  }
+  const deleted = await methods.deleteProject(id);
+  return deleted;
 }
 async function editCurrentProject(methods, currentProject, user) {
-  try {
-    const newUser = await methods.editUserCurrentProject(currentProject, user);
-    return newUser;
-  } catch (err) {
-    return err;
-  }
+  const newUser = await methods.editUserCurrentProject(currentProject, user);
+  return newUser;
 }
 module.exports = {
   addProject,

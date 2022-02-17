@@ -1,40 +1,23 @@
 const { Customer } = require("../index");
 
 async function find(projectId) {
-  try {
-    const customers = await Customer.find({ projectId });
-    return customers;
-  } catch (err) {
-    return err;
-  }
+  const customers = await Customer.find({ projectId });
+  return customers;
 }
 
 async function create(customer) {
-  try {
-    const newCustomer = new Customer(customer);
-    newCustomer.save();
-    return newCustomer;
-  } catch (err) {
-    return err;
-  }
+  const newCustomer = new Customer(customer);
+  newCustomer.save();
+  return newCustomer;
 }
 
 async function deleteOne(id) {
-  try {
-    const deleted = await Customer.deleteOne({ _id: id }, {});
-  } catch (err) {
-    return err;
-  }
+  await Customer.deleteOne({ _id: id }, {});
 }
 
 async function editOne(newCustomer, id) {
-  try {
-    const customer = await Customer.replaceOne({ _id: id }, newCustomer);
-
-    return customer;
-  } catch (err) {
-    return err;
-  }
+  const customer = await Customer.replaceOne({ _id: id }, newCustomer);
+  return customer;
 }
 
 module.exports = {

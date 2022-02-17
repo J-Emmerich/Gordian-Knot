@@ -5,22 +5,20 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "lint": " ./node_modules/.bin/eslint ./src --fix"
   },
   "dependencies": {
     "bcrypt": "5.0.1",
-    "cors": "2.8.5",
     "dayjs": "1.10.7",
     "dotenv": "^10.0.0",
     "express": "4.17.1",
-    "google-auth-library": "7.10.2",
     "jsonwebtoken": "8.5.1",
     "mongodb": "4.1.1",
     "mongoose": "6.0.5",
     "mongoose-unique-validator": "3.0.0",
-    "puppeteer": "10.4.0",
-    "sequelize": "6.9.0",
-    "sqlite3": "5.0.2"
+    "nodemailer": "^6.7.2",
+    "puppeteer": "10.4.0"
   },
   "devDependencies": {
     "eslint": "^8.8.0",

@@ -1,9 +1,9 @@
 const puppeteer = require("puppeteer");
 const path = require("path");
 
-const frontEndBase = process.env.FRONTEND_PDF;
+const { BASE_FRONTEND_URL } = process.env;
 
-const finalPath = path.join(__dirname, "../../client/output");
+const fileOutputPath = path.join(__dirname, "../../client/output");
 
 const setDomainLocalStorage = async (browser, url, values) => {
   try {
@@ -35,16 +35,16 @@ const saveToPdf = async (id, name, token) => {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const localStorage = { ACCESS_TOKEN: token };
-    await setDomainLocalStorage(browser, frontEndBase, localStorage);
+    await setDomainLocalStorage(browser, BASE_FRONTEND_URL, localStorage);
 
     // old
     const page = await browser.newPage();
-    await page.goto(`${frontEndBase}/topdf/${id}`, {
+    await page.goto(`${BASE_FRONTEND_URL}/topdf/${id}`, {
       waitUntil: "networkidle2",
     });
     await page.emulateMediaType("screen");
     await page.pdf({
-      path: `${finalPath}/${name}.pdf`,
+      path: `${fileOutputPath}/${name}.pdf`,
       format: "a4",
       printBackground: true,
     });

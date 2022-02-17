@@ -1,48 +1,28 @@
 const { Invoice } = require("../index");
 
 async function find(projectId) {
-  try {
-    const invoices = await Invoice.find({ projectId });
-    return invoices;
-  } catch (err) {
-    return err;
-  }
+  const invoices = await Invoice.find({ projectId });
+  return invoices;
 }
 
 async function findOne(id) {
-  try {
-    const invoice = await Invoice.findOne({ _id: id });
-    return invoice;
-  } catch (err) {
-    return err;
-  }
+  const invoice = await Invoice.findOne({ _id: id });
+  return invoice;
 }
 
 async function create(invoice) {
-  try {
-    const newInvoice = new Invoice(invoice);
-    newInvoice.save();
-    return newInvoice;
-  } catch (err) {
-    return err;
-  }
+  const newInvoice = new Invoice(invoice);
+  newInvoice.save();
+  return newInvoice;
 }
 
 async function editOne(newInvoice, id) {
-  try {
-    const invoice = await Invoice.replaceOne({ _id: id }, newInvoice);
-    return invoice;
-  } catch (err) {
-    return err;
-  }
+  const invoice = await Invoice.replaceOne({ _id: id }, newInvoice);
+  return invoice;
 }
 
 async function deleteOne(id) {
-  try {
-    const deleted = await Invoice.deleteOne({ _id: id }, {});
-  } catch (err) {
-    return err;
-  }
+  await Invoice.deleteOne({ _id: id }, {});
 }
 
 module.exports = { find, create, findOne, editOne, deleteOne };
