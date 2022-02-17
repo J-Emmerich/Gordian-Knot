@@ -21,5 +21,22 @@ module.exports = (methods) => {
     }
   };
 
-  return { login, register };
+  const forgotPassword = async (req, res, next) => {
+    try {
+
+      res.status(200).json({succes: true, data: "This is forgot password token"})
+    } catch (err) {
+      next(err);
+    }
+  }
+  const resetPassword = async (req, res, next) => {
+    try {
+      const token = req.params.resetToken;
+res.status(200).json({succes: true, data: { msg: "This is reset password token", token}})
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  return { login, register, forgotPassword, resetPassword };
 };
