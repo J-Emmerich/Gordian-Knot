@@ -12,7 +12,7 @@ const {
 } = require("./routes");
 const {
   invoiceMethods,
-  settingMethods,
+  userMethods,
   customerMethods,
 } = require("./data/methods");
 const { errorHandler, logError } = require("./middlewares/error-handler");
@@ -22,10 +22,10 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 app.use(express.json());
-app.use("/api/auth", authRouter(settingMethods));
+app.use("/api/auth", authRouter(userMethods));
 app.use("/api/invoice", auth.verifyToken, invoiceRouter(invoiceMethods));
 app.use("/api/customer", auth.verifyToken, customerRouter(customerMethods));
-app.use("/api/setting", auth.verifyToken, settingRouter(settingMethods));
+app.use("/api/setting", auth.verifyToken, settingRouter(userMethods));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));

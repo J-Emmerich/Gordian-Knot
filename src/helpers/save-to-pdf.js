@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 const path = require("path");
 
-const {BASE_FRONTEND_URL} = process.env;
+const { BASE_FRONTEND_URL } = process.env;
 
 const fileOutputPath = path.join(__dirname, "../../client/output");
 

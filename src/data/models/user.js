@@ -22,8 +22,8 @@ const userSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  resetPasswordToken: String,
-resetPasswordExpire: String,
+  resetTokenHash: String,
+  resetPasswordExpire: String,
   projects: [
     {
       projectName: { type: String },

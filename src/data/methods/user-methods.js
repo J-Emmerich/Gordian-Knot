@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const ErrorResponse = require("../../helpers/error-response");
 const { User } = require("../index");
 
 const create = async ({ username, passwordHash, email }) => {
@@ -12,12 +13,11 @@ const findOne = async ({ username }) => {
 };
 const findOneWithEmail = async ({ email }) => {
   try {
-    
     const user = await User.findOne({ email });
     return user;
   } catch (error) {
-    console.log("The error is here", email, user)
-    throw error
+    console.log("The error is here", email);
+    throw error;
   }
 };
 const findOneWithPassword = async ({ username }) => {
@@ -63,25 +63,42 @@ async function editUserCurrentProject(currentProject, user) {
   return editedUser;
 }
 
-async function setResetToken(user) {
-
+async function setResetToken(receivedUser) {
+  const user = receivedUser; // So it doesn't reassign the parameter value.
   const resetToken = crypto.randomBytes(20).toString("hex");
-  user.resetPasswordToken = crypto
-  .createHash("sha256")
-  .update(resetToken)
-  .digest("hex")
+  user.resetTokenHash = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
-user.resetPasswordExpire = Date.now() + 10 * (60 * 1000);
-await user.save({validateModifiedOnly : true});
-return resetToken;
-
+  user.resetPasswordExpire = Date.now() + 10 * (60 * 1000);
+  await user.save({ validateModifiedOnly: true });
+  return resetToken;
 }
 
-async function unsetResetToken(user) {
-  user.resetPasswordToken = undefined;
-user.resetPasswordExpire = undefined;
-await user.save({validateModifiedOnly : true});
+async function unsetResetToken(receivedUser) {
+  const user = receivedUser; // So it doesn't reassign the parameter value.
+  user.resetTokenHash = undefined;
+  user.resetPasswordExpire = undefined;
+  await user.save({ validateModifiedOnly: true });
 }
+
+async function findOneWithResetToken(resetTokenHash) {
+  const user = await User.findOne({
+    resetTokenHash,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+  if (!user || user?.length === 0)
+    throw new ErrorResponse("Invalid Token", 400);
+  return user;
+}
+
+async function updatePassword(receivedUser, passwordHash) {
+  const user = receivedUser;
+  user.passwordHash = passwordHash;
+  await user.save({ validateModifiedOnly: true });
+}
+
 module.exports = {
   create,
   findOne,
@@ -94,4 +111,6 @@ module.exports = {
   setResetToken,
   unsetResetToken,
   findOneWithEmail,
+  findOneWithResetToken,
+  updatePassword,
 };
