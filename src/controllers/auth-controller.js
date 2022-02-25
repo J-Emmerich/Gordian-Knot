@@ -42,7 +42,7 @@ module.exports = (methods) => {
       await resetUserPassword(methods, resetToken, password);
       res.status(200).json({
         succes: true,
-        data: { msg: "Password reset" },
+        data: "Password reset",
       });
     } catch (err) {
       next(err);

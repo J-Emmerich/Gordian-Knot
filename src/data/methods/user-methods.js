@@ -14,6 +14,8 @@ const findOne = async ({ username }) => {
 const findOneWithEmail = async ({ email }) => {
   try {
     const user = await User.findOne({ email });
+    if (!user || user?.length === 0)
+      throw new Error("Credenciales incorrectas");
     return user;
   } catch (error) {
     console.log("The error is here", email);
