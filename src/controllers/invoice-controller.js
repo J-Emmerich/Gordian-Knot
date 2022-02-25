@@ -1,23 +1,24 @@
+const path = require("path");
 const {
   fetchInvoices,
   fetchInvoice,
   saveInvoice,
   editInvoice,
-  deleteInvoice
+  deleteInvoice,
 } = require("../use-cases/invoice-use-cases");
 
 const saveToPdf = require("../helpers/save-to-pdf");
 const { dayjsFormat } = require("../helpers/format-date");
-const path = require("path");
+
 const root = path.join(__dirname, "../../client/output");
 
 module.exports = (methods) => {
   async function fetchOne(req, res) {
     try {
-      const user = req.user;
-      const id = req.params.id;
-      let invoice = await fetchInvoice(methods, id, user);
-      res.status(200).json(invoice);
+      const { user } = req;
+      const { id } = req.params;
+      const invoice = await fetchInvoice(methods, id, user);
+      res.status(200).json({ success: true, data: invoice });
     } catch (err) {
       res.status(500).end();
     }
@@ -25,10 +26,10 @@ module.exports = (methods) => {
 
   async function fetchAll(req, res) {
     try {
-      const user = req.user;
-      let invoices = await fetchInvoices(methods, user);
-      
-      res.status(200).json(invoices);
+      const { user } = req;
+      const invoices = await fetchInvoices(methods, user);
+
+      res.status(200).json({ success: true, data: invoices });
     } catch (error) {
       res.send(error.message);
     }
@@ -36,25 +37,25 @@ module.exports = (methods) => {
 
   async function saveOne(req, res) {
     try {
-      const user = req.user;
+      const { user } = req;
       const newInvoice = req.body;
       const date = dayjsFormat(newInvoice.invoiceDate);
       newInvoice.invoiceDate = date;
       newInvoice.projectId = user.currentProject;
       const invoice = await saveInvoice(methods, newInvoice, user);
-      res.status(204).json(invoice);
+      res.status(204).json({ success: true, data: invoice });
     } catch (err) {
       res.send(err.message);
     }
   }
   async function editOne(req, res) {
     try {
-      const user = req.user;
-      const id = req.params.id;
+      const { user } = req;
+      const { id } = req.params;
       const newInvoice = req.body;
 
       const editedInvoice = await editInvoice(methods, newInvoice, id, user);
-      res.status(200).json(editedInvoice);
+      res.status(200).json({ success: true, data: editedInvoice });
     } catch (err) {
       res.send(err.message);
     }
@@ -62,10 +63,10 @@ module.exports = (methods) => {
 
   async function deleteOne(req, res) {
     try {
-      const user = req.user;
+      const { user } = req;
       const { id } = req.params;
-      const deleted = await deleteInvoice(methods, id, user);
-      res.status(200).send("deleted");
+      await deleteInvoice(methods, id, user);
+      res.status(200).json({ success: true, data: "deleted" });
     } catch (err) {
       res.send(err.message);
     }
@@ -73,7 +74,7 @@ module.exports = (methods) => {
 
   async function fetchPdf(req, res) {
     try {
-      const user = req.user;
+      const { user } = req;
       const { id } = req.params;
       const invoice = await fetchInvoice(methods, id, user);
       await saveToPdf(id, invoice.invoiceNumber, req.token); // File System

@@ -1,28 +1,27 @@
 const jwt = require("jsonwebtoken");
 const methods = require("../data/methods/user-methods");
 
-const verify = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1]; // <- Get everything after the blank space
-    const decodedToken = jwt.verify(token, process.env.JWTSECRET, {
-      complete: true
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET, {
+      complete: true,
     });
     const username = decodedToken.payload.user;
     const user = await methods.findOne({ username });
-    
+
     if (user && user.username === username) {
-      req.token = token
+      req.token = token;
       req.user = user;
       req.currentProject = user.currentProject;
       next();
     } else {
-      throw "No user";
+      console.log("no user");
+      throw new Error("No user");
     }
   } catch (error) {
-    res.status(401).json({
-      error: new Error(error)
-    });
+    next(error);
   }
 };
 
-module.exports = { verify };
+module.exports = { verifyToken };

@@ -1,32 +1,39 @@
-require("dotenv").config({path: '../.env'}); // adjust path on development
+require("dotenv").config(/* { path: "../.env" } */); // adjust path on development
+
 const express = require("express");
 const path = require("path");
-const verifyToken = require("./middlewares/auth");
-const PORT = process.env.PORT || 8000
-const {dashboardRouter, invoiceRouter, authRouter, customerRouter, projectRouter, userRouter} = require("./routes");
-const {toDoMethods, invoiceMethods, userMethods, customerMethods} = require("./data/methods")
+const auth = require("./middlewares/auth");
 
+const {
+  invoiceRouter,
+  authRouter,
+  customerRouter,
+  settingRouter,
+} = require("./routes");
+const {
+  invoiceMethods,
+  userMethods,
+  customerMethods,
+} = require("./data/methods");
+const { errorHandler, logError } = require("./middlewares/error-handler");
 
+const PORT = process.env.PORT || 8000;
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, "../client/build")));
 app.use(express.json());
 app.use("/api/auth", authRouter(userMethods));
-app.use("/api/pdf", verifyToken.verify, invoiceRouter(invoiceMethods));
-app.use("/api/dashboard", verifyToken.verify, dashboardRouter(toDoMethods));
-app.use("/api/customer", verifyToken.verify, customerRouter(customerMethods));
-app.use("/api/project", verifyToken.verify, projectRouter(userMethods));
-app.use("/api/user", verifyToken.verify, userRouter(userMethods));
+app.use("/api/invoice", auth.verifyToken, invoiceRouter(invoiceMethods));
+app.use("/api/customer", auth.verifyToken, customerRouter(customerMethods));
+app.use("/api/setting", auth.verifyToken, settingRouter(userMethods));
 
-
-// Uncomment for production build
-
-app.get('*', (req,res) =>{
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
+app.use(logError);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is listening to the port ${PORT}`);
-
 });
