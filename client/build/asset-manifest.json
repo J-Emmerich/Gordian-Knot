@@ -1,28 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.e80f4210.chunk.css",
-    "main.js": "/static/js/main.815dbb36.chunk.js",
-    "main.js.map": "/static/js/main.815dbb36.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.a8859ad7.js",
-    "runtime-main.js.map": "/static/js/runtime-main.a8859ad7.js.map",
+    "main.css": "/static/css/main.096fadfb.chunk.css",
+    "main.js": "/static/js/main.fac5f642.chunk.js",
+    "main.js.map": "/static/js/main.fac5f642.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.f1d9efa8.js",
+    "runtime-main.js.map": "/static/js/runtime-main.f1d9efa8.js.map",
     "static/css/2.1ca50200.chunk.css": "/static/css/2.1ca50200.chunk.css",
-    "static/js/2.0804c65c.chunk.js": "/static/js/2.0804c65c.chunk.js",
-    "static/js/2.0804c65c.chunk.js.map": "/static/js/2.0804c65c.chunk.js.map",
-    "static/js/3.5a4aac78.chunk.js": "/static/js/3.5a4aac78.chunk.js",
-    "static/js/3.5a4aac78.chunk.js.map": "/static/js/3.5a4aac78.chunk.js.map",
+    "static/js/2.857361f8.chunk.js": "/static/js/2.857361f8.chunk.js",
+    "static/js/2.857361f8.chunk.js.map": "/static/js/2.857361f8.chunk.js.map",
+    "static/js/3.b2e4ada2.chunk.js": "/static/js/3.b2e4ada2.chunk.js",
+    "static/js/3.b2e4ada2.chunk.js.map": "/static/js/3.b2e4ada2.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.1ca50200.chunk.css.map": "/static/css/2.1ca50200.chunk.css.map",
-    "static/css/main.e80f4210.chunk.css.map": "/static/css/main.e80f4210.chunk.css.map",
-    "static/js/2.0804c65c.chunk.js.LICENSE.txt": "/static/js/2.0804c65c.chunk.js.LICENSE.txt",
+    "static/css/main.096fadfb.chunk.css.map": "/static/css/main.096fadfb.chunk.css.map",
+    "static/js/2.857361f8.chunk.js.LICENSE.txt": "/static/js/2.857361f8.chunk.js.LICENSE.txt",
     "static/media/about-min-view.0625cae9.svg": "/static/media/about-min-view.0625cae9.svg",
     "static/media/gordian-hero-min-view.88cc3190.svg": "/static/media/gordian-hero-min-view.88cc3190.svg",
     "static/media/index.css": "/static/media/roboto-latin-900italic.cb5ad999.woff2"
   },
   "entrypoints": [
-    "static/js/runtime-main.a8859ad7.js",
+    "static/js/runtime-main.f1d9efa8.js",
     "static/css/2.1ca50200.chunk.css",
-    "static/js/2.0804c65c.chunk.js",
-    "static/css/main.e80f4210.chunk.css",
-    "static/js/main.815dbb36.chunk.js"
+    "static/js/2.857361f8.chunk.js",
+    "static/css/main.096fadfb.chunk.css",
+    "static/js/main.fac5f642.chunk.js"
   ]
 }
