@@ -9,7 +9,6 @@ const verifyToken = async (req, res, next) => {
     });
     const username = decodedToken.payload.user;
     const user = await methods.findOne({ username });
-
     if (user && user.username === username) {
       req.token = token;
       req.user = user;
