@@ -7,37 +7,37 @@ const {
 } = require("../use-cases/setting-use-cases");
 
 module.exports = (methods) => {
-  async function fetchUser(req, res) {
+  async function fetchUser(req, res, next) {
     try {
       const { user } = req;
       const updatedUser = await findUser(methods, user);
       res.status(200).json({ success: true, data: updatedUser });
     } catch (err) {
-      res.status(500).end();
+      next(err);
     }
   }
 
-  async function fetchAll(req, res) {
+  async function fetchAll(req, res, next) {
     try {
       const { user } = req;
       const projects = await fetchAllProjects(methods, user);
       res.status(200).json({ success: true, data: projects });
-    } catch (error) {
-      res.send(error.message);
+    } catch (err) {
+      next(err);
     }
   }
 
-  async function saveOne(req, res) {
+  async function saveOne(req, res, next) {
     try {
       const { user } = req;
       const newProject = req.body;
       const userUpdated = await addProject(methods, newProject, user);
       res.status(204).json({ success: true, data: userUpdated });
     } catch (err) {
-      res.send(err.message);
+      next(err);
     }
   }
-  async function editOne(req, res) {
+  async function editOne(req, res, next) {
     try {
       const { user } = req;
       const { id } = req.params;
@@ -45,11 +45,11 @@ module.exports = (methods) => {
       const editedProject = await editProject(methods, newProject, id, user);
       res.status(200).json({ success: true, data: editedProject });
     } catch (err) {
-      res.send(err.message);
+      next(err);
     }
   }
 
-  async function editCurrentOne(req, res) {
+  async function editCurrentOne(req, res, next) {
     try {
       const { user } = req;
       const currentProject = req.body;
@@ -60,7 +60,7 @@ module.exports = (methods) => {
       );
       res.status(200).json({ success: true, data: editedCurrentProject });
     } catch (err) {
-      res.send(err.message);
+      next(err);
     }
   }
 

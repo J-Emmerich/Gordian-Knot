@@ -6,14 +6,17 @@ const {
 } = require("../use-cases/customers-use-cases");
 
 module.exports = (methods) => {
-  async function fetchCustomers(req, res) {
-    const { user } = req;
-    const customers = await getCustomers(methods, user);
-    res.status(200).json({ success: true, data: customers });
-    res.end();
+  async function fetchCustomers(req, res, next) {
+    try {
+      const { user } = req;
+      const customers = await getCustomers(methods, user);
+      res.status(200).json({ success: true, data: customers });
+    } catch (err) {
+      next(err);
+    }
   }
 
-  async function saveCustomer(req, res) {
+  async function saveCustomer(req, res, next) {
     try {
       const customer = req.body;
       const { user } = req;
@@ -21,21 +24,21 @@ module.exports = (methods) => {
       const newCustomer = await createCustomer(methods, customer, user);
       res.status(200).json({ success: true, data: newCustomer });
     } catch (err) {
-      res.status(500).send(err.message);
+      next(err);
     }
   }
-  async function deleteOne(req, res) {
+  async function deleteOne(req, res, next) {
     try {
       const { user } = req;
       const { id } = req.params;
       await deleteCustomer(methods, id, user);
       res.status(200).json({ success: true, data: "User deleted" });
     } catch (err) {
-      res.send(err.message);
+      next(err);
     }
   }
 
-  async function editOne(req, res) {
+  async function editOne(req, res, next) {
     try {
       const { user } = req;
       const { id } = req.params;
@@ -43,7 +46,7 @@ module.exports = (methods) => {
       const editedCustomer = await editCustomer(methods, newCustomer, id, user);
       res.status(200).json({ success: true, data: editedCustomer });
     } catch (err) {
-      res.send(err.message);
+      next(err);
     }
   }
 

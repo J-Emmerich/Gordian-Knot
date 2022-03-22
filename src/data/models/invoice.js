@@ -27,13 +27,14 @@ const invoiceSchema = mongoose.Schema({
 invoiceSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.articles = returnedObject.articles.map((article) => {
-      article.totalPrice = article.totalPrice.toString();
-      article.pricePerUnit = article.pricePerUnit.toString();
+      article.totalPrice =  article.totalPrice ? article.totalPrice.toString() : "";
+      article.pricePerUnit = article.pricePerUnit ? article.pricePerUnit.toString() : "";
       return article;
     });
-    returnedObject.invoiceTotal = returnedObject.invoiceTotal.toString();
-    returnedObject.invoiceSubTotal = returnedObject.invoiceSubTotal.toString();
-    returnedObject.invoiceTax = returnedObject.invoiceTax.toString();
+    returnedObject.invoiceTotal = returnedObject.invoiceTotal ? returnedObject.invoiceTotal.toString() : "";
+    returnedObject.invoiceSubTotal = returnedObject.invoiceSubTotal ? returnedObject.invoiceSubTotal.toString() : "";
+    returnedObject.invoiceTax = returnedObject.invoiceTax ? returnedObject.invoiceTax.toString() : ""
+    returnedObject.invoiceTax = returnedObject.invoiceTax ? returnedObject.invoiceTax.toString() : ""
     returnedObject.invoiceDate = formatDate(returnedObject.invoiceDate);
     returnedObject.invoiceDue = formatDate(returnedObject.invoiceDue);
   },
