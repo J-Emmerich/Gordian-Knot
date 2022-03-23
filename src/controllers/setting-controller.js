@@ -27,13 +27,15 @@ module.exports = (methods) => {
     }
   }
 
-  async function saveOne(req, res, next) {
+  async function createProject(req, res, next) {
     try {
       const { user } = req;
       const newProject = req.body;
       const userUpdated = await addProject(methods, newProject, user);
-      res.status(204).json({ success: true, data: userUpdated });
+      console.log(userUpdated);
+      res.status(201).json({ success: true, data: userUpdated });
     } catch (err) {
+      err.route = "Setting";
       next(err);
     }
   }
@@ -78,7 +80,7 @@ module.exports = (methods) => {
   return {
     fetchUser,
     fetchAll,
-    saveOne,
+    createProject,
     editOne,
     editCurrentOne,
   };

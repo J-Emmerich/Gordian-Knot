@@ -8,7 +8,7 @@ const settingRouter = (methods) => {
   router.get("/user", controller.fetchUser);
   router.put("/", controller.editCurrentOne);
   router.put("/:id", controller.editOne);
-  router.post("/", controller.saveOne);
+  router.post("/", controller.createProject);
 
   return router;
 };

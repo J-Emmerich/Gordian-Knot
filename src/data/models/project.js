@@ -4,8 +4,8 @@ const uniqueValidator = require("mongoose-unique-validator");
 
 const projectSchema = mongoose.Schema({
   id: String,
-  name: String,
-  users: [{ userId: String, role: String }],
+  name: { type: String, required: true, unique: true },
+  users: [{ username: String, role: String }],
 });
 projectSchema.plugin(uniqueValidator);
 projectSchema.set("toJSON", {
@@ -14,5 +14,6 @@ projectSchema.set("toJSON", {
     delete received._id;
   },
 });
+projectSchema.plugin(uniqueValidator, { type: "mongoose-unique-validator" });
 
 module.exports = mongoose.model("Project", projectSchema);

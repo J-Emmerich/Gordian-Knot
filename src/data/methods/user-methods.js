@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const ErrorResponse = require("../../helpers/error-response");
 const { User } = require("../index");
+const { Project } = require("../index");
 
 const create = async ({ username, passwordHash, email }) => {
   const user = await User.create({ username, passwordHash, email });
@@ -38,10 +39,19 @@ const findProjects = async ({ username }) => {
   const user = await User.findOne({ username });
   return user.projects;
 };
+
 async function addProject(receivedProject, receivedUser) {
+  const project = await Project.create({
+    name: receivedProject.name,
+    users: [{ username: receivedUser.username, role: "Admin" }],
+  });
   const update = await User.updateOne(
     { username: receivedUser.username },
-    { $push: { projects: receivedProject } },
+    {
+      $push: {
+        projects: { projectName: project.name, projectId: project._id },
+      },
+    },
     { upsert: true, rawResult: true }
   );
   if (update.matchedCount !== 1) {

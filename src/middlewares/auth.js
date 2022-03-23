@@ -19,6 +19,7 @@ const verifyToken = async (req, res, next) => {
       throw new Error("No user");
     }
   } catch (error) {
+    error.route = "Auth";
     next(error);
   }
 };

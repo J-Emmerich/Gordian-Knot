@@ -26,9 +26,8 @@ const userSchema = mongoose.Schema({
   resetPasswordExpire: String,
   projects: [
     {
-      projectName: { type: String },
+      projectName: String,
       projectId: String,
-      projectUsers: [{ userId: String, role: String }],
     },
   ],
 });

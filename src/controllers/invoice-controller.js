@@ -43,7 +43,7 @@ module.exports = (methods) => {
       newInvoice.invoiceDate = date;
       newInvoice.projectId = user.currentProject;
       const invoice = await saveInvoice(methods, newInvoice, user);
-      res.status(204).json({ success: true, data: invoice });
+      res.status(201).json({ success: true, data: invoice });
     } catch (err) {
       next(err);
     }

@@ -22,7 +22,7 @@ module.exports = (methods) => {
       const { user } = req;
       customer.projectId = user.currentProject;
       const newCustomer = await createCustomer(methods, customer, user);
-      res.status(200).json({ success: true, data: newCustomer });
+      res.status(201).json({ success: true, data: newCustomer });
     } catch (err) {
       next(err);
     }
