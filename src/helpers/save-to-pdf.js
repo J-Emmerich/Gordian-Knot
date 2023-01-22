@@ -48,7 +48,7 @@ const saveToPdf = async (id, name, token) => {
       format: "a4",
       printBackground: true,
     });
-    console.log("saved successfully");
+  
     await browser.close();
   } catch (err) {
     console.log("*****", err.message);

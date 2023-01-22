@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
+
 const userSchema = mongoose.Schema({
   id: String,
   googleId: String,
@@ -26,7 +27,7 @@ const userSchema = mongoose.Schema({
   resetPasswordExpire: String,
   projects: [
     {
-      projectName: String,
+      projectName: {type: String},
       projectId: String,
     },
   ],
