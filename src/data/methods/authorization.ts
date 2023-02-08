@@ -1,23 +1,24 @@
-import * as types from "../../commons/types";
+import { HydratedDocument, Types } from "mongoose";
+import {IPermission, IRole, IResource} from "../../commons/types";
 
 import { Role, Permission, Resource } from '../models';
 
 // Create the roles and permissions in the database
 
 
- const permissions: types.Permission[] = [
+ const permissions: IPermission[] = [
    { name: 'create', description: 'create resource'},
    { name: 'read', description: 'Read a resource' },
    { name: 'update', description: 'Update a resource' },
    { name: 'delete', description: 'Delete a resource' }
 ]
 
- const resources: types.Resource[] = [
+ const resources: IResource[] = [
     {resourceId: 'Invoice'},
     {resourceId: 'Client'}
 ];
 
- const roles: types.IRole[] = [
+ const roles: IRole[] = [
     {name: 'Admin', resources: resources, permissions: permissions},
     {name: 'User', resources: resources, permissions: [permissions[0], permissions[1], permissions[2]]},
     {name: 'InvAdmin', resources: [resources[0]], permissions: permissions},
@@ -26,30 +27,31 @@ import { Role, Permission, Resource } from '../models';
     {name: 'ClientUser', resources: [resources[1]], permissions: [permissions[0], permissions[1], permissions[2]]}
 ]
 
-const findRoleAndSave:Function = (role: types.IRole, i: number) => {
+const findRoleAndSave:Function = async (role: IRole) => {
     {
-        console.log(`find role and save ${i}`);
-        i++;
-      const newRole = new Role({
+      // This must be an Promise.all otherwise it won´t wait the function
+      const resources = await mapResources(role);
+      const permissions = await mapPermissions(role);
+    console.log(permissions, resources); 
+        const newRole: HydratedDocument<IRole> = new Role({
         name: role.name,
-        resources: role.resources.map(resource  => {
-            return Resource.find({resourceId: resource.resourceId})
-        }),
-        permissions: role.permissions.map(permission => {
-          return Permission.find({ name: permission.name });
+        resources: resources,
+        permissions: permissions     
         })
-      });
+  
+ newRole.save((e)=>{
+  console.log(e)
+ });
 
-      newRole.save((e:any)=>console.log(e?.message));
-    }
+  }
 }
 
 export const createRolesAndPermissions = async () => {
  try {
     for (const permission of permissions) {
-        const existingPermission = await Permission.find({ name: permission.name });
+        const existingPermission: IPermission | null = await Permission.findOne({ name: permission.name });
         if (!existingPermission) {
-          const newPermission = new Permission(permission);
+          const newPermission: HydratedDocument<IPermission> = new Permission(permission);
           newPermission.save((err) => {
                 console.log(err?.message);
             });
@@ -57,9 +59,9 @@ export const createRolesAndPermissions = async () => {
       }
     
       for (const resource of resources) {
-          const existingResource = await Resource.find({resourceId: resource.resourceId})
+          const existingResource: IResource | null = await Resource.findOne({resourceId: resource.resourceId})
           if(!existingResource) {
-  const newResource = new Resource(resource);
+  const newResource: HydratedDocument<IResource> = new Resource(resource);
   newResource.save((err) => {
                   console.log(err?.message);
               });
@@ -68,13 +70,10 @@ export const createRolesAndPermissions = async () => {
   
 
       for (const role of roles) {
-        let i = 1;
-        console.log(i, "first shit");
-
-        let existingRole = await Role.find({ name: role.name });
+           let existingRole: HydratedDocument<IRole> | null= await Role.findOne({ name: role.name });
         
-        if (!existingRole|| existingRole[0]===null || existingRole[0]===undefined){
-            findRoleAndSave(role, i);
+        if (!existingRole){
+            findRoleAndSave(role);
         } 
         
        
@@ -86,3 +85,17 @@ export const createRolesAndPermissions = async () => {
 
 
   };
+
+
+
+  // This function will return an array of resolved promises
+  // It needs to await to db find the result
+  // once thats done it will be put in another Promise.All
+  function mapResources(role: IRole){
+    return Promise.all(role.resources.map(async resource  => {
+      return await Resource.findOne({resourceId: resource.resourceId})}))
+  }
+  function mapPermissions(role : IRole){
+    return Promise.all(role.permissions.map(async permission  => {
+      return await Permission.findOne({name: permission.name})}))
+  }
