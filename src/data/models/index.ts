@@ -1,4 +1,3 @@
-import  { Role, Permission, Resource } from './authorization';
-import { User } from './users';
+import  { Role, Permission, Resource, User } from './authorization';
 
 export {Role, Permission, Resource, User};

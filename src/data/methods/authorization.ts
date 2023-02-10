@@ -29,19 +29,20 @@ import { Role, Permission, Resource } from '../models';
 
 const findRoleAndSave:Function = async (role: IRole) => {
     {
-      // This must be an Promise.all otherwise it won´t wait the function
-      const resources = await mapResources(role);
-      const permissions = await mapPermissions(role);
-    console.log(permissions, resources); 
-        const newRole: HydratedDocument<IRole> = new Role({
-        name: role.name,
-        resources: resources,
-        permissions: permissions     
-        })
-  
- newRole.save((e)=>{
-  console.log(e)
- });
+      const resources: HydratedDocument<IResource>[] | null[] = await mapResources(role);
+      const permissions : HydratedDocument<IPermission>[] | null[]= await mapPermissions(role);
+  if(resources[0] && permissions[0]){
+
+    const newRole: HydratedDocument<IRole> = new Role({
+      name: role.name,
+      resources: resources,
+      permissions: permissions     
+    })
+    
+    newRole.save((e)=>{
+      console.log(e)
+    });
+  } else console.log("A role must have resource and permission defined");
 
   }
 }
@@ -91,11 +92,11 @@ export const createRolesAndPermissions = async () => {
   // This function will return an array of resolved promises
   // It needs to await to db find the result
   // once thats done it will be put in another Promise.All
-  function mapResources(role: IRole){
-    return Promise.all(role.resources.map(async resource  => {
+  function mapResources(role: IRole) : Promise<any> {
+    return Promise.all(role.resources.map(async (resource) : Promise<any>   => {
       return await Resource.findOne({resourceId: resource.resourceId})}))
   }
-  function mapPermissions(role : IRole){
-    return Promise.all(role.permissions.map(async permission  => {
+  function mapPermissions(role : IRole) :  Promise<any> {
+    return Promise.all(role.permissions.map(async (permission) : Promise<any> => {
       return await Permission.findOne({name: permission.name})}))
   }

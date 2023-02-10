@@ -2,35 +2,51 @@ import { IUser,IRole } from "../../commons/types";
 import { Role, User } from "../models";
 //import { IRoleModel } from "../models/authorization";
 //needed to access the mongoose methods
-import {HydratedDocument} from 'mongoose'; 
+import {HydratedDocument, Types} from 'mongoose'; 
 
-export const createUser: Function = async (name: string) => {
+export const createUser: Function = async (name: string) : Promise<IUser | null> => {
 try {
     
     const newUser: HydratedDocument<IUser> = await User.create({name: name});
     newUser.save(e =>console.log(e?.message))
-    const foundUserById = await User.findById(newUser._id);
-    console.log("this is not hanging", foundUserById?.name);
+    return newUser;
 } catch (error) {
     console.log( error.message);
+    return null
 }
 
 }
 
-export const findUserById : Function =async (name:string) => {
+export const findUserByName : Function =async (name:string) : Promise<IUser|undefined>   => {
     try {
         const foundUser: IUser | null = await User.findOne({name: name});
+if (foundUser){
+    console.log(foundUser);
+    return foundUser;
+} else {
+    return undefined
+}
 
-        if(foundUser) {
-          if(foundUser?.role){
-            
-                const role: IRole | null = await Role.findById(foundUser.role._id)
-                console.log(role, "this is the role");
-
-          } else console.log("User has no role attached")
-                }
-                else console.log(`User not found`);
     } catch (error) {
+
         console.log(error)
+    return 
     }
+}
+
+export const assignToUserByIdRoleByName = async (userId: Types.ObjectId, roleId: string ): Promise<IRole | null> =>{
+   
+    const role : HydratedDocument<IRole> | null = await Role.findOne({name: roleId}); 
+    if (role) {
+    const user : HydratedDocument<IUser> | null = await User.findById(userId);
+    if(user) {
+        user.role.push(role._id as unknown as IRole);
+await user.save();
+
+    }
+    return role;
+    } else {
+        return null
+    }
+
 }

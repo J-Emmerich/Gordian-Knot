@@ -28,5 +28,5 @@ export interface IResource{
 export interface IUser {
     _id?: Types.ObjectId
     name: string,
-    role: IRole;
+    role: [IRole];
 }

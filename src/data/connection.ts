@@ -11,8 +11,7 @@ const database = process.env.DB;
 const uri =`mongodb+srv://${user}:${password}@${database}.mbikmto.mongodb.net/?retryWrites=true&w=majority&authSource=admin`;
 
 const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  //strictPopulate: false
 };
 
 

@@ -29,6 +29,20 @@ const ResourceSchema = new Schema<types.IResource>({
   resourceId: {type: String, required: true}
 })
 
+
+
+const ProjectSchema = new Schema<types.IProject>({
+    name: {type: String, required: true}
+})
+export const Project = model<types.IProject>('Project', ProjectSchema); 
+
+const UserSchema = new Schema<types.IUser>({
+    name: {type: String, required: true },
+    role: [{type: Schema.Types.ObjectId, ref: 'Role' }]
+});
+export const User = model<types.IUser>('User', UserSchema);
+
+
   // Create the Role and Permission models
 export const Role = model<types.IRole>('Role', RoleSchema);
 export const Permission = model<types.IPermission>('Permission', PermissionSchema);
