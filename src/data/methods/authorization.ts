@@ -14,11 +14,11 @@ import { Role, Permission, Resource } from '../models';
 ]
 
  const resources: IResource[] = [
-    {resourceId: 'Invoice'},
-    {resourceId: 'Client'}
+    {name: 'Invoice'},
+    {name: 'Client'}
 ];
 
- const roles: IRole[] = [
+export const roles: IRole[] = [
     {name: 'Admin', resources: resources, permissions: permissions},
     {name: 'User', resources: resources, permissions: [permissions[0], permissions[1], permissions[2]]},
     {name: 'InvAdmin', resources: [resources[0]], permissions: permissions},
@@ -47,7 +47,7 @@ const findRoleAndSave:Function = async (role: IRole) => {
   }
 }
 
-export const createRolesAndPermissions = async () => {
+export const createRolesAndPermissionsAndResources = async () => {
  try {
     for (const permission of permissions) {
         const existingPermission: IPermission | null = await Permission.findOne({ name: permission.name });
@@ -60,7 +60,7 @@ export const createRolesAndPermissions = async () => {
       }
     
       for (const resource of resources) {
-          const existingResource: IResource | null = await Resource.findOne({resourceId: resource.resourceId})
+          const existingResource: IResource | null = await Resource.findOne({name: resource.name})
           if(!existingResource) {
   const newResource: HydratedDocument<IResource> = new Resource(resource);
   newResource.save((err) => {
@@ -94,7 +94,7 @@ export const createRolesAndPermissions = async () => {
   // once thats done it will be put in another Promise.All
   function mapResources(role: IRole) : Promise<any> {
     return Promise.all(role.resources.map(async (resource) : Promise<any>   => {
-      return await Resource.findOne({resourceId: resource.resourceId})}))
+      return await Resource.findOne({name: resource.name})}))
   }
   function mapPermissions(role : IRole) :  Promise<any> {
     return Promise.all(role.permissions.map(async (permission) : Promise<any> => {

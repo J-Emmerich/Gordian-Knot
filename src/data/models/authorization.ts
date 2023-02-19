@@ -18,7 +18,8 @@ const RoleSchema = new Schema<types.IRole>({
         type: Schema.Types.ObjectId,
         ref: 'Permission'
       }
-    ]
+    ],
+    project: {type: Schema.Types.ObjectId, ref: 'Project'}
   });
 
   const PermissionSchema = new Schema<types.IPermission>({
@@ -26,13 +27,16 @@ const RoleSchema = new Schema<types.IRole>({
     description: { type: String, required: true }
   });
 const ResourceSchema = new Schema<types.IResource>({
-  resourceId: {type: String, required: true}
+  name: {type: String, required: true}
 })
 
 
 
 const ProjectSchema = new Schema<types.IProject>({
-    name: {type: String, required: true}
+    name: {type: String, required: true},
+    users: [{type: Schema.Types.ObjectId, ref: "User"}],
+    roles: [{type: Schema.Types.ObjectId, ref: "Role"}],
+
 })
 export const Project = model<types.IProject>('Project', ProjectSchema); 
 

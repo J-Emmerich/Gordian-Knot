@@ -1,13 +1,16 @@
 require('dotenv').config('../.env')
 import { NextFunction, Request, Response } from 'express';
-import {createRolesAndPermissions} from './data/methods/authorization';
+import {createRolesAndPermissionsAndResources} from './data/methods/authorization';
 import { findUserByName, assignToUserByIdRoleByName, createUser } from './data/methods/users';
 import { authorize } from './middlewares/authorize';
-
+import { createDummyProject } from './utilities/createDummyProject';
 
 import * as express from 'express';
 import { HydratedDocument } from 'mongoose';
 import { IUser } from './commons/types';
+import { Permission, Resource, Role } from './data/models';
+import { addRoleToUser } from './utilities/addRoleToUser';
+
 const jwt = require('jsonwebtoken');
 const connection = require('./data/connection');
 
@@ -15,9 +18,11 @@ const app = express();
 const port:number = 3000;
 
 
+
+
 app.use(express.json())
 
-app.get('/user/:id',authorize, (req, res) => {
+app.get('/project/:projectId/user/:id',authorize, (req, res) => {
 
     res.send(`user ${req.params.id}, you're authorized`)
   })

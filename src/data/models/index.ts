@@ -1,3 +1,3 @@
-import  { Role, Permission, Resource, User } from './authorization';
+import  { Role, Permission, Resource, User, Project } from './authorization';
 
-export {Role, Permission, Resource, User};
+export {Role, Permission, Resource, User, Project};

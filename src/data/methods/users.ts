@@ -1,6 +1,7 @@
 import { IUser,IRole } from "../../commons/types";
 import { Role, User } from "../models";
-//import { IRoleModel } from "../models/authorization";
+
+
 //needed to access the mongoose methods
 import {HydratedDocument, Types} from 'mongoose'; 
 

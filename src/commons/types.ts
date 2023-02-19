@@ -4,7 +4,8 @@ import {Types} from 'mongoose';
 export interface IProject {
     _id?: Types.ObjectId
     name: string
-    usersAndRoles: [{user: Types.ObjectId, role: Types.ObjectId}]
+    users: IUser[]
+    roles: IRole[]
 }
 
 export interface IPermission {
@@ -17,16 +18,53 @@ export interface IRole {
     _id?: Types.ObjectId
     name: string
     resources: IResource[],
-    permissions: IPermission[]
+    permissions: IPermission[],
+    project?: IProject
 }
 
 export interface IResource{
     _id?: Types.ObjectId
-    resourceId: string 
+    name: string 
 }
 
 export interface IUser {
     _id?: Types.ObjectId
     name: string,
-    role: [IRole];
+    role: IRole[];
+}
+
+export interface IAuthorization {
+   requiredRole: ERole,
+   requiredResource: EResource,
+   requiredPermission: EPermision
+}
+
+export interface IRouterContext {
+    resourceName: EResource,
+    availableRoles: IRole[]
+}
+
+// ======================= // ================ // =============
+
+
+
+export enum EPermision {
+    create = "CREATE",
+    read = "READ",
+    update = "UPDATE",
+    delete = "DELETE"
+}
+
+export enum ERole {
+    admin = "ADMIN",
+    user = "USER",
+    invAdmin = "INVADMIN",
+    clientAdmin = "CLIENTADMIN",
+    invUser = "INVUSER",
+    clientUser = "CLIENTUSER"
+    }
+
+export enum EResource {
+    invoice = "INVOICE",
+    client = "CLIENT"
 }
