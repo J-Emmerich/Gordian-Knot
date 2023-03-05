@@ -9,10 +9,10 @@ export const createUser: Function = async (name: string) : Promise<IUser | null>
 try {
     
     const newUser: HydratedDocument<IUser> = await User.create({name: name});
-    newUser.save(e =>console.log(e?.message))
+    await newUser.save()
     return newUser;
 } catch (error) {
-    console.log( error.message);
+    console.log( error.message, "error in create user");
     return null
 }
 

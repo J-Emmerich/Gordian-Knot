@@ -93,10 +93,13 @@ export const createRolesAndPermissionsAndResources = async () => {
   // It needs to await to db find the result
   // once thats done it will be put in another Promise.All
   function mapResources(role: IRole) : Promise<any> {
-    return Promise.all(role.resources.map(async (resource) : Promise<any>   => {
-      return await Resource.findOne({name: resource.name})}))
+    return Promise.all(role.resources.map(async (resource : IPermission) : Promise<IResource | null>   => {
+      
+        return await Resource.findOne({name: resource.name})}))
+      
   }
   function mapPermissions(role : IRole) :  Promise<any> {
-    return Promise.all(role.permissions.map(async (permission) : Promise<any> => {
-      return await Permission.findOne({name: permission.name})}))
+    return Promise.all(role.permissions.map(async (permission : IPermission) : Promise<IPermission | null> => {
+      
+      return await Permission.findOne({name: permission.name })}))
   }

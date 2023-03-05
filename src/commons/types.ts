@@ -1,11 +1,12 @@
+import { Request } from 'express';
 import {Types} from 'mongoose'; 
 
 
 export interface IProject {
     _id?: Types.ObjectId
     name: string
-    users: IUser[]
-    roles: IRole[]
+    users: Array<IUser | Types.ObjectId>
+    roles: Array<IRole | Types.ObjectId>
 }
 
 export interface IPermission {
@@ -17,8 +18,8 @@ export interface IPermission {
 export interface IRole {
     _id?: Types.ObjectId
     name: string
-    resources: IResource[],
-    permissions: IPermission[],
+    resources: Array<IResource | Types.ObjectId>,
+    permissions: Array<IPermission | Types.ObjectId>,
     project?: IProject
 }
 
@@ -30,7 +31,8 @@ export interface IResource{
 export interface IUser {
     _id?: Types.ObjectId
     name: string,
-    role: IRole[];
+    role: Array<Types.ObjectId | IRole>,
+    projects: Array<Types.ObjectId | IProject>
 }
 
 export interface IAuthorization {
@@ -42,6 +44,16 @@ export interface IAuthorization {
 export interface IRouterContext {
     resourceName: EResource,
     availableRoles: IRole[]
+}
+
+export interface IRequest extends Request{
+    context?: {
+        projectId?: Types.ObjectId,
+        userId?: Types.ObjectId,
+        user?: IUser,
+        resourceName?: EResource,
+        availableRoles?: IRole[],
+    } 
 }
 
 // ======================= // ================ // =============
@@ -66,5 +78,6 @@ export enum ERole {
 
 export enum EResource {
     invoice = "INVOICE",
-    client = "CLIENT"
+    client = "CLIENT",
+    project = "PROJECT"
 }
