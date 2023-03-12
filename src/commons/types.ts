@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import {Types} from 'mongoose'; 
+import {HydratedDocument, Types} from 'mongoose'; 
 
 
 export interface IProject {
@@ -31,7 +31,7 @@ export interface IResource{
 export interface IUser {
     _id?: Types.ObjectId,
     passwordHash?: string,
-    currentProject?: Types.ObjectId,
+    currentProject?: Types.ObjectId | IProject | HydratedDocument<IProject>,
     email: string,
     name: string,
     role: Array<Types.ObjectId | IRole>,
@@ -57,7 +57,7 @@ export interface IRequest extends Request{
         resourceName?: EResource,
         availableRoles?: IRole[],
         token?: string,
-        currentProject?: Types.ObjectId
+        currentProject?: HydratedDocument<IProject>
 
     } 
 }

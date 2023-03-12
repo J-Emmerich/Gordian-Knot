@@ -1,7 +1,8 @@
 import { NextFunction, Response } from "express";
 import { User } from "../data/models";
-import { IRequest } from "../commons/types";
+import { IProject, IRequest } from "../commons/types";
 import { setDefaultProjectForUser } from "../utilities";
+import { HydratedDocument } from "mongoose";
 
 const jwt = require("jsonwebtoken");
 
@@ -20,7 +21,7 @@ export const authenticate = async (req:IRequest, res: Response, next: NextFuncti
             req.context.token = token;
             req.context.user = user;
             if(!user.currentProject?._id) await setDefaultProjectForUser(user); 
-            req.context.currentProject = user.currentProject;
+            req.context.currentProject = user.currentProject as HydratedDocument<IProject>;
             next();
         } else {
             console.log("no user");

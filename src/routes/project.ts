@@ -31,7 +31,7 @@ export const projectRouter = (methods : any) => {
   const controller = projectController(methods);
 
   
-  router.all('*', context)
+  router.all('*', context, authorize);
   router.param("projectId", async (req:IRequest, res, next)=>{
     const projectId = new Types.ObjectId(req.params.projectId);
     req.context.projectId = projectId; 
@@ -40,9 +40,8 @@ export const projectRouter = (methods : any) => {
 
   router.get("/", controller.getAllProjectsFromUser);
   router.get("/:projectId", controller.getOneProject);
-  
-  router.post("/", controller.createOneUser);
-  router.post("/:projectId/users/:userId", controller.addUserToProject)
+  router.post("/:projectId/users/:userId", controller.addUserToOneProject);
+
   /* 
 
 

@@ -15,16 +15,18 @@ import { Role, Permission, Resource } from '../models';
 
  const resources: IResource[] = [
     {name: 'Invoice'},
-    {name: 'Client'}
+    {name: 'Client'},
+    {name: 'User'},
+    {name: 'Project'}
 ];
 
 export const roles: IRole[] = [
     {name: 'Admin', resources: resources, permissions: permissions},
     {name: 'User', resources: resources, permissions: [permissions[0], permissions[1], permissions[2]]},
-    {name: 'InvAdmin', resources: [resources[0]], permissions: permissions},
-    {name: 'ClientAdmin', resources: [resources[1]], permissions: permissions},
-    {name: 'InvUser', resources: [resources[0]], permissions: [permissions[0], permissions[1]] },
-    {name: 'ClientUser', resources: [resources[1]], permissions: [permissions[0], permissions[1], permissions[2]]}
+    {name: 'InvAdmin', resources: [resources[0],resources[2], resources[3]], permissions: permissions},
+    {name: 'ClientAdmin', resources: [resources[1],resources[2], resources[3]], permissions: permissions},
+    {name: 'InvUser', resources: [resources[0],resources[2], resources[3]], permissions: [permissions[0], permissions[1]] },
+    {name: 'ClientUser', resources: [resources[1],resources[2], resources[3]], permissions: [permissions[0], permissions[1], permissions[2]]}
 ]
 
 const findRoleAndSave:Function = async (role: IRole) => {

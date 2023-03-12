@@ -5,6 +5,7 @@ import { filterCreatePermission } from "./filterCreatePermission";
 import { filterDeletePermission } from "./filterDeletePermission";
 import { filterUpdatePermission } from "./filterUpdatePermission";
 import { createContext } from "./createContext";
+import { purgeModel } from "./purgeModel";
 import { setDefaultProjectForUser, setDefaultProjectForUserWithoutSave } from "./setDefaultProjectForUser";
 
-export {setDefaultProjectForUserWithoutSave, setDefaultProjectForUser,createContext,filterReadPermission, filterCreatePermission, filterUpdatePermission, filterDeletePermission, isRoleInBothArrays,filterClientResource};
+export {purgeModel, setDefaultProjectForUserWithoutSave, setDefaultProjectForUser,createContext,filterReadPermission, filterCreatePermission, filterUpdatePermission, filterDeletePermission, isRoleInBothArrays,filterClientResource};
