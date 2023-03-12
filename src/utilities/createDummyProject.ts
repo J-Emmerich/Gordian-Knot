@@ -1,4 +1,4 @@
-import { Project } from "../data/models/authorization"
+import { Project } from "../data/models"
 import { Types } from "mongoose";
 export const createDummyProject = async () => {
 

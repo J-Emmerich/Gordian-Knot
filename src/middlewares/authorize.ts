@@ -55,7 +55,7 @@ return res.status(401).send(`Access denied. Switch`);
 
 if (!filteredRolesFromContext.length) return res.status(403).send(`Access denied. No permissions set for this`)
 // check if the user has the permission to READ the resource
- hasPermission = isRoleInBothArrays(filteredRolesFromContext, user.role);
+ hasPermission = isRoleInBothArrays(filteredRolesFromContext, user.role as IRole[]);
     if (!hasPermission) return res.status(403).send(`Access denied. Not your role`);
     next();
   };

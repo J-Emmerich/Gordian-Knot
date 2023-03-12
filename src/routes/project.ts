@@ -33,19 +33,16 @@ export const projectRouter = (methods : any) => {
   
   router.all('*', context)
   router.param("projectId", async (req:IRequest, res, next)=>{
-    console.log(req.params.projectId, "project id params"); 
     const projectId = new Types.ObjectId(req.params.projectId);
-    if(!req.context) req.context = {}
     req.context.projectId = projectId; 
-    console.log( req.context.projectId)
     next()
   })
 
-  router.get("/", controller.getAllProjects);
+  router.get("/", controller.getAllProjectsFromUser);
   router.get("/:projectId", controller.getOneProject);
   
   router.post("/", controller.createOneUser);
-  router.post("/:projectId/users", controller.addUserToProject)
+  router.post("/:projectId/users/:userId", controller.addUserToProject)
   /* 
 
 

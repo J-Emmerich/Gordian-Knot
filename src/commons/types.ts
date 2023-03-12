@@ -29,7 +29,10 @@ export interface IResource{
 }
 
 export interface IUser {
-    _id?: Types.ObjectId
+    _id?: Types.ObjectId,
+    passwordHash?: string,
+    currentProject?: Types.ObjectId,
+    email: string,
     name: string,
     role: Array<Types.ObjectId | IRole>,
     projects: Array<Types.ObjectId | IProject>
@@ -47,12 +50,15 @@ export interface IRouterContext {
 }
 
 export interface IRequest extends Request{
-    context?: {
+    context: {
         projectId?: Types.ObjectId,
         userId?: Types.ObjectId,
         user?: IUser,
         resourceName?: EResource,
         availableRoles?: IRole[],
+        token?: string,
+        currentProject?: Types.ObjectId
+
     } 
 }
 
@@ -79,5 +85,6 @@ export enum ERole {
 export enum EResource {
     invoice = "INVOICE",
     client = "CLIENT",
-    project = "PROJECT"
+    project = "PROJECT",
+    user = "USER"
 }
