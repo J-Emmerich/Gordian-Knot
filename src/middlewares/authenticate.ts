@@ -2,7 +2,7 @@ import { NextFunction, Response } from "express";
 import { User } from "../data/models";
 import { IProject, IRequest } from "../commons/types";
 import { setDefaultProjectForUser } from "../utilities";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 
 const jwt = require("jsonwebtoken");
 
@@ -15,7 +15,9 @@ export const authenticate = async (req:IRequest, res: Response, next: NextFuncti
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET, {
             complete: true,
         });
-        const id = decodedToken.payload.user;
+        let id = decodedToken.payload.user;
+        id = new Types.ObjectId(id); 
+      
         const user = await User.findById(id).populate('currentProject');
         if (user) {
             req.context.token = token;

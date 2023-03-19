@@ -7,6 +7,7 @@ export interface IProject {
     name: string
     users: Array<IUser | Types.ObjectId>
     roles: Array<IRole | Types.ObjectId>
+    isPrivate?: Boolean
 }
 
 export interface IPermission {
@@ -20,7 +21,7 @@ export interface IRole {
     name: string
     resources: Array<IResource | Types.ObjectId>,
     permissions: Array<IPermission | Types.ObjectId>,
-    project?: IProject
+    project?: Types.ObjectId
 }
 
 export interface IResource{
@@ -52,13 +53,12 @@ export interface IRouterContext {
 export interface IRequest extends Request{
     context: {
         projectId?: Types.ObjectId,
-        userId?: Types.ObjectId,
         user?: IUser,
         resourceName?: EResource,
         availableRoles?: IRole[],
         token?: string,
         currentProject?: HydratedDocument<IProject>
-
+        secondaryUserId?: Types.ObjectId 
     } 
 }
 

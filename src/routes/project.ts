@@ -32,25 +32,39 @@ export const projectRouter = (methods : any) => {
 
   
   router.param("projectId", async (req:IRequest, res, next)=>{
-
     const projectId = new Types.ObjectId(req.params.projectId);
     req.context.projectId = projectId; 
     next()
   })
+  router.param("secondaryUserId", async (req:IRequest, res, next)=>{
+    const secondaryUserId = new Types.ObjectId(req.params.secondaryUserId);
+    req.context.secondaryUserId = secondaryUserId; 
+    next()
+  })
   
   router.all('*', context, authorize);
+  // If project Id is not defined its assumed that the current project should be updated
+
   // Get all projects from user
   router.get("/", controller.getAllProjectsFromUser);
+  // Edit project details
+  router.put("/", controller.editProjectDetails);
+  
   // Get specific project from user
   router.get("/:projectId", controller.getOneProject);
+  // Add a project
+  router.post('/', controller.createNewProject); 
   // Add an user to a project
-  router.post("/:projectId/user/:userToAddId", controller.addUserToOneProject);
-
+  router.post("/:projectId/user/:secondaryUserId", controller.addUserToOneProject);
+  // router.put("/:projectId/user/:secondaryUserId", controller.updateUserRole);
+  router.delete("/:projectId", controller.deleteProject); 
+  router.delete("/:projectId/user/:secondaryUserId", controller.removeUserFromProject);  
+  
+  
   /* 
 
 
 
-  router.put("/:projectId", controller.editProjectDetails);
 
   router.delete("/:projectId", controller.deleteOneProject);
 */

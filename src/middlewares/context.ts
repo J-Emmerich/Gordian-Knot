@@ -2,7 +2,6 @@ import { Response, Request, NextFunction } from "express";
 import { IRequest, EResource, IRole, IResource } from "../commons/types";
 
 export const context = async (req : IRequest, res: Response, next: NextFunction) => {
-console.log("ici context");
 // Trim the /api/ part of the base url and convert to uppercase
 const indexOfLastPath = req.baseUrl.lastIndexOf("/") + 1
 let resource = req.baseUrl.substring(indexOfLastPath).toUpperCase(); 

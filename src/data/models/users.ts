@@ -10,8 +10,8 @@ const uniqueValidator = require("mongoose-unique-validator");
 }*/
 
 const createDefaultProject = async (userDoc :  types.IUser) => {
-  const project : HydratedDocument<types.IProject>  = new Project({name: userDoc._id?.toString()}); 
-  const role : HydratedDocument<types.IRole> = new Role({name: 'Admin-U'}); 
+  const project : HydratedDocument<types.IProject>  = new Project({name: userDoc._id?.toString(), isPrivate: true}); 
+  const role : HydratedDocument<types.IRole> = new Role({name: 'Admin', project: project._id}); 
   let resources : any = Resource.find({}); 
   let permissions : any = Permission.find({}); 
    [resources, permissions] = await Promise.all([resources, permissions]); 
@@ -19,7 +19,7 @@ const createDefaultProject = async (userDoc :  types.IUser) => {
     return role.resources.push(resource._id as Types.ObjectId);
   });
   permissions.forEach((permission: types.IPermission) =>role.permissions.push(permission._id as Types.ObjectId))
-  await role.save()
+  await role.save(); // Maybe this could run in parallel with the project save
   userDoc.role.push(role._id); 
   project.roles.push(role._id);
   project.users.push(userDoc._id as Types.ObjectId); 

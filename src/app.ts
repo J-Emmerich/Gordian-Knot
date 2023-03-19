@@ -16,7 +16,7 @@ const port:number = 3000;
 
 app.use(express.json());
 app.all('*', createContext);
-// app.use("/debug", debugRouter()); ===== DEBUG DEBUG DEBUG 
+app.use("/debug", debugRouter()); //===== DEBUG DEBUG DEBUG 
 app.use("/user", authenticationRouter());
 app.all('/api/*', authenticate)
 app.use("/api/project", projectRouter(1));
