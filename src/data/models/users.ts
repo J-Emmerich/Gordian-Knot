@@ -1,8 +1,8 @@
 
 import { Types, Schema, model, HydratedDocument } from 'mongoose';
-import { setDefaultProjectForUser, setDefaultProjectForUserWithoutSave } from '../../utilities';
-import * as types from '../../commons/types';
-import {Resource, Permission, Project, Role} from '../models'
+import { setDefaultProjectForUser, setDefaultProjectForUserWithoutSave } from '@utilities';
+import * as types from '@commons/types';
+import {Resource, Permission, Project, Role} from '@models'
 const uniqueValidator = require("mongoose-unique-validator");
 
 /*export interface IRoleModel extends types.IRole {

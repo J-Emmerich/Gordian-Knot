@@ -1,10 +1,11 @@
 require('dotenv').config('../.env')
+import 'module-alias/register';
 import * as express from 'express';
 import { projectRouter, authenticationRouter } from './routes';
-import {createContext, purgeModel} from './utilities';
-import { errorHandler, logError, authenticate } from './middlewares';
-import { createRolesAndPermissionsAndResources } from './data/methods/authorization';
-import { Permission, Project, Resource, Role, User } from './data/models';
+import {createContext, purgeModel} from '@utilities';
+import { errorHandler, logError, authenticate } from '@middlewares';
+import { createRolesAndPermissionsAndResources } from '@dbmethods/authorization';
+import { Permission, Project, Resource, Role, User } from '@models';
 import { debugRouter  } from './routes/debug';
 
 // Connects to MongoDB Atlas

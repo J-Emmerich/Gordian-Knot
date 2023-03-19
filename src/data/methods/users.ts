@@ -1,5 +1,5 @@
-import { IUser,IRole } from "../../commons/types";
-import { Role, User } from "../models";
+import { IUser,IRole } from "@commons/types";
+import { Role, User } from "@models";
 
 
 //needed to access the mongoose methods

@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from "express";
-import { IRequest, EResource, IRole, IResource } from "../commons/types";
+import { IRequest, EResource, IRole, IResource } from "@commons/types";
 
 export const context = async (req : IRequest, res: Response, next: NextFunction) => {
 // Trim the /api/ part of the base url and convert to uppercase

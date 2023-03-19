@@ -1,6 +1,6 @@
-import { IUser, IProject, IRole, IResource, IPermission } from "../../commons/types";
+import { IUser, IProject, IRole, IResource, IPermission } from "@commons/types";
 import { HydratedDocument, Types } from "mongoose";
-import { Project, Role, Resource, Permission } from "../models";
+import { Project, Role, Resource, Permission } from "@models";
 
 export const createProjectAndSaveUser = async (userDoc : HydratedDocument<IUser>, projectName: string, roleName: string, isPrivate : boolean) => {
     const project : HydratedDocument<IProject>  = new Project({name: projectName, isPrivate}); 

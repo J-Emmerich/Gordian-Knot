@@ -1,6 +1,5 @@
 
-import { IRole,IResource } from "../commons/types";
-import { EResource } from "../commons/types";
+import { IRole,IResource, EResource } from "@commons/types";
 
 export const filterClientResource = (role : IRole) : IRole | void => {
 

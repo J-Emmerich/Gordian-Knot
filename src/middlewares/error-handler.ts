@@ -1,10 +1,9 @@
 import { NextFunction, Response } from 'express';
 import { Error } from 'mongoose';
-import { IRequest } from '../commons/types';
-import {ErrorResponse} from '../utilities/errorResponse'
+import { IRequest } from '@commons/types';
+import {ErrorResponse} from '@utilities'
 
 const sendHttpResponse = (err : ErrorResponse, req: IRequest, res: Response) => {
-  console.log("http response ^^******************++", err);
   if (err.statusCode === 500) {
     res.status(500).json({
       success: false,

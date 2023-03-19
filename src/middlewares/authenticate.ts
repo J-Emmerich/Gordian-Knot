@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
-import { User } from "../data/models";
-import { IProject, IRequest } from "../commons/types";
-import { setDefaultProjectForUser } from "../utilities";
+import { User } from "@models";
+import { IProject, IRequest } from "@commons/types";
+import { setDefaultProjectForUser } from "@utilities";
 import { HydratedDocument, Types } from "mongoose";
 
 const jwt = require("jsonwebtoken");

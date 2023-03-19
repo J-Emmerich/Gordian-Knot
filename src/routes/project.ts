@@ -20,11 +20,10 @@ A user can edit the roles inside a project -> create a role for the project, edi
 */
 
 import * as express from 'express';
-import { authorize } from '../middlewares/authorize';
+import { authorize, context } from '@middlewares';
 import { projectController } from '../controllers/projectController'
-import { context } from '../middlewares/context';
 import { Types } from 'mongoose';
-import { IRequest } from '../commons/types';
+import { IRequest } from '@commons/types';
 
 export const projectRouter = (methods : any) => {
   const router = express.Router();

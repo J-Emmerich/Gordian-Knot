@@ -10,7 +10,12 @@
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {
-            "*": ["node_modules/*", "@types/*", "src/types/*"]
+            "*": ["node_modules/*", "@types/*", "src/types/*"],
+            "@models"      : ["src/data/models"],
+            "@dbmethods/*"      : ["src/data/methods/*"],
+            "@commons/*" : ["src/commons/*"],
+            "@middlewares"  : ["src/middlewares"],
+            "@utilities": ["src/utilities"]
         }
     },
     "include": ["src/**/*"],

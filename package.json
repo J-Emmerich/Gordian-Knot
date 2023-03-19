@@ -1,5 +1,12 @@
 {
     "main": "app.js",
+    "_moduleAliases": {
+        "@models"      : "dist/data/models",
+        "@dbmethods"      : "dist/data/methods",
+        "@commons" : "dist/commons",
+        "@middlewares"  : "dist/middlewares",
+        "@utilities": "dist/utilities"
+      },
     "scripts": {
         "start:build": "tsc -w",
         "start:run": "nodemon dist/app.js",
@@ -10,6 +17,7 @@
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
         "jsonwebtoken": "^9.0.0",
+        "module-alias": "^2.2.2",
         "mongoose": "^6.9.0",
         "mongoose-unique-validator": "^3.1.0"
     },

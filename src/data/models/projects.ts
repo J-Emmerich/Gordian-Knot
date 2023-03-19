@@ -1,5 +1,5 @@
 import { Types, Schema, model, HydratedDocument } from 'mongoose';
-import * as types from '../../commons/types';
+import * as types from '@commons/types';
 
 
 const ProjectSchema = new Schema<types.IProject>({

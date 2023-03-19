@@ -1,8 +1,8 @@
 import * as express from 'express';
-import { IUser } from '../commons/types';
-import { getAllUsersFromDatabase } from '../utilities'; 
+import { IUser } from '@commons/types';
+import { getAllUsersFromDatabase } from '@utilities'; 
 import { Types } from 'mongoose';
-import { Project } from '../data/models'; 
+import { Project } from '@models'; 
 
 
 export const debugRouter = () => {

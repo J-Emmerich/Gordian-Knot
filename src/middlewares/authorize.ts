@@ -1,7 +1,7 @@
 import { NextFunction } from "express";
 import {Types, HydratedDocument} from 'mongoose';
-import { User, Role, Project } from "../data/models";
-import { IUser, IRole, ERole, EPermision, EResource } from "../commons/types";
+import { User, Role, Project } from "@models";
+import { IUser, IRole, ERole, EPermision, EResource } from "@commons/types";
 import { isRoleInBothArrays, filterReadPermission, filterClientResource,filterCreatePermission, filterDeletePermission, filterUpdatePermission } from "../utilities";
 
 export const authorize = async (req: any, res: any, next: NextFunction) => {

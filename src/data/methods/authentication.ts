@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
-import { User } from "../models";
-import {setDefaultProjectForUser} from '../../utilities';
+import { User } from "@models";
+import {setDefaultProjectForUser} from '@utilities';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 

@@ -1,5 +1,5 @@
 import { Types, Schema, model, HydratedDocument } from 'mongoose';
-import {IRole} from '../../commons/types';
+import {IRole} from '@commons/types';
 
 const RoleSchema = new Schema<IRole>({
     name: { type: String, required: true },

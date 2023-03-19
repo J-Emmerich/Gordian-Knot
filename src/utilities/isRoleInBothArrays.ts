@@ -1,5 +1,5 @@
 import { Types } from "mongoose"
-import { IRole } from "../commons/types";
+import { IRole } from "@commons/types";
 
 export const isRoleInBothArrays = (fthArr: IRole[], secArr: IRole[]) : Boolean => {
 

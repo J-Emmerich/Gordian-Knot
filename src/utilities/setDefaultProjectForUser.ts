@@ -1,6 +1,6 @@
 import { Types, HydratedDocument } from 'mongoose';
-import { IProject, IUser } from '../commons/types';
-import {User, Project} from '../data/models';
+import { IProject, IUser } from '@commons/types';
+import {User, Project} from '@models';
 
 export const setDefaultProjectForUser = async (user : HydratedDocument<IUser>, project? : Types.ObjectId) => {
     let projectId; 

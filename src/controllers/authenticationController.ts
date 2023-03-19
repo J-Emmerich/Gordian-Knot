@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
-import { IRequest } from "../commons/types";
-import { loginUser, registerUser } from "../data/methods/authentication";
+import { IRequest } from "@commons/types"
+import { loginUser, registerUser } from "@dbmethods/authentication";
 
 export const authenticationController = () => {
     const login = async (req: IRequest, res: Response, next : NextFunction) => {

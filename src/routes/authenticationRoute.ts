@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { context } from '../middlewares/context';
+import { context } from '@middlewares';
 import {authenticationController} from '../controllers/authenticationController';
 
 export const authenticationRouter = () => {

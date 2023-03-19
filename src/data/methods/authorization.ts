@@ -1,7 +1,7 @@
 import { HydratedDocument, Types } from "mongoose";
-import {IPermission, IRole, IResource} from "../../commons/types";
+import {IPermission, IRole, IResource} from "@commons/types";
 
-import { Role, Permission, Resource } from '../models';
+import { Role, Permission, Resource } from '@models';
 
 // Create the roles and permissions in the database
 

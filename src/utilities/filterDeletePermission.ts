@@ -1,6 +1,5 @@
 
-import { IRole, IPermission } from "../commons/types";
-import { EPermision } from "../commons/types";
+import { IRole, IPermission, EPermision } from "@commons/types";
 
 export const filterDeletePermission = (role : IRole) : IRole | void => {
 

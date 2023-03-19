@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { IRequest, IRole, IUser } from "../commons/types";
-import { Project, Role, User } from "../data/models";
-import { createUser } from "../data/methods/users";
+import { IRequest, IRole, IUser, IProject } from "@commons/types";
+import { Project, Role, User } from "@models";
+import { createUser } from "@dbmethods/users";
 import { HydratedDocument, Types } from "mongoose";
-import { IProject } from "../commons/types";
-import { createProjectAndSaveUser } from "../data/methods/projects";
+import {  } from "@commons/types";
+import { createProjectAndSaveUser } from "@dbmethods/projects";
 
 
 export const projectController = (methods : any) => {
