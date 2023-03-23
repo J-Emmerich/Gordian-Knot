@@ -41,7 +41,7 @@ export const assignToUserByIdRoleByName = async (userId: Types.ObjectId, roleId:
     if (role) {
     const user : HydratedDocument<IUser> | null = await User.findById(userId);
     if(user) {
-        user.role.push(role._id as unknown as IRole);
+        user.roles.push(role._id as unknown as IRole);
 await user.save();
 
     }

@@ -1,5 +1,6 @@
 import { Response, Request, NextFunction } from "express";
-import { IRequest, EResource, IRole, IResource } from "@commons/types";
+import { IRequest, IRole, IResource } from "@commons/types";
+import { EResource } from "@commons/enumerators";
 
 export const context = async (req : IRequest, res: Response, next: NextFunction) => {
 // Trim the /api/ part of the base url and convert to uppercase
@@ -7,8 +8,8 @@ const indexOfLastPath = req.baseUrl.lastIndexOf("/") + 1
 let resource = req.baseUrl.substring(indexOfLastPath).toUpperCase(); 
 let filteredRolesFromContext : IRole[] | [];
 // If exist in the list of resources save in the context, otherwise close connection
-    if(Object.values(EResource).includes(resource as EResource)){
-        req.context.resourceName = resource as EResource;
+    if(EResource.has(resource)){
+        req.context.resourceName = resource;
 
 // Define the Available roles in the project
 req.context.currentProject = await req.context.currentProject!.populate({path:'roles', populate: ['resources', 'permissions']});; 

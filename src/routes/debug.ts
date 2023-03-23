@@ -1,8 +1,9 @@
 import * as express from 'express';
 import { IUser } from '@commons/types';
-import { getAllUsersFromDatabase } from '@utilities'; 
+import { getAllUsersFromDatabase, purgeModel } from '@utilities'; 
 import { Types } from 'mongoose';
-import { Project } from '@models'; 
+import { Project, Role, User } from '@models';
+
 
 
 export const debugRouter = () => {
@@ -40,7 +41,14 @@ router.get('/testSlice', async(req, res)=> {
 
     return res.status(322).json(bigObject); 
 })
+router.delete('/deleteAll', async(req, res) => {
+await purgeModel(Project);
+await purgeModel(Role);
 
+await purgeModel(User)
+
+res.status(200).send("All deleted"); 
+})
     return router;
   };
   

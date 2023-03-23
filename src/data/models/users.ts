@@ -2,25 +2,17 @@
 import { Types, Schema, model, HydratedDocument } from 'mongoose';
 import { setDefaultProjectForUser, setDefaultProjectForUserWithoutSave } from '@utilities';
 import * as types from '@commons/types';
-import {Resource, Permission, Project, Role} from '@models'
+import {Project, Role} from '@models'
+import { EPermission, EResource } from '@commons/enumerators';
 const uniqueValidator = require("mongoose-unique-validator");
 
-/*export interface IRoleModel extends types.IRole {
-  _id: Schema.Types.ObjectId
-}*/
-
 const createDefaultProject = async (userDoc :  types.IUser) => {
-  const project : HydratedDocument<types.IProject>  = new Project({name: userDoc._id?.toString(), isPrivate: true}); 
+  const project : HydratedDocument<types.IProject>  = new Project({name: `${userDoc.name}&&${userDoc._id?.toString()}`, isPrivate: true, isDefault: true}); 
   const role : HydratedDocument<types.IRole> = new Role({name: 'Admin', project: project._id}); 
-  let resources : any = Resource.find({}); 
-  let permissions : any = Permission.find({}); 
-   [resources, permissions] = await Promise.all([resources, permissions]); 
-   resources.forEach((resource:types.IResource) => {
-    return role.resources.push(resource._id as Types.ObjectId);
-  });
-  permissions.forEach((permission: types.IPermission) =>role.permissions.push(permission._id as Types.ObjectId))
+  role.resources = [...EResource].map(resource => {return {name: resource}})
+  role.permissions = [...EPermission].map(permission => {return {name: permission}})
   await role.save(); // Maybe this could run in parallel with the project save
-  userDoc.role.push(role._id); 
+  userDoc.roles.push(role._id); 
   project.roles.push(role._id);
   project.users.push(userDoc._id as Types.ObjectId); 
   await project.save(); 
@@ -29,10 +21,10 @@ const createDefaultProject = async (userDoc :  types.IUser) => {
 
 
 const UserSchema = new Schema<types.IUser>({
-    name: {type: String, required: true },
+    name: {type: String, required: true, lowercase: true },
     passwordHash: {type: String, select: false, required: true},
-    email: {type: String, required: true, unique: true},
-    role: [{type: Schema.Types.ObjectId, ref: 'Role' }],
+    email: {type: String, required: true, unique: true, lowercase: true},
+    roles: [{type: Schema.Types.ObjectId, ref: 'Role' }],
     projects: [{type: Schema.Types.ObjectId, ref: 'Project'}],
     currentProject: {type: Schema.Types.ObjectId, ref: 'Project'},
 });

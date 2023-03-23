@@ -7,25 +7,23 @@ export interface IProject {
     name: string
     users: Array<IUser | Types.ObjectId>
     roles: Array<IRole | Types.ObjectId>
-    isPrivate?: Boolean
+    isPrivate?: Boolean,
+    isDefault?: Boolean
 }
 
 export interface IPermission {
-    _id?: Types.ObjectId
     name: string,
-    description: string
 }
 
 export interface IRole {
     _id?: Types.ObjectId
     name: string
-    resources: Array<IResource | Types.ObjectId>,
-    permissions: Array<IPermission | Types.ObjectId>,
+    resources: Array<IResource>,
+    permissions: Array<IPermission>,
     project?: Types.ObjectId
 }
 
 export interface IResource{
-    _id?: Types.ObjectId
     name: string 
 }
 
@@ -35,26 +33,16 @@ export interface IUser {
     currentProject?: Types.ObjectId | IProject | HydratedDocument<IProject>,
     email: string,
     name: string,
-    role: Array<Types.ObjectId | IRole>,
+    roles: Array<Types.ObjectId | IRole>,
     projects: Array<Types.ObjectId | IProject>
 }
 
-export interface IAuthorization {
-   requiredRole: ERole,
-   requiredResource: EResource,
-   requiredPermission: EPermision
-}
-
-export interface IRouterContext {
-    resourceName: EResource,
-    availableRoles: IRole[]
-}
 
 export interface IRequest extends Request{
     context: {
         projectId?: Types.ObjectId,
         user?: IUser,
-        resourceName?: EResource,
+        resourceName?: string,
         availableRoles?: IRole[],
         token?: string,
         currentProject?: HydratedDocument<IProject>
@@ -62,29 +50,3 @@ export interface IRequest extends Request{
     } 
 }
 
-// ======================= // ================ // =============
-
-
-
-export enum EPermision {
-    create = "CREATE",
-    read = "READ",
-    update = "UPDATE",
-    delete = "DELETE"
-}
-
-export enum ERole {
-    admin = "ADMIN",
-    user = "USER",
-    invAdmin = "INVADMIN",
-    clientAdmin = "CLIENTADMIN",
-    invUser = "INVUSER",
-    clientUser = "CLIENTUSER"
-    }
-
-export enum EResource {
-    invoice = "INVOICE",
-    client = "CLIENT",
-    project = "PROJECT",
-    user = "USER"
-}

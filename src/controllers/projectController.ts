@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { IRequest, IRole, IUser, IProject } from "@commons/types";
+import { IRequest, IRole, IUser, IProject, IResource, IPermission } from "@commons/types";
 import { Project, Role, User } from "@models";
-import { createUser } from "@dbmethods/users";
+
 import { HydratedDocument, Types } from "mongoose";
-import {  } from "@commons/types";
 import { createProjectAndSaveUser } from "@dbmethods/projects";
+import { EPermission, EResource } from "@commons/enumerators";
 
 
 export const projectController = (methods : any) => {
@@ -39,7 +39,7 @@ const addUserToOneProject = async (req : IRequest, res : Response, next: NextFun
     project.users = project.users.filter((user: IUser)=>user._id?.toString() === req.context.user!._id?.toString());
     if(project.users.length<1) return res.status(404).send("User is not in the project"); 
     // === // Shouldn't this be done by the authorize function? 
-
+if(project.isDefault) return res.status(401).send("Default projects cannot be shared"); 
     if(!req.context.secondaryUserId) return res.status(404).send("No user to add to project"); 
 
 const IDOfUserToAdd : Types.ObjectId = req.context.secondaryUserId; 
@@ -51,12 +51,12 @@ if(project.users.find(user => user._id?.toString() === IDOfUserToAdd.toString())
 
 if(!req.body.roleName) return res.status(401).send("Role name cannot be empty"); 
 if(!project.populated('roles')) await project.populate('roles'); 
-const projectRole = project.roles.find((role: IRole) => role.name === req.body.roleName)
+const projectRole = project.roles.find((role: IRole) => role.name.toLowerCase() === req.body.roleName.toLowerCase())
 if(!projectRole) return res.status(401).send("Role don't exist in project"); 
 //
 project.users.push(userToAddToProject._id); 
 userToAddToProject.projects.push(project._id);
-userToAddToProject.role.push(projectRole._id as Types.ObjectId);
+userToAddToProject.roles.push(projectRole._id as Types.ObjectId);
 await project.save(); 
 await userToAddToProject.save();
     
@@ -99,9 +99,11 @@ const removeUserFromProject = async (req: IRequest, res: Response, next: NextFun
 await project.save(); // this will remove the user even if the user has been deleted from Database
 const secondaryUser = await User.findById(req.context.secondaryUserId); 
 if(!secondaryUser) return res.status(404).send("User is not found"); 
-const isProjectInUserList : number = secondaryUser.projects.findIndex((project: IProject) => project._id?.toString() === project._id?.toString())
+const isProjectInUserList : number = secondaryUser.projects.findIndex((secondaryUserProject: IProject) => secondaryUserProject._id?.toString() === project._id?.toString())
 if(isProjectInUserList === -1) return res.status(404).send("This project is not in user list"); 
 secondaryUser.projects =  secondaryUser.projects.filter(projectFromUser => projectFromUser._id?.toString() !== project._id.toString());
+if(!secondaryUser.populated('roles')) await secondaryUser.populate('roles');
+secondaryUser.roles = secondaryUser.roles.filter((secondaryUserRole : IRole) => secondaryUserRole.project?._id.toString() !== project._id.toString() )
 await secondaryUser.save()
 return res.status(201).json({project, secondaryUser}); 
 
@@ -109,9 +111,16 @@ return res.status(201).json({project, secondaryUser});
 
 const createNewProject = async (req: IRequest, res: Response, next: NextFunction) => {
     // This needs validation
-    const {name, isPrivate} = req.body;
+    const {name, isPrivate, role} = req.body;
+// Validate if role has all properties otherwise return
+// Validate that the role has the required properties
+if(!role.name) return res.send(401).json({name: "Error", description: "role name inexistent"});
+if(!role.resources.some((resource : IResource) => EResource.has(resource.name.toUpperCase()) )) return res.send(401).json({name: "Error", description: "resource is not valid"});
+if(!role.permissions.some((permission : IPermission) => EPermission.has(permission.name.toUpperCase()))) return res.send(401).json({name: "Error", description: "permission is not valid"});
+//
 
-    const project = await createProjectAndSaveUser(req.context.user! as HydratedDocument<IUser>, name, 'admin', isPrivate ); 
+//
+    const project = await createProjectAndSaveUser(req.context.user! as HydratedDocument<IUser>, name, role, isPrivate ); 
     res.status(201).json({project})
 }
 
@@ -120,10 +129,12 @@ const deleteProject = async (req: IRequest, res: Response, next: NextFunction) =
 // === verify that the user has this project in his list. Otherwise denegate === // 
 const project : HydratedDocument<IProject> | null = await Project.findById(req.context.projectId); 
 if(!project) return res.status(404).send("No project");     
-if(!project.populated('users')) await project.populate({path: 'users', populate: 'role'});  
+if(!project.populated('users')) await project.populate({path: 'users', populate: 'roles'});  
+
+// Check if the user requesting the deletion of the project has an admin role in the project
 project.users = project.users.filter((user: IUser)=>{
     if(user._id?.toString() === req.context.user!._id?.toString()){
-        if(user.role?.some((role : IRole)=> 
+        if(user.roles?.some((role : IRole)=> 
         { 
             if(role.project?.toString() === req.context.projectId?.toString() && role.name.toLowerCase() === 'admin'){
                 return role 
@@ -142,10 +153,10 @@ project.users = project.users.filter((user: IUser)=>{
 });
 if(project.users.length<1) return res.status(404).send("User is not in the project, or does not have the access"); 
 
-// for each user in the project remove the project from their list
+// for each user in the project remove the project and the related role from their list
 project.users.map(async (user: HydratedDocument<IUser>) => {
     user.projects = user.projects.filter((UserProject: IProject)=> UserProject._id?.toString() !== project._id.toString())
-user.role = user.role.filter((UserRole: IRole)=> UserRole.project?.toString() !== project._id.toString())
+user.roles = user.roles.filter((UserRole: IRole)=> UserRole.project?.toString() !== project._id.toString())
     await user.save()
 })
 // for each role in the project remove the role from the database

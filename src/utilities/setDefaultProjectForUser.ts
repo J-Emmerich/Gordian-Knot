@@ -1,13 +1,12 @@
 import { Types, HydratedDocument } from 'mongoose';
 import { IProject, IUser } from '@commons/types';
-import {User, Project} from '@models';
 
 export const setDefaultProjectForUser = async (user : HydratedDocument<IUser>, project? : Types.ObjectId) => {
     let projectId; 
 // Use default project if none is defined
 if(!project) {
     let populatedUser : HydratedDocument<IUser> = await user.populate('projects'); 
-    console.log(populatedUser);
+   
     projectId = populatedUser.projects.find((project : IProject) => project.name === populatedUser._id.toString()); 
    // If finds a default project with the user id as same then sets the id. Otherwise use the first found
     if(projectId) projectId = projectId?._id;
@@ -26,7 +25,6 @@ export const setDefaultProjectForUserWithoutSave = async (user : HydratedDocumen
 // Use default project if none is defined
 if(!project) {
     let populatedUser : HydratedDocument<IUser> = await user.populate('projects'); 
-    console.log(populatedUser);
     projectId = populatedUser.projects.find((project : IProject) => project.name === populatedUser._id.toString()); 
    // If finds a default project with the user id as same then sets the id. Otherwise use the first found
     if(projectId) projectId = projectId?._id;

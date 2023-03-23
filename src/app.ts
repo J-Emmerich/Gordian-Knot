@@ -5,7 +5,6 @@ import { projectRouter, authenticationRouter } from './routes';
 import {createContext, purgeModel} from '@utilities';
 import { errorHandler, logError, authenticate } from '@middlewares';
 import { createRolesAndPermissionsAndResources } from '@dbmethods/authorization';
-import { Permission, Project, Resource, Role, User } from '@models';
 import { debugRouter  } from './routes/debug';
 
 // Connects to MongoDB Atlas
