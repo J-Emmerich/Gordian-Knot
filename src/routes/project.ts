@@ -53,7 +53,6 @@ export const projectRouter = (methods : any) => {
   // Edit project details
   router.put("/", controller.editProjectDetails);
   router.get("/current", controller.getCurrentProject);
-  router.put("/current", controller.updateCurrentProject);
   // Get role from defined project
   router.get("/:projectId?/role", controller.getRoleDetails); 
 router.post("/:projectId?/role", controller.createRole); 

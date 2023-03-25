@@ -35,18 +35,7 @@ const getCurrentProject = async(req: IRequest, res: Response, next: NextFunction
     res.status(200).json(req.context.currentProject); 
 }
 
-const updateCurrentProject = async(req: IRequest, res: Response, next: NextFunction)=> {
-    const {projectName} = req.body; 
-    console.log(projectName)
-    if(!projectName) return res.status(401).json({success: false, description: "Bad Request"});
-    // verify that the user has the project
-    if(!req.context.user!.populated('projects')) await req.context.user?.populate('projects');
-  
-    const project = req.context.user?.projects.find((project : IProject)=> project.name === projectName);
-    if(!project) return res.status(401).json({success: false, description: "User dont have this project"}); 
-const updatedUser = await User.findOneAndUpdate({_id: req.context.user!._id}, {currentProject: project._id}, {new:true});   
-return res.status(200).json({success: true, description: "current project changed", updated: updatedUser?.currentProject}); 
-}
+
 
 const addUserToOneProject = async (req : IRequest, res : Response, next: NextFunction) => {
 
@@ -147,8 +136,6 @@ const getRoleDetails = async (req: IRequest, res: Response, next: NextFunction) 
     const {roleName} = req.body;
     
     const projectId = req.context?.projectId ? req.context.projectId : req.context.currentProject?._id;  
-    console.log(projectId)
-    console.log(roleName);  
     const role = await Role.findOne({name: roleName, project: projectId}); 
 if(!role) return res.status(404).json({success: false, description: "No such role in database"}); 
 return res.status(200).json({success: true, role: role}); 
@@ -222,7 +209,6 @@ project.users = project.users.filter((user: IUser)=>{
         ))
         
         {
-            console.log("passed the second")
             return user
         }
     } 
@@ -244,5 +230,5 @@ return res.status(201).json(project);
 }
 
 
-return {updateCurrentProject, getCurrentProject, updateUserRole, createRole, getRoleDetails, deleteProject, createNewProject, removeUserFromProject, getAllProjectsFromUser, addUserToOneProject,getOneProject, editProjectDetails };
+return { getCurrentProject, updateUserRole, createRole, getRoleDetails, deleteProject, createNewProject, removeUserFromProject, getAllProjectsFromUser, addUserToOneProject,getOneProject, editProjectDetails };
 };

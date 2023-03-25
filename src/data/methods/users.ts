@@ -12,7 +12,7 @@ try {
     await newUser.save()
     return newUser;
 } catch (error) {
-    console.log( error.message, "error in create user");
+   
     return null
 }
 

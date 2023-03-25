@@ -30,13 +30,12 @@ router.get('/allProjectsAndAllDetails', async(req, res)=> {
 router.get('/testSlice', async(req, res)=> {
     const array = [{name: 1}, {name: 2}, {name: 3}, {name:4}]; 
     const bigObject = {users: array}; 
-    console.log("this is the big object", bigObject); 
+ 
     const index = bigObject.users.findIndex(user => user.name === 2); 
     const newArr = bigObject.users.slice(0, index); 
-    console.log(newArr); 
+
     const secArr = bigObject.users.slice(-index); 
-    console.log(secArr);   
-    console.log(bigObject.users); 
+
 
 
     return res.status(322).json(bigObject); 

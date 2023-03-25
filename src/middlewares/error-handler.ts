@@ -29,7 +29,7 @@ const sendHttpResponse = (err : ErrorResponse, req: IRequest, res: Response) => 
 // eslint-disable-next-line no-unused-vars
 export const errorHandler = (err : Error, req: IRequest, res: Response, next: NextFunction) => {
   let error = { ...err };
-console.log("at error handler");
+
   error.message = `${err.message}`;
   let errorResponse;
   if (err.code === 11000) {
@@ -46,7 +46,7 @@ console.log("at error handler");
 };
 
 export const logError = (err, req, res, next) => {
-  console.log("At log Error", err, "At logError.");
+
   next(err);
 };
 

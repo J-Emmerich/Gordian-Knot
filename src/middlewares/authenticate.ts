@@ -26,7 +26,6 @@ export const authenticate = async (req:IRequest, res: Response, next: NextFuncti
             req.context.currentProject = user.currentProject as HydratedDocument<IProject>;
             next();
         } else {
-            console.log("no user");
             throw new Error("No user");
         }
   } catch (error) {

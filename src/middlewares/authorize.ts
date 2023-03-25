@@ -19,7 +19,6 @@ req.context.availableRoles = req.context.availableRoles.map((availableRole : IRo
 
 if (!req.context.availableRoles.length) return res.status(403).send(`Access denied. No permissions set for this`)
 // check if the user has the permission to READ the resource
-console.log(user.roles); 
  hasPermission = isRoleInBothArrays(req.context.availableRoles, user.roles as IRole[]);
     if (!hasPermission) return res.status(403).send(`Access denied. Not your role`);
     next();

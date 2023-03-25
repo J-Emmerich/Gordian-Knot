@@ -81,9 +81,7 @@ const findRoleAndSave:Function = async (role: IRole) => {
       permissions: role.permissions     
     })
     
-    newRole.save((e)=>{
-      console.log(e)
-    });
+    await newRole.save();
   } 
 }
 

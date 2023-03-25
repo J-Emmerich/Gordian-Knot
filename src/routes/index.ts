@@ -1,4 +1,4 @@
 import {authenticationRouter} from './authenticationRoute';
 import { projectRouter } from './project';
-
-export {authenticationRouter, projectRouter};
+import { userRouter } from './user';
+export {authenticationRouter, projectRouter, userRouter};

@@ -15,7 +15,7 @@ export const authenticationController = () => {
   
     const register = async (req: IRequest, res: Response, next : NextFunction) => {
       try {
-        console.log("1")
+
         const { name, password, email } = req.body;
         const user = await registerUser(name, password, email);
         res.status(200).json({ success: true, data: user });
