@@ -1,4 +1,4 @@
-import { IUser, IProject, IRole, IResource, IPermission } from "@commons/types";
+import { IUser, IProject, IRole} from "@commons/types";
 import { HydratedDocument, Types } from "mongoose";
 import { Project, Role } from "@models";
 
@@ -6,7 +6,7 @@ export const createProjectAndSaveUser = async (userDoc : HydratedDocument<IUser>
     
   
     const project : HydratedDocument<IProject>  = new Project({name: projectName, isPrivate}); 
-    const newRole : HydratedDocument<IRole> = new Role({name: role.name, permissions:role.permissions, resources: role.resources, project: project._id}); 
+    const newRole : HydratedDocument<IRole> = new Role({name: role.name, permissions:role.permissions, project: project._id}); 
     
     await newRole.save(); // Role should be saved first
     userDoc.roles.push(newRole._id); 

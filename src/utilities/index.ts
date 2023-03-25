@@ -1,5 +1,5 @@
 import { isRoleInBothArrays } from "./isRoleInBothArrays"; 
-import { filterClientResource } from "./filterClientResource";
+// import { filterClientResource } from "./filterClientResource";
 import { createContext } from "./createContext";
 import { purgeModel } from "./purgeModel";
 import { getAllUsersFromDatabase} from "./getAllUsersFromDatabase"; 
@@ -9,4 +9,4 @@ import { filterRolePermissionsByHTTPMethod } from "./filterRolePermissionsByHTTP
 
 import { setDefaultProjectForUser, setDefaultProjectForUserWithoutSave } from "./setDefaultProjectForUser";
 
-export {filterRolePermissionsByHTTPMethod, ErrorResponse, getAllUsersFromDatabase, purgeModel, setDefaultProjectForUserWithoutSave, setDefaultProjectForUser,createContext, isRoleInBothArrays,filterClientResource};
+export {filterRolePermissionsByHTTPMethod, ErrorResponse, getAllUsersFromDatabase, purgeModel, setDefaultProjectForUserWithoutSave, setDefaultProjectForUser,createContext, isRoleInBothArrays};

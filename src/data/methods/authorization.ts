@@ -1,28 +1,74 @@
-import { HydratedDocument, Types } from "mongoose";
-import {IPermission, IRole, IResource} from "@commons/types";
+import { HydratedDocument} from "mongoose";
+import {IPermission, IRole} from "@commons/types";
 
 import { Role} from '@models';
 
 // Create the roles and permissions in the database
 
 
- const permissions: IPermission[] = [
-   { name: 'CREATE'},
+export const adminPermissions: IPermission[] = [
+ { resource: "Invoice",
+  actions: [
+  { name: 'CREATE'},
    { name: 'READ'},
    { name: 'UPDATE'},
    { name: 'DELETE'}
-]
+]},
+{ resource: "Client",
+  actions: [
+  { name: 'CREATE'},
+   { name: 'READ'},
+   { name: 'UPDATE'},
+   { name: 'DELETE'}
+]},
+{ resource: "User",
+  actions: [
+  { name: 'CREATE'},
+   { name: 'READ'},
+   { name: 'UPDATE'},
+   { name: 'DELETE'}
+]},
+{ resource: "Project",
+  actions: [
+  { name: 'CREATE'},
+   { name: 'READ'},
+   { name: 'UPDATE'},
+   { name: 'DELETE'}
+]}  
+]; 
 
- const resources: IResource[] = [
-    {name: 'Invoice'},
-    {name: 'Client'},
-    {name: 'User'},
-    {name: 'Project'}
-];
+const userPermissions: IPermission[] = [
+  { resource: "Invoice",
+   actions: [
+   { name: 'CREATE'},
+    { name: 'READ'},
+    { name: 'UPDATE'},
+ ]},
+ { resource: "Client",
+   actions: [
+   { name: 'CREATE'},
+    { name: 'READ'},
+    { name: 'UPDATE'},
+ ]},
+ { resource: "User",
+   actions: [
+   { name: 'CREATE'},
+    { name: 'READ'},
+    { name: 'UPDATE'},
+ ]},
+ { resource: "Project",
+   actions: [
+   { name: 'CREATE'},
+    { name: 'READ'},
+    { name: 'UPDATE'},
+ ]}  
+ ]; 
+ 
+
 
 export const roles: IRole[] = [
-    {name: 'Admin', resources: resources, permissions: permissions},
-    {name: 'User', resources: resources, permissions: [permissions[0], permissions[1], permissions[2]]},
+    {name: 'Admin', permissions: adminPermissions},
+    {name: 'User', permissions: userPermissions},
 ]
 
 const findRoleAndSave:Function = async (role: IRole) => {
@@ -32,7 +78,6 @@ const findRoleAndSave:Function = async (role: IRole) => {
 
     const newRole: HydratedDocument<IRole> = new Role({
       name: role.name,
-      resources: role.resources,
       permissions: role.permissions     
     })
     

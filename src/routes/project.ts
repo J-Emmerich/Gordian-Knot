@@ -31,9 +31,13 @@ export const projectRouter = (methods : any) => {
 
   
   router.param("projectId", async (req:IRequest, res, next)=>{
-    const projectId = new Types.ObjectId(req.params.projectId);
-    req.context.projectId = projectId; 
-    next()
+    try {
+      const projectId = new Types.ObjectId(req.params.projectId);
+      req.context.projectId = projectId; 
+      next()
+    } catch(err){
+      return res.status(401).json({success: false, description: "Bad format of id"}); 
+    }
   })
   router.param("secondaryUserId", async (req:IRequest, res, next)=>{
     const secondaryUserId = new Types.ObjectId(req.params.secondaryUserId);
@@ -48,7 +52,14 @@ export const projectRouter = (methods : any) => {
   router.get("/", controller.getAllProjectsFromUser);
   // Edit project details
   router.put("/", controller.editProjectDetails);
-  
+  router.get("/current", controller.getCurrentProject);
+  router.put("/current", controller.updateCurrentProject);
+  // Get role from defined project
+  router.get("/:projectId?/role", controller.getRoleDetails); 
+router.post("/:projectId?/role", controller.createRole); 
+router.put("/:projectId?/user/:secondaryUserId?/role", controller.updateUserRole); 
+
+
   // Get specific project from user
   router.get("/:projectId", controller.getOneProject);
   // Add a project

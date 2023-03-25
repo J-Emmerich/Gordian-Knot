@@ -12,20 +12,23 @@ export interface IProject {
 }
 
 export interface IPermission {
-    name: string,
+    actions: Array<IAction>,
+    resource: string
+
 }
+
+export interface IAction {
+    name: string
+}
+
 
 export interface IRole {
     _id?: Types.ObjectId
     name: string
-    resources: Array<IResource>,
     permissions: Array<IPermission>,
     project?: Types.ObjectId
 }
 
-export interface IResource{
-    name: string 
-}
 
 export interface IUser {
     _id?: Types.ObjectId,
@@ -41,7 +44,7 @@ export interface IUser {
 export interface IRequest extends Request{
     context: {
         projectId?: Types.ObjectId,
-        user?: IUser,
+        user?: HydratedDocument<IUser>,
         resourceName?: string,
         availableRoles?: IRole[],
         token?: string,

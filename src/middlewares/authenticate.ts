@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
 import { User } from "@models";
-import { IProject, IRequest } from "@commons/types";
+import { IProject, IRequest, IUser } from "@commons/types";
 import { setDefaultProjectForUser } from "@utilities";
 import { HydratedDocument, Types } from "mongoose";
 

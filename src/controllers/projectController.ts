@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { IRequest, IRole, IUser, IProject, IResource, IPermission } from "@commons/types";
+import { IRequest, IRole, IUser, IProject, IPermission, IAction } from "@commons/types";
 import { Project, Role, User } from "@models";
 
 import { HydratedDocument, Types } from "mongoose";
 import { createProjectAndSaveUser } from "@dbmethods/projects";
-import { EPermission, EResource } from "@commons/enumerators";
+import { EAction, EResource } from "@commons/enumerators";
 
 
 export const projectController = (methods : any) => {
@@ -30,6 +30,24 @@ if(project.users.length<1) return res.status(404).send("User is not in the proje
 res.status(200).json(project);
 
 }
+
+const getCurrentProject = async(req: IRequest, res: Response, next: NextFunction) => {
+    res.status(200).json(req.context.currentProject); 
+}
+
+const updateCurrentProject = async(req: IRequest, res: Response, next: NextFunction)=> {
+    const {projectName} = req.body; 
+    console.log(projectName)
+    if(!projectName) return res.status(401).json({success: false, description: "Bad Request"});
+    // verify that the user has the project
+    if(!req.context.user!.populated('projects')) await req.context.user?.populate('projects');
+  
+    const project = req.context.user?.projects.find((project : IProject)=> project.name === projectName);
+    if(!project) return res.status(401).json({success: false, description: "User dont have this project"}); 
+const updatedUser = await User.findOneAndUpdate({_id: req.context.user!._id}, {currentProject: project._id}, {new:true});   
+return res.status(200).json({success: true, description: "current project changed", updated: updatedUser?.currentProject}); 
+}
+
 const addUserToOneProject = async (req : IRequest, res : Response, next: NextFunction) => {
 
     // ======================== MOVE TO AUTHORIZE NEXT ITERATION =============
@@ -111,18 +129,76 @@ return res.status(201).json({project, secondaryUser});
 
 const createNewProject = async (req: IRequest, res: Response, next: NextFunction) => {
     // This needs validation
-    const {name, isPrivate, role} = req.body;
-// Validate if role has all properties otherwise return
+    const {name, isPrivate, role} = req.body; 
 // Validate that the role has the required properties
-if(!role.name) return res.send(401).json({name: "Error", description: "role name inexistent"});
-if(!role.resources.some((resource : IResource) => EResource.has(resource.name.toUpperCase()) )) return res.send(401).json({name: "Error", description: "resource is not valid"});
-if(!role.permissions.some((permission : IPermission) => EPermission.has(permission.name.toUpperCase()))) return res.send(401).json({name: "Error", description: "permission is not valid"});
+if(!role?.name) return res.status(401).json({name: "Error", description: "role name inexistent"});
+if(!role?.permissions) return res.status(401).json({name: "Error", description: "No permission set"});
+if(!role?.permissions.some((permission : IPermission) => EResource.has(permission.resource.toUpperCase()) )) return res.status(401).json({name: "Error", description: "resource is not valid"});
+if(role.permissions.some((permission : IPermission) => !Array.isArray(permission.actions))) return res.status(401).json({name: "Error", description: "actions are not properly formated"});
+if(!role.permissions.some((permission: IPermission)=> permission.actions?.some((action: IAction) => EAction.has(action.name.toUpperCase())))) return res.status(401).json({name: "Error", description: "permission is not valid"});
 //
 
 //
     const project = await createProjectAndSaveUser(req.context.user! as HydratedDocument<IUser>, name, role, isPrivate ); 
     res.status(201).json({project})
 }
+
+const getRoleDetails = async (req: IRequest, res: Response, next: NextFunction) => {
+    const {roleName} = req.body;
+    
+    const projectId = req.context?.projectId ? req.context.projectId : req.context.currentProject?._id;  
+    console.log(projectId)
+    console.log(roleName);  
+    const role = await Role.findOne({name: roleName, project: projectId}); 
+if(!role) return res.status(404).json({success: false, description: "No such role in database"}); 
+return res.status(200).json({success: true, role: role}); 
+}
+
+const createRole = async (req: IRequest, res: Response, next: NextFunction)=>{
+
+    const {role} = req.body; 
+    // Validate that the role has the required properties
+if(!role?.name) return res.status(401).json({name: "Error", description: "role name inexistent"});
+if(!role?.permissions) return res.status(401).json({name: "Error", description: "No permission set"});
+if(!role?.permissions.some((permission : IPermission) => EResource.has(permission.resource.toUpperCase()) )) return res.status(401).json({name: "Error", description: "resource is not valid"});
+if(role.permissions.some((permission : IPermission) => !Array.isArray(permission.actions))) return res.status(401).json({name: "Error", description: "actions are not properly formated"});
+if(!role.permissions.some((permission: IPermission)=> permission.actions?.some((action: IAction) => EAction.has(action.name.toUpperCase())))) return res.status(401).json({name: "Error", description: "permission is not valid"});
+//
+
+const projectId = req.context?.projectId ? req.context.projectId : req.context.currentProject?._id;  
+role.project = projectId; 
+const newRole = new Role(role);
+await newRole.save()
+const theProject = await Project.findById(projectId); 
+theProject?.roles.push(newRole); 
+await theProject?.save()
+
+return res.status(200).json({success:true, project: theProject, newRole: newRole}); 
+
+}
+
+const updateUserRole = async(req: IRequest, res: Response, next: NextFunction)=>{
+
+const {roleName} = req.body; 
+// Handle optional route path params
+const projectId = req.context?.projectId ? req.context.projectId : req.context.currentProject?._id;  
+const userId = req.context?.secondaryUserId ? req.context.secondaryUserId : req.context.user?._id;
+
+const role = await Role.findOne({name: roleName, project: projectId}); 
+if(!role) return res.status(404).json({success: false, description: "role not found"}); 
+const user = await User.findById(userId).populate(['projects', 'roles']);
+if(!user) return res.status(404).json({sucess: false, description: "User not found"}); 
+// Check if user has the project before editing its role
+const userProject = user.projects.find((project: IProject)=> project._id?.toString() === projectId?.toString())
+if(!userProject) return res.status(404).json({success: false, description: "user is not in the project"});
+// Remove user actual role 
+user.roles = user.roles.filter((role : IRole)=> role.project?.toString() !== projectId?.toString()); 
+user.roles.push(role); 
+await user.save(); 
+
+return res.status(201).json({success: true, user: user}); 
+}
+
 
 const deleteProject = async (req: IRequest, res: Response, next: NextFunction) => {
     // ======================== MOVE TO AUTHORIZE NEXT ITERATION =============
@@ -168,5 +244,5 @@ return res.status(201).json(project);
 }
 
 
-return { deleteProject, createNewProject, removeUserFromProject, getAllProjectsFromUser, addUserToOneProject,getOneProject, editProjectDetails };
+return {updateCurrentProject, getCurrentProject, updateUserRole, createRole, getRoleDetails, deleteProject, createNewProject, removeUserFromProject, getAllProjectsFromUser, addUserToOneProject,getOneProject, editProjectDetails };
 };

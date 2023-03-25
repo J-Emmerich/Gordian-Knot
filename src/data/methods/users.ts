@@ -22,8 +22,7 @@ export const findUserByName : Function =async (name:string) : Promise<IUser|unde
     try {
         const foundUser: IUser | null = await User.findOne({name: name});
 if (foundUser){
-    console.log(foundUser);
-    return foundUser;
+      return foundUser;
 } else {
     return undefined
 }
