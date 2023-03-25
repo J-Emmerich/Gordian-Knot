@@ -1,22 +1,26 @@
+// Why is this here? 
 process.stdin.resume();
 const mongoose = require("mongoose");
-const { logError } = require("../middlewares/error-handler");
+
+// This should be a central log system that is not implemented as yet
+// const { logError } = require("../middlewares/error-handler");
 
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
 const database = process.env.DB;
+const uri =`mongodb+srv://${user}:${password}@${database}.mbikmto.mongodb.net/?retryWrites=true&w=majority&authSource=admin`;
 
-const uri = `mongodb://${user}:${password}@localhost:27017/${database}?authSource=admin`;
 const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  //strictPopulate: false
 };
 
-//Start 
+
+// start the connection when the file is loaded
+
 try {
-  mongoose.connect(uri, options);
+  mongoose.connect(uri,options);
 } catch (error) {
-  logError(error);
+  console.log(error);
 }
 
 mongoose.connection.on("connected", () => {
@@ -29,8 +33,8 @@ mongoose.connection.on("disconnected", () => {
 mongoose.connection.on("disconnecting", () => {
   console.log("Disconnecting from Mongoose");
 });
-mongoose.connection.on("error", (err) => {
-  logError(err);
+mongoose.connection.on("error", (err:String) => {
+  console.log(err);
 });
 
 // Disconnect from mongoose when server is killed

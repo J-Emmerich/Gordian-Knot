@@ -20,6 +20,7 @@ const { errorHandler, logError } = require("./middlewares/error-handler");
 const PORT = process.env.PORT || 8000;
 const app = express();
 
+// Used in react? 
 app.use(express.static(path.join(__dirname, "../client/build")));
 app.use(express.json());
 app.use("/api/auth", authRouter(userMethods));
