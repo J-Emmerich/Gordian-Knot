@@ -1,9 +1,9 @@
-import { NextFunction, Response } from 'express';
-import { Error } from 'mongoose';
-import { IRequest } from '@commons/types';
-import {ErrorResponse} from '@utilities'
+import { NextFunction, Response } from "express";
+import { Error } from "mongoose";
+import { IRequest } from "@commons/types";
+import { ErrorResponse } from "@utilities";
 
-const sendHttpResponse = (err : ErrorResponse, req: IRequest, res: Response) => {
+const sendHttpResponse = (err: ErrorResponse, req: IRequest, res: Response) => {
   if (err.statusCode === 500) {
     res.status(500).json({
       success: false,
@@ -27,14 +27,23 @@ const sendHttpResponse = (err : ErrorResponse, req: IRequest, res: Response) => 
 };
 
 // eslint-disable-next-line no-unused-vars
-export const errorHandler = (err : Error, req: IRequest, res: Response, next: NextFunction) => {
+export const errorHandler = (
+  err: Error,
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
   let error = { ...err };
 
   error.message = `${err.message}`;
   let errorResponse;
   if (err.code === 11000) {
     const message = "Duplicate Field Error";
-    const errorResponse : ErrorResponse = new ErrorResponse(message, 400, error.route);
+    const errorResponse: ErrorResponse = new ErrorResponse(
+      message,
+      400,
+      error.route
+    );
     sendHttpResponse(errorResponse, req, res);
   } else if (err.name === "ValidationError") {
     const message = Object.values(err.errors).map((value) => value.message);
@@ -46,7 +55,5 @@ export const errorHandler = (err : Error, req: IRequest, res: Response, next: Ne
 };
 
 export const logError = (err, req, res, next) => {
-
   next(err);
 };
-

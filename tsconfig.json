@@ -1,23 +1,23 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        
-        "target": "es6",
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist",
-        "baseUrl": ".",
-        "paths": {
-            "*": ["node_modules/*", "@types/*", "src/types/*"],
-            "@models"      : ["src/data/models"],
-            "@dbmethods/*"      : ["src/data/methods/*"],
-            "@commons/*" : ["src/commons/*"],
-            "@middlewares"  : ["src/middlewares"],
-            "@utilities": ["src/utilities"]
-        }
-    },
-    "include": ["src/**/*"],
-    "lib": ["es2016"]
+  "compilerOptions": {
+    "module": "commonjs",
+
+    "target": "es6",
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "@types/*", "src/types/*"],
+      "@models": ["src/data/models"],
+      "@dbmethods/*": ["src/data/methods/*"],
+      "@commons/*": ["src/commons/*"],
+      "@middlewares": ["src/middlewares"],
+      "@utilities": ["src/utilities"]
+    }
+  },
+  "include": ["src/**/*"],
+  "lib": ["es2016"]
 }
