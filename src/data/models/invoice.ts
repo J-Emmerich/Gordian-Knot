@@ -4,7 +4,8 @@ import { Schema, Types, model } from "mongoose";
 import { formatDate } from "@utilities";
 
 const invoiceSchema = new Schema({
-  project: { type: Schema.Types.ObjectId, ref: "Project" },
+  project: { type: Schema.Types.ObjectId, ref: "Project", required: true },
+  invoiceOwners: [{ type: Schema.Types.ObjectId, ref: "Customer" }],
   invoiceNumber: String,
   invoiceDate: Date,
   orderNumber: String,
@@ -22,7 +23,8 @@ const invoiceSchema = new Schema({
   invoiceTotal: Types.Decimal128,
   invoiceSubTotal: Types.Decimal128,
   invoiceTax: Types.Decimal128,
-  clientName: String,
+  customerNameOnInvoice: String,
+  pathToInvoiceFile: String,
 });
 
 invoiceSchema.set("toJSON", {
@@ -49,7 +51,6 @@ invoiceSchema.set("toJSON", {
       ? returnedObject.invoiceTax.toString()
       : "";
     returnedObject.invoiceDate = formatDate(returnedObject.invoiceDate);
-    returnedObject.invoiceDue = formatDate(returnedObject.invoiceDue);
   },
 });
 

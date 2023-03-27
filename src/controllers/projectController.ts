@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Request, Response, NextFunction } from "express";
 import {
   IRequest,
@@ -13,7 +14,7 @@ import { HydratedDocument, Types } from "mongoose";
 import { createProjectAndSaveUser } from "@dbmethods/projects";
 import { EAction, EResource } from "@commons/enumerators";
 
-export const projectController = (methods: any) => {
+export const projectController = () => {
   const getAllProjectsFromUser = async (
     req: IRequest,
     res: Response,
@@ -57,7 +58,10 @@ export const projectController = (methods: any) => {
     res: Response,
     next: NextFunction
   ) => {
-    res.status(200).json(req.context.currentProject);
+    const currentProject = await Project.findById(
+      req.context.currentProject._id
+    ).populate("roles");
+    res.status(200).json(currentProject);
   };
 
   const addUserToOneProject = async (
@@ -128,10 +132,9 @@ export const projectController = (methods: any) => {
     if (!updateName) {
       await req.context.currentProject!.save();
       return res.status(201).json(req.context.currentProject);
-    } else {
-      req.context.currentProject!.name = name;
-      return res.status(201).json(req.context.currentProject);
     }
+    req.context.currentProject!.name = name;
+    return res.status(201).json(req.context.currentProject);
   };
 
   const removeUserFromProject = async (
@@ -319,7 +322,7 @@ export const projectController = (methods: any) => {
 
     return res
       .status(200)
-      .json({ success: true, project: theProject, newRole: newRole });
+      .json({ success: true, project: theProject, newRole });
   };
 
   const updateUserRole = async (
@@ -356,12 +359,13 @@ export const projectController = (methods: any) => {
         .json({ success: false, description: "user is not in the project" });
     // Remove user actual role
     user.roles = user.roles.filter(
-      (role: IRole) => role.project?.toString() !== projectId?.toString()
+      (roleFromUser: IRole) =>
+        roleFromUser.project?.toString() !== projectId?.toString()
     );
     user.roles.push(role);
     await user.save();
 
-    return res.status(201).json({ success: true, user: user });
+    return res.status(201).json({ success: true, user });
   };
 
   const deleteProject = async (
@@ -413,7 +417,7 @@ export const projectController = (methods: any) => {
       await user.save();
     });
     // for each role in the project remove the role from the database
-    project.roles.map(async (role) => await Role.deleteOne({ _id: role._id }));
+    project.roles.map((role) => Role.deleteOne({ _id: role._id }));
     await Project.deleteOne({ _id: project._id });
 
     return res.status(201).json(project);

@@ -1,22 +1,52 @@
+import { IRequest } from "@commons/types";
 import { Customer } from "@models";
+import { NextFunction, Response } from "express";
+import { Types } from "mongoose";
 
 export const customersController = () => {
-  async function fetchCustomers(req, res, next) {
+  async function getAllCustomersFromAProject(
+    req: IRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const customers = await Customer.find({
         project: req.context.currentProject._id,
       });
-      res.status(200).json({ success: true, data: customers });
+      if (customers.length < 1)
+        return res
+          .status(404)
+          .json({ success: false, data: "no customer found" });
+
+      return res.status(200).json({ success: true, data: customers });
     } catch (err) {
       next(err);
     }
   }
-
-  async function saveCustomer(req, res, next) {
+  async function getOneCustomer(
+    req: IRequest,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const customerId = new Types.ObjectId(req.params.customerId);
+      const customer = await Customer.findById(customerId);
+      if (!customer)
+        return res.status(404).json({ success: false, data: "no customer" });
+      return res.status(200).json({ success: true, data: customer });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async function createCustomer(
+    req: IRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       // need to validate request
       const customer = req.body;
-      customer.projectId = req.context.currentProject._id;
+      customer.project = req.context.currentProject._id;
       const newCustomer = new Customer(customer);
       await newCustomer.save();
 
@@ -25,25 +55,30 @@ export const customersController = () => {
       next(err);
     }
   }
-  async function deleteOne(req, res, next) {
+  async function deleteCustomer(
+    req: IRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const { user } = req;
-      const { id } = req.params;
-
-      await Customer.deleteOne({ _id: id });
+      await Customer.deleteOne({ _id: req.context.customerId });
       res.status(200).json({ success: true, data: "User deleted" });
     } catch (err) {
       next(err);
     }
   }
 
-  async function editOne(req, res, next) {
+  async function editCustomer(
+    req: IRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
-      const { id } = req.params;
       const newCustomer = req.body;
-      const editedCustomer = await Customer.replaceOne(
-        { _id: id },
-        newCustomer
+      const editedCustomer = await Customer.findOneAndUpdate(
+        { _id: req.context.customerId },
+        newCustomer,
+        { new: true }
       );
 
       res.status(200).json({ success: true, data: editedCustomer });
@@ -53,9 +88,10 @@ export const customersController = () => {
   }
 
   return {
-    fetchCustomers,
-    saveCustomer,
-    deleteOne,
-    editOne,
+    getOneCustomer,
+    getAllCustomersFromAProject,
+    createCustomer,
+    deleteCustomer,
+    editCustomer,
   };
 };

@@ -1,12 +1,12 @@
 import * as express from "express";
 import { authorize, context } from "@middlewares";
-import { projectController } from "../controllers/projectController";
 import { Types } from "mongoose";
 import { IRequest } from "@commons/types";
+import { projectController } from "../controllers/projectController";
 
-export const projectRouter = (methods: any) => {
+export const projectRouter = () => {
   const router = express.Router();
-  const controller = projectController(methods);
+  const controller = projectController();
 
   router.param("projectId", async (req: IRequest, res, next) => {
     try {

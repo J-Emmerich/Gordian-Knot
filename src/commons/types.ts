@@ -47,5 +47,7 @@ export interface IRequest extends Request {
     token?: string;
     currentProject?: HydratedDocument<IProject>;
     secondaryUserId?: Types.ObjectId;
+    customerId?: Types.ObjectId;
+    invoiceId?: Types.ObjectId;
   };
 }
