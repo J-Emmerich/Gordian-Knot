@@ -1,11 +1,10 @@
 import { Types, Schema, model, HydratedDocument } from "mongoose";
-import {
-  setDefaultProjectForUser,
-  setDefaultProjectForUserWithoutSave,
-} from "@utilities";
+import { setDefaultProjectForUserWithoutSave } from "@utilities";
 import * as types from "@commons/types";
 import { Project, Role } from "@models";
 import { adminPermissions } from "@dbmethods/authorization";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const uniqueValidator = require("mongoose-unique-validator");
 
 const createDefaultProject = async (userDoc: types.IUser) => {
@@ -38,6 +37,7 @@ const UserSchema = new Schema<types.IUser>({
   resetTokenHash: { type: String, select: false },
 });
 
+// eslint-disable-next-line no-unused-vars
 UserSchema.pre("save", async function (this: HydratedDocument<types.IUser>) {
   if (this._id && this.projects.length === 0) {
     const project: HydratedDocument<types.IProject> =

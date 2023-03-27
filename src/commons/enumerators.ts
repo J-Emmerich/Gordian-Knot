@@ -6,7 +6,7 @@ export const EAction: Set<string> = new Set([
 ]);
 export const EResource: Set<string> = new Set([
   "INVOICE",
-  "CLIENT",
+  "CUSTOMER",
   "PROJECT",
   "USER",
 ]);

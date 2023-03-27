@@ -1,4 +1,5 @@
 import { IRequest } from "@commons/types";
+import { authorize, context } from "@middlewares";
 import { NextFunction, Response, Router } from "express";
 import { Types } from "mongoose";
 import { customersController } from "../controllers/customers-controller";
@@ -8,17 +9,20 @@ export const customerRouter = () => {
   const controller = customersController();
 
   router.param(
-    "secondaryUserId",
+    "customerId",
     async (req: IRequest, res: Response, next: NextFunction) => {
-      const secondaryUserId = new Types.ObjectId(req.params.secondaryUserId);
-      req.context.secondaryUserId = secondaryUserId;
+      const customerId = new Types.ObjectId(req.params.customerId);
+      req.context.customerId = customerId;
       next();
     }
   );
 
-  router.get("/", controller.fetchCustomers);
-  router.post("/", controller.saveCustomer);
-  router.put("/:secondaryUserId", controller.editOne);
-  router.delete("/:secondaryUserId", controller.deleteOne);
+  router.all("*", context, authorize);
+
+  router.get("/", controller.getAllCustomersFromAProject);
+  router.get("/:customerId", controller.getOneCustomer);
+  router.post("/", controller.createCustomer);
+  router.put("/:customerId", controller.editCustomer);
+  router.delete("/:customerId", controller.deleteCustomer);
   return router;
 };

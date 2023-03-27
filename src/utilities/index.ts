@@ -11,8 +11,10 @@ import {
   setDefaultProjectForUserWithoutSave,
 } from "./setDefaultProjectForUser";
 import { saveToPdf } from "./save-to-pdf";
+import { validateInvoiceOwnerUniqueness } from "./validateInvoiceOwnerUniqueness";
 
 export {
+  validateInvoiceOwnerUniqueness,
   dayjsFormat,
   saveToPdf,
   formatDate,

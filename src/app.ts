@@ -14,6 +14,7 @@ import {
   invoiceRouter,
   customerRouter,
 } from "./routes";
+import { debugRouter } from "./routes/debug";
 
 // Connects to MongoDB Atlas
 // eslint-disable-next-line import/extensions, no-unused-vars, @typescript-eslint/no-unused-vars
@@ -27,11 +28,13 @@ app.use(express.static(join(__dirname, "../client/build")));
 
 app.use(express.json());
 app.all("*", createContext);
-// uncomment for debugging app.use("/debug", debugRouter());
+
+app.use("/debug", debugRouter());
+
 app.use("/user", authenticationRouter());
 app.all("/api/*", authenticate);
-app.use("/api/project", projectRouter(1));
-app.use("/api/user", userRouter(1));
+app.use("/api/project", projectRouter());
+app.use("/api/user", userRouter());
 app.use("/api/invoice", invoiceRouter());
 app.use("/api/customer", customerRouter());
 

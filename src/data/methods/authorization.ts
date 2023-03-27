@@ -16,7 +16,7 @@ export const adminPermissions: IPermission[] = [
     ],
   },
   {
-    resource: "Client",
+    resource: "Customer",
     actions: [
       { name: "CREATE" },
       { name: "READ" },
@@ -69,28 +69,27 @@ export const roles: IRole[] = [
 ];
 
 const findRoleAndSave: Function = async (role: IRole) => {
-  {
-    const newRole: HydratedDocument<IRole> = new Role({
-      name: role.name,
-      permissions: role.permissions,
-    });
+  const newRole: HydratedDocument<IRole> = new Role({
+    name: role.name,
+    permissions: role.permissions,
+  });
 
-    await newRole.save();
-  }
+  await newRole.save();
 };
 
-export const createRolesAndPermissionsAndResources = async () => {
-  try {
-    for (const role of roles) {
-      let existingRole: HydratedDocument<IRole> | null = await Role.findOne({
-        name: role.name,
-      });
+// export const createRolesAndPermissionsAndResources = async () => {
+//   try {
 
-      if (!existingRole) {
-        findRoleAndSave(role);
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     for (const role of roles) {
+//       const existingRole: HydratedDocument<IRole> | null = await Role.findOne({
+//         name: role.name,
+//       });
+
+//       if (!existingRole) {
+//         findRoleAndSave(role);
+//       }
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
