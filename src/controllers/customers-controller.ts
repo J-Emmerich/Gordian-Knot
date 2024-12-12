@@ -2,6 +2,7 @@ import { IRequest } from "@commons/types";
 import { Customer } from "@models";
 import { NextFunction, Response } from "express";
 import { Types } from "mongoose";
+import { logger } from "@utilities";
 
 export const customersController = () => {
   async function getAllCustomersFromAProject(
@@ -20,6 +21,8 @@ export const customersController = () => {
 
       return res.status(200).json({ success: true, data: customers });
     } catch (err) {
+      logger.error(err, "getAllCustomersFromAProject")
+
       next(err);
     }
   }
@@ -34,8 +37,9 @@ export const customersController = () => {
       if (!customer)
         return res.status(404).json({ success: false, data: "no customer" });
       return res.status(200).json({ success: true, data: customer });
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      logger.error(err, "getOneCustomer")
+      next(err);
     }
   }
   async function createCustomer(
@@ -52,6 +56,7 @@ export const customersController = () => {
 
       res.status(201).json({ success: true, data: newCustomer });
     } catch (err) {
+      logger.error(err, "createCustomer")
       next(err);
     }
   }
@@ -64,6 +69,7 @@ export const customersController = () => {
       await Customer.deleteOne({ _id: req.context.customerId });
       res.status(200).json({ success: true, data: "User deleted" });
     } catch (err) {
+      logger.error(err, "deleteCustomer")
       next(err);
     }
   }
@@ -83,6 +89,7 @@ export const customersController = () => {
 
       res.status(200).json({ success: true, data: editedCustomer });
     } catch (err) {
+      logger.error(err, "editCustomer")
       next(err);
     }
   }

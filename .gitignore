@@ -2,3 +2,4 @@
 /node_modules
 /client/output
 /dist
+logs.json

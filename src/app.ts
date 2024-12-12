@@ -16,6 +16,7 @@ import {
   customerRouter,
 } from "./routes";
 import { debugRouter } from "./routes/debug";
+import {loggerMiddleware} from '@utilities'
 
 // Connects to MongoDB Atlas
 // eslint-disable-next-line import/extensions, no-unused-vars, @typescript-eslint/no-unused-vars
@@ -26,7 +27,7 @@ const port = 3000;
 
 // A bit of security
 app.use(helmet());
-
+app.use(loggerMiddleware);
 // For react
 app.use(express.static(join(__dirname, "../client/build")));
 
@@ -42,6 +43,7 @@ app.use("/api/user", userRouter());
 app.use("/api/invoice", invoiceRouter());
 app.use("/api/customer", customerRouter());
 
+// why is this here?
 app.get("*", (req, res) => {
   res.sendFile(join(__dirname, "../client/build/index.html"));
 });

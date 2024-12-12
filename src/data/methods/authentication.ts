@@ -1,6 +1,7 @@
 import { HydratedDocument, Types } from "mongoose";
 import { User } from "@models";
 import { ErrorResponse, setDefaultProjectForUser } from "@utilities";
+const { logger } = require("../../utilities/logger"); // importer un enregistreur
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 import { createHash, randomBytes } from "crypto";
@@ -28,10 +29,13 @@ export const registerUser = async (
 };
 
 export const loginUser = async (name: string, password: string) => {
+
   const user = await User.findOne({ name: name }).select("+passwordHash");
-  if (!user) throw new Error("Invalid credentials");
+  if (!user) { 
+    logger.error("No user found with this name"); throw new Error("Invalid credentials");
+  }
   const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
-  if (!isPasswordCorrect) throw new Error("Invalid Credentials");
+  if (!isPasswordCorrect) {logger.error("invalid password"); throw new Error("Invalid Credentials");}
   if (!user.currentProject?._id) await setDefaultProjectForUser(user);
   const payload = {
     user: user._id,

@@ -5,7 +5,7 @@ import { NextFunction, Response } from "express";
 import {
   saveToPdf,
   dayjsFormat,
-  validateInvoiceOwnerUniqueness,
+  validateInvoiceOwnerUniqueness,logger
 } from "@utilities";
 
 const root = join(__dirname, "../../client/output");
@@ -17,11 +17,13 @@ export const invoiceController = () => {
     next: NextFunction
   ) {
     try {
-      console.log(req.context.invoiceId);
+      
+      logger.debug(`${req.context.invoiceId} invoice id to fetch`);
       const invoice = await Invoice.findById(req.context.invoiceId);
       if (!invoice) throw Error("Nothing found");
       res.status(200).json({ success: true, data: invoice });
     } catch (err) {
+      logger.error(err, "fetchInvoice")
       next(err);
     }
   }
@@ -37,6 +39,7 @@ export const invoiceController = () => {
       });
       res.status(200).json({ success: true, data: invoices });
     } catch (err) {
+  
       next(err);
     }
   }

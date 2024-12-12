@@ -6,14 +6,18 @@ import {
   resetUserPassword,
   userForgotPassword,
 } from "@dbmethods/authentication";
+import { logger } from "@utilities";
 
 export const authenticationController = () => {
+
+
   const login = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
       const { name, password } = req.body;
       const user = await loginUser(name, password);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
+      logger.error(err, "login")
       next(err);
     }
   };
@@ -24,6 +28,8 @@ export const authenticationController = () => {
       const user = await registerUser(name, password, email);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
+      logger.error(err, "register")
+
       next(err);
     }
   };
@@ -33,6 +39,8 @@ export const authenticationController = () => {
       await userForgotPassword(email);
       res.status(200).json({ success: true, data: "Email Sent" });
     } catch (err) {
+      logger.error(err, "forgotPassword")
+
       next(err);
     }
   };
@@ -47,6 +55,8 @@ export const authenticationController = () => {
         data: "Password reset",
       });
     } catch (err) {
+      logger.error(err, "resetPassword")
+
       next(err);
     }
   };
