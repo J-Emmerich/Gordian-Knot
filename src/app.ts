@@ -4,6 +4,7 @@ require("dotenv").config("../.env");
 
 import "module-alias/register";
 import * as express from "express";
+import helmet from "helmet";
 import { errorHandler, logError, authenticate } from "@middlewares";
 import { createContext } from "@utilities";
 import { join } from "path";
@@ -22,6 +23,9 @@ const connection = require("./data/connection");
 
 const app = express();
 const port = 3000;
+
+// A bit of security
+app.use(helmet());
 
 // For react
 app.use(express.static(join(__dirname, "../client/build")));
