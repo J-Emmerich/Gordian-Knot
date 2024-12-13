@@ -63,7 +63,7 @@ export const userForgotPassword = async (email) => {
     await sendResetTokenEmail(user.email, resetToken);
   } catch (error) {
     await unsetResetToken(user);
-    console.log(error);
+    logger.error(error);
     throw new ErrorResponse("Email could not be sent", 500);
   }
 };
@@ -114,7 +114,7 @@ const findOneWithEmail = async ({ email }) => {
     if (!user) throw new Error("Credenciales incorrectas");
     return user;
   } catch (error) {
-    console.log("The error is here", email);
+    logger.error(error,`findOneWithEmail: ${email}`);
     throw error;
   }
 };

@@ -1,5 +1,6 @@
 import * as puppeteer from "puppeteer";
 import { join } from "path";
+import { logger} from "@utilities";
 
 const { BASE_FRONTEND_URL } = process.env;
 
@@ -27,7 +28,7 @@ const setDomainLocalStorage = async (browser, url, values) => {
     }, values);
     await page.close();
   } catch (error) {
-    console.log(error);
+    logger.error(error,"setDomainLocalStorage");
   }
 };
 
@@ -53,6 +54,6 @@ export const saveToPdf = async (id, name, token) => {
 
     await browser.close();
   } catch (err) {
-    console.log("*****", err.message);
+    logger.error(err, err.message);
   }
 };

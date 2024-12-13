@@ -16,7 +16,7 @@ import {
   customerRouter,
 } from "./routes";
 import { debugRouter } from "./routes/debug";
-import {loggerMiddleware} from '@utilities'
+import {loggerMiddleware, logger} from '@utilities'
 
 // Connects to MongoDB Atlas
 // eslint-disable-next-line import/extensions, no-unused-vars, @typescript-eslint/no-unused-vars
@@ -51,4 +51,4 @@ app.get("*", (req, res) => {
 app.use(logError);
 app.use(errorHandler);
 
-app.listen(port, () => console.log(`App is listening to port ${port}`));
+app.listen(port, () => logger.info(`App is listening to port ${port}`));

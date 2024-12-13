@@ -77,19 +77,3 @@ const findRoleAndSave: Function = async (role: IRole) => {
   await newRole.save();
 };
 
-// export const createRolesAndPermissionsAndResources = async () => {
-//   try {
-
-//     for (const role of roles) {
-//       const existingRole: HydratedDocument<IRole> | null = await Role.findOne({
-//         name: role.name,
-//       });
-
-//       if (!existingRole) {
-//         findRoleAndSave(role);
-//       }
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };

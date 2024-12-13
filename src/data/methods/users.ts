@@ -1,5 +1,6 @@
 import { IUser, IRole } from "@commons/types";
 import { Role, User } from "@models";
+import {logger} from "@utilities";
 
 //needed to access the mongoose methods
 import { HydratedDocument, Types } from "mongoose";
@@ -27,7 +28,7 @@ export const findUserByName: Function = async (
       return undefined;
     }
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return;
   }
 };
