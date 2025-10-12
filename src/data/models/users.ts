@@ -1,11 +1,10 @@
-import { Types, Schema, model, HydratedDocument } from "mongoose";
-import { setDefaultProjectForUserWithoutSave } from "@utilities";
-import * as types from "@commons/types";
-import { Project, Role } from "@models";
-import { adminPermissions } from "@dbmethods/authorization";
+import { Types, Schema, model, HydratedDocument } from 'mongoose';
+import { setDefaultProjectForUserWithoutSave } from '@utilities';
+import * as types from '@commons/types';
+import { Project, Role } from '@models';
+import { adminPermissions } from '@dbmethods/authorization';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const uniqueValidator = require("mongoose-unique-validator");
+const uniqueValidator = require('mongoose-unique-validator');
 
 const createDefaultProject = async (userDoc: types.IUser) => {
   const project: HydratedDocument<types.IProject> = new Project({
@@ -14,7 +13,7 @@ const createDefaultProject = async (userDoc: types.IUser) => {
     isDefault: true,
   });
   const role: HydratedDocument<types.IRole> = new Role({
-    name: "Admin",
+    name: 'Admin',
     project: project._id,
   });
   role.permissions = adminPermissions;
@@ -35,23 +34,21 @@ const UserSchema = new Schema<types.IUser>({
     unique: true,
     lowercase: true,
   },
-  roles: [{ type: Schema.Types.ObjectId, ref: "Role" }],
-  projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-  currentProject: { type: Schema.Types.ObjectId, ref: "Project" },
+  roles: [{ type: Schema.Types.ObjectId, ref: 'Role' }],
+  projects: [{ type: Schema.Types.ObjectId, ref: 'Project' }],
+  currentProject: { type: Schema.Types.ObjectId, ref: 'Project' },
   resetPasswordExpire: { type: String, select: false },
   resetTokenHash: { type: String, select: false },
 });
 
-// eslint-disable-next-line no-unused-vars
-UserSchema.pre("save", async function (this: HydratedDocument<types.IUser>) {
+UserSchema.pre('save', async function (this: HydratedDocument<types.IUser>) {
   if (this._id && this.projects.length === 0) {
-    const project: HydratedDocument<types.IProject> =
-      await createDefaultProject(this);
+    const project: HydratedDocument<types.IProject> = await createDefaultProject(this);
     project.users.push(this._id);
     this.projects.push(project._id);
   }
   await setDefaultProjectForUserWithoutSave(this);
 });
-UserSchema.plugin(uniqueValidator, { type: "mongoose-unique-validator" });
+UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 
-export const User = model<types.IUser>("User", UserSchema);
+export const User = model<types.IUser>('User', UserSchema);

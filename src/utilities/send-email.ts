@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
-const sendEmail = (options:{to:string, subject:string,text:string}) => {
+const sendEmail = (options: { to: string; subject: string; text: string }) => {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,

@@ -5,7 +5,7 @@ export class ErrorResponse extends Error {
 
   message: string;
 
-  constructor(message: string, statusCode: number, route = "not defined") {
+  constructor(message: string, statusCode: number, route = 'not defined') {
     super(message);
     this.statusCode = statusCode;
     this.route = route;

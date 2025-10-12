@@ -1,13 +1,11 @@
-import { IUser, IRole } from "@commons/types";
-import { Role, User } from "@models";
-import { logger } from "@utilities";
+import { IUser, IRole } from '@commons/types';
+import { Role, User } from '@models';
+import { logger } from '@utilities';
 
 // needed to access the mongoose methods
-import { HydratedDocument, Types } from "mongoose";
+import { HydratedDocument, Types } from 'mongoose';
 
-export const createUser: Function = async (
-  name: string
-): Promise<IUser | null> => {
+export const createUser: Function = async (name: string): Promise<IUser | null> => {
   try {
     const newUser: HydratedDocument<IUser> = await User.create({ name });
     await newUser.save();
@@ -17,9 +15,7 @@ export const createUser: Function = async (
   }
 };
 
-export const findUserByName: Function = async (
-  name: string
-): Promise<IUser | undefined> => {
+export const findUserByName: Function = async (name: string): Promise<IUser | undefined> => {
   try {
     const foundUser: IUser | null = await User.findOne({ name });
     if (foundUser) {
@@ -33,7 +29,7 @@ export const findUserByName: Function = async (
 
 export const assignToUserByIdRoleByName = async (
   userId: Types.ObjectId,
-  roleId: string
+  roleId: string,
 ): Promise<IRole | null> => {
   const role: HydratedDocument<IRole> | null = await Role.findOne({
     name: roleId,

@@ -1,56 +1,56 @@
-import { NextFunction, Response , RequestHandler} from "express";
-import { IRequest } from "@commons/types";
+import { NextFunction, Response, RequestHandler } from 'express';
+import { IRequest } from '@commons/types';
 import {
   loginUser,
   registerUser,
   resetUserPassword,
   userForgotPassword,
-} from "@dbmethods/authentication";
-import { logger } from "@utilities";
+} from '@dbmethods/authentication';
+import { logger } from '@utilities';
 
 export const authenticationController = () => {
-  const login :  RequestHandler = async (req: IRequest, res:Response, next:NextFunction) => {
+  const login: RequestHandler = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
       const { name, password } = req.body;
       const user = await loginUser(name, password);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      logger.error(err, "login");
+      logger.error(err, 'login');
       next(err);
     }
   };
 
-  const register :  RequestHandler = async (req: IRequest, res: Response, next: NextFunction) => {
+  const register: RequestHandler = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
       const { name, password, email } = req.body;
       const user = await registerUser(name, password, email);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      logger.error(err, "register");
+      logger.error(err, 'register');
 
       next(err);
     }
   };
-  const forgotPassword :  RequestHandler = async (
+  const forgotPassword: RequestHandler = async (
     req: IRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { email } = req.body;
       await userForgotPassword(email);
-      res.status(200).json({ success: true, data: "Email Sent" });
+      res.status(200).json({ success: true, data: 'Email Sent' });
     } catch (err) {
-      logger.error(err, "forgotPassword");
+      logger.error(err, 'forgotPassword');
 
       next(err);
     }
   };
 
-  const resetPassword :  RequestHandler = async (
+  const resetPassword: RequestHandler = async (
     req: IRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const { resetToken } = req.params;
@@ -58,10 +58,10 @@ export const authenticationController = () => {
       await resetUserPassword(resetToken, password);
       res.status(200).json({
         succes: true,
-        data: "Password reset",
+        data: 'Password reset',
       });
     } catch (err) {
-      logger.error(err, "resetPassword");
+      logger.error(err, 'resetPassword');
 
       next(err);
     }

@@ -1,68 +1,48 @@
-import { IPermission, IRole } from "@commons/types";
+import { IPermission, IRole } from '@commons/types';
 
 // Create the roles and permissions in the database
 
 export const adminPermissions: IPermission[] = [
   {
-    resource: "Invoice",
-    actions: [
-      { name: "CREATE" },
-      { name: "READ" },
-      { name: "UPDATE" },
-      { name: "DELETE" },
-    ],
+    resource: 'Invoice',
+    actions: [{ name: 'CREATE' }, { name: 'READ' }, { name: 'UPDATE' }, { name: 'DELETE' }],
   },
   {
-    resource: "Customer",
-    actions: [
-      { name: "CREATE" },
-      { name: "READ" },
-      { name: "UPDATE" },
-      { name: "DELETE" },
-    ],
+    resource: 'Customer',
+    actions: [{ name: 'CREATE' }, { name: 'READ' }, { name: 'UPDATE' }, { name: 'DELETE' }],
   },
   {
-    resource: "User",
-    actions: [
-      { name: "CREATE" },
-      { name: "READ" },
-      { name: "UPDATE" },
-      { name: "DELETE" },
-    ],
+    resource: 'User',
+    actions: [{ name: 'CREATE' }, { name: 'READ' }, { name: 'UPDATE' }, { name: 'DELETE' }],
   },
   {
-    resource: "Project",
-    actions: [
-      { name: "CREATE" },
-      { name: "READ" },
-      { name: "UPDATE" },
-      { name: "DELETE" },
-    ],
+    resource: 'Project',
+    actions: [{ name: 'CREATE' }, { name: 'READ' }, { name: 'UPDATE' }, { name: 'DELETE' }],
   },
 ];
 
 const userPermissions: IPermission[] = [
   {
-    resource: "Invoice",
-    actions: [{ name: "CREATE" }, { name: "READ" }, { name: "UPDATE" }],
+    resource: 'Invoice',
+    actions: [{ name: 'CREATE' }, { name: 'READ' }, { name: 'UPDATE' }],
   },
   {
-    resource: "Client",
-    actions: [{ name: "CREATE" }, { name: "READ" }, { name: "UPDATE" }],
+    resource: 'Client',
+    actions: [{ name: 'CREATE' }, { name: 'READ' }, { name: 'UPDATE' }],
   },
   {
-    resource: "User",
-    actions: [{ name: "CREATE" }, { name: "READ" }, { name: "UPDATE" }],
+    resource: 'User',
+    actions: [{ name: 'CREATE' }, { name: 'READ' }, { name: 'UPDATE' }],
   },
   {
-    resource: "Project",
-    actions: [{ name: "CREATE" }, { name: "READ" }, { name: "UPDATE" }],
+    resource: 'Project',
+    actions: [{ name: 'CREATE' }, { name: 'READ' }, { name: 'UPDATE' }],
   },
 ];
 
 export const roles: IRole[] = [
-  { name: "Admin", permissions: adminPermissions },
-  { name: "User", permissions: userPermissions },
+  { name: 'Admin', permissions: adminPermissions },
+  { name: 'User', permissions: userPermissions },
 ];
 
 /* const findRoleAndSave: Function = async (role: IRole) => {

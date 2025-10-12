@@ -1,11 +1,10 @@
-/* eslint-disable no-param-reassign */
-import { Schema, Types, model } from "mongoose";
+import { Schema, Types, model } from 'mongoose';
 
-import { formatDate } from "@utilities";
+import { formatDate } from '@utilities';
 
 const invoiceSchema = new Schema({
-  project: { type: Schema.Types.ObjectId, ref: "Project", required: true },
-  invoiceOwners: [{ type: Schema.Types.ObjectId, ref: "Customer" }],
+  project: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
+  invoiceOwners: [{ type: Schema.Types.ObjectId, ref: 'Customer' }],
   invoiceNumber: String,
   invoiceDate: Date,
   orderNumber: String,
@@ -27,31 +26,29 @@ const invoiceSchema = new Schema({
   pathToInvoiceFile: String,
 });
 
-invoiceSchema.set("toJSON", {
+invoiceSchema.set('toJSON', {
   transform: (_document, returnedObject) => {
-    returnedObject.articles = returnedObject.articles.map((article: { totalPrice: { toString: () => any; }; pricePerUnit: { toString: () => any; }; }) => {
-      article.totalPrice = article.totalPrice
-        ? article.totalPrice.toString()
-        : "";
-      article.pricePerUnit = article.pricePerUnit
-        ? article.pricePerUnit.toString()
-        : "";
-      return article;
-    });
+    returnedObject.articles = returnedObject.articles.map(
+      (article: { totalPrice: { toString: () => any }; pricePerUnit: { toString: () => any } }) => {
+        article.totalPrice = article.totalPrice ? article.totalPrice.toString() : '';
+        article.pricePerUnit = article.pricePerUnit ? article.pricePerUnit.toString() : '';
+        return article;
+      },
+    );
     returnedObject.invoiceTotal = returnedObject.invoiceTotal
       ? returnedObject.invoiceTotal.toString()
-      : "";
+      : '';
     returnedObject.invoiceSubTotal = returnedObject.invoiceSubTotal
       ? returnedObject.invoiceSubTotal.toString()
-      : "";
+      : '';
     returnedObject.invoiceTax = returnedObject.invoiceTax
       ? returnedObject.invoiceTax.toString()
-      : "";
+      : '';
     returnedObject.invoiceTax = returnedObject.invoiceTax
       ? returnedObject.invoiceTax.toString()
-      : "";
+      : '';
     returnedObject.invoiceDate = formatDate(returnedObject.invoiceDate);
   },
 });
 
-export const Invoice = model("Invoice", invoiceSchema);
+export const Invoice = model('Invoice', invoiceSchema);

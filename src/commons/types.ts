@@ -1,9 +1,6 @@
-import {
-  ParamsDictionary,
-  Query,
-} from "express-serve-static-core";
-import { Errback, Request } from "express";
-import { Error, HydratedDocument, Types } from "mongoose";
+import { ParamsDictionary, Query } from 'express-serve-static-core';
+import { Errback, Request } from 'express';
+import { Error, HydratedDocument, Types } from 'mongoose';
 
 export interface IProject {
   _id?: Types.ObjectId;

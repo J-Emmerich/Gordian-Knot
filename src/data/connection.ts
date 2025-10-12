@@ -1,9 +1,9 @@
-import { logger } from "@utilities";
+import { logger } from '@utilities';
 process.stdin.resume();
 
 import mongoose from 'mongoose';
 
-const { DB_USER, DB_PASSWORD} = process.env;
+const { DB_USER, DB_PASSWORD } = process.env;
 const user = encodeURIComponent(DB_USER);
 const pass = encodeURIComponent(DB_PASSWORD);
 // const DB = encodeURIComponent(DB_ENV); // required in some cases
@@ -17,28 +17,28 @@ const options = {
 };
 
 // start the connection when the file is loaded
-async function initMongoose(){
+async function initMongoose() {
   try {
     mongoose.connect(uri, options);
   } catch (error) {
     logger.error(error);
-  process.exit(1);
+    process.exit(1);
   }
 }
 
 initMongoose();
 
-mongoose.connection.on("connected", () => {
-  logger.info("Connected to Mongoose");
+mongoose.connection.on('connected', () => {
+  logger.info('Connected to Mongoose');
 });
 
-mongoose.connection.on("disconnected", () => {
-  logger.info("Disconnected from Mongoose");
+mongoose.connection.on('disconnected', () => {
+  logger.info('Disconnected from Mongoose');
 });
-mongoose.connection.on("disconnecting", () => {
-  logger.info("Disconnecting from Mongoose");
+mongoose.connection.on('disconnecting', () => {
+  logger.info('Disconnecting from Mongoose');
 });
-mongoose.connection.on("error", (err: string) => {
+mongoose.connection.on('error', (err: string) => {
   logger.error(err);
 });
 
@@ -50,7 +50,7 @@ const gracefulShutdown = async (signal: string) => {
   process.exit(0);
 };
 
-process.on('SIGINT',  () => gracefulShutdown('SIGINT'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2'));
 process.on('SIGQUIT', () => gracefulShutdown('SIGQUIT'));

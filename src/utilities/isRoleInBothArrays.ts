@@ -1,17 +1,10 @@
-import { IRole } from "@commons/types";
+import { IRole } from '@commons/types';
 
-export const isRoleInBothArrays = (
-  fthArr: IRole[],
-  secArr: IRole[]
-): boolean => {
+export const isRoleInBothArrays = (fthArr: IRole[], secArr: IRole[]): boolean => {
   let answer = false;
 
   for (let i = 0; i < fthArr.length; i++) {
-    if (
-      secArr.some(
-        (role) => role?._id?.toString() === fthArr[i]?._id?.toString()
-      )
-    ) {
+    if (secArr.some((role) => role?._id?.toString() === fthArr[i]?._id?.toString())) {
       answer = true;
       break;
     }

@@ -1,12 +1,5 @@
 import { Response, NextFunction } from 'express';
-import {
-  IRequest,
-  IRole,
-  IUser,
-  IProject,
-  IPermission,
-  IAction,
-} from '@commons/types';
+import { IRequest, IRole, IUser, IProject, IPermission, IAction } from '@commons/types';
 import { Project, Role, User } from '@models';
 
 import { HydratedDocument, Types } from 'mongoose';
@@ -14,25 +7,13 @@ import { createProjectAndSaveUser } from '@dbmethods/projects';
 import { EAction, EResource } from '@commons/enumerators';
 
 export const projectController = () => {
-
-  const getAllProjectsFromUser = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
-    const populatedUser = await User.findById(req.context.user!._id).populate(
-      'projects',
-      'name'
-    );
+  const getAllProjectsFromUser = async (req: IRequest, res: Response, _next: NextFunction) => {
+    const populatedUser = await User.findById(req.context.user!._id).populate('projects', 'name');
     if (!populatedUser?.populated('projects')) return res.status(404).send('not populated');
     res.status(299).json(populatedUser.projects);
     res.end();
   };
-  const getOneProject = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const getOneProject = async (req: IRequest, res: Response, _next: NextFunction) => {
     if (!req.context?.projectId) return res.status(404).send('No project Id');
 
     // ======================== MOVE TO AUTHORIZE NEXT ITERATION =============
@@ -54,22 +35,12 @@ export const projectController = () => {
     res.status(200).json(project);
   };
 
-  const getCurrentProject = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
-    const currentProject = await Project.findById(
-      req.context.currentProject._id,
-    ).populate('roles');
+  const getCurrentProject = async (req: IRequest, res: Response, _next: NextFunction) => {
+    const currentProject = await Project.findById(req.context.currentProject._id).populate('roles');
     res.status(200).json(currentProject);
   };
 
-  const addUserToOneProject = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const addUserToOneProject = async (req: IRequest, res: Response, _next: NextFunction) => {
     // ========= TODO =============== MOVE TO AUTHORIZE NEXT ITERATION =============
     const project: HydratedDocument<IProject> | null = await Project.findById(
       req.context.projectId,
@@ -89,13 +60,11 @@ export const projectController = () => {
 
     const IDOfUserToAdd: Types.ObjectId = req.context.secondaryUserId;
     const userToAddToProject = await User.findById(IDOfUserToAdd);
-    if (userToAddToProject === null) return res.status(404).send("Can't add an user that is not in database");
+    if (userToAddToProject === null)
+      return res.status(404).send("Can't add an user that is not in database");
     // the authorize function takes care that the project has populate its users
-    if (
-      project.users.find(
-        (user) => user._id?.toString() === IDOfUserToAdd.toString(),
-      )
-    ) return res.status(401).send('this is user is already in the project');
+    if (project.users.find((user) => user._id?.toString() === IDOfUserToAdd.toString()))
+      return res.status(401).send('this is user is already in the project');
     // Find the role in the project
 
     if (!req.body.roleName) return res.status(401).send('Role name cannot be empty');
@@ -115,11 +84,7 @@ export const projectController = () => {
     res.status(200).json({ project, userToAddToProject });
   };
 
-  const editProjectDetails = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const editProjectDetails = async (req: IRequest, res: Response, _next: NextFunction) => {
     const { isPrivate, name, updateName } = req.body;
     // TODO Validate that the request has the expected properties.
 
@@ -133,11 +98,7 @@ export const projectController = () => {
     return res.status(201).json(req.context.currentProject);
   };
 
-  const removeUserFromProject = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const removeUserFromProject = async (req: IRequest, res: Response, _next: NextFunction) => {
     // ======================== MOVE TO AUTHORIZE NEXT ITERATION =============
     const project: HydratedDocument<IProject> | null = await Project.findById(
       req.context.projectId,
@@ -161,10 +122,10 @@ export const projectController = () => {
       user._id.toString() === req.context.secondaryUserId.toString();
     });
     if (indexOfUserToRemove === -1) {
-    { return res
-      .status(404)
-      .send("User can't be removed, is not in the project");
-    }}
+      {
+        return res.status(404).send("User can't be removed, is not in the project");
+      }
+    }
     project.users = project.users.filter((user) => {
       const logged = req.context.secondaryUserId;
       if (!logged) return -1; // no user
@@ -175,19 +136,15 @@ export const projectController = () => {
     await project.save(); // this will remove the user even if the user has been deleted from Database
     const secondaryUser = await User.findById(req.context.secondaryUserId);
     if (!secondaryUser) return res.status(404).send('User is not found');
-    const isProjectInUserList: number = secondaryUser.projects.findIndex(
-      (secondaryUserProject) => {
-        if (!secondaryUserProject._id || !project._id) return -1;
-        secondaryUserProject._id.toString() === project._id.toString();
-      },
-    );
+    const isProjectInUserList: number = secondaryUser.projects.findIndex((secondaryUserProject) => {
+      if (!secondaryUserProject._id || !project._id) return -1;
+      secondaryUserProject._id.toString() === project._id.toString();
+    });
     if (isProjectInUserList === -1) return res.status(404).send('This project is not in user list');
-    secondaryUser.projects = secondaryUser.projects.filter(
-      (projectFromUser) => {
-        if (!projectFromUser._id || !project._id) return false;
-        projectFromUser._id.toString() !== project._id.toString();
-      },
-    );
+    secondaryUser.projects = secondaryUser.projects.filter((projectFromUser) => {
+      if (!projectFromUser._id || !project._id) return false;
+      projectFromUser._id.toString() !== project._id.toString();
+    });
     if (!secondaryUser.populated('roles')) await secondaryUser.populate('roles');
     secondaryUser.roles = secondaryUser.roles.filter((roleRaw) => {
       const secondaryUserRole = roleRaw as IRole;
@@ -198,50 +155,46 @@ export const projectController = () => {
     return res.status(201).json({ project, secondaryUser });
   };
 
-  const createNewProject = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const createNewProject = async (req: IRequest, res: Response, _next: NextFunction) => {
     // This needs validation
     const { name, isPrivate, role } = req.body;
     // Validate that the role has the required properties
     if (!role?.name) {
-    { return res
-      .status(401)
-      .json({ name: "Error", description: "role name inexistent" });
-    }}
+      {
+        return res.status(401).json({ name: 'Error', description: 'role name inexistent' });
+      }
+    }
     if (!role?.permissions) {
-    { return res
-      .status(401)
-      .json({ name: "Error", description: "No permission set" });
-    }}
-    if (
-      !role?.permissions.some((permission: IPermission) => EResource.has(permission.resource.toUpperCase()),
-      )
-    ) {
-    { return res
-      .status(401)
-      .json({ name: "Error", description: "resource is not valid" });
-    }}
-    if (
-      role.permissions.some(
-        (permission: IPermission) => !Array.isArray(permission.actions),
-      )
-    ) {
-    { return res.status(401).json({
-      name: "Error",
-      description: "actions are not properly formated",
-    })};
+      {
+        return res.status(401).json({ name: 'Error', description: 'No permission set' });
+      }
     }
     if (
-      !role.permissions.some((permission: IPermission) => permission.actions?.some((action: IAction) => EAction.has(action.name.toUpperCase()),
-      ))
+      !role?.permissions.some((permission: IPermission) =>
+        EResource.has(permission.resource.toUpperCase()),
+      )
     ) {
-    { return res
-      .status(401)
-      .json({ name: "Error", description: "permission is not valid" });
-    }}
+      {
+        return res.status(401).json({ name: 'Error', description: 'resource is not valid' });
+      }
+    }
+    if (role.permissions.some((permission: IPermission) => !Array.isArray(permission.actions))) {
+      {
+        return res.status(401).json({
+          name: 'Error',
+          description: 'actions are not properly formated',
+        });
+      }
+    }
+    if (
+      !role.permissions.some((permission: IPermission) =>
+        permission.actions?.some((action: IAction) => EAction.has(action.name.toUpperCase())),
+      )
+    ) {
+      {
+        return res.status(401).json({ name: 'Error', description: 'permission is not valid' });
+      }
+    }
     //
 
     //
@@ -254,11 +207,7 @@ export const projectController = () => {
     res.status(201).json({ project });
   };
 
-  const getRoleDetails = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const getRoleDetails = async (req: IRequest, res: Response, _next: NextFunction) => {
     const { roleName } = req.body;
 
     const projectId = req.context?.projectId
@@ -266,57 +215,52 @@ export const projectController = () => {
       : req.context.currentProject?._id;
     const role = await Role.findOne({ name: roleName, project: projectId });
     if (!role) {
-    { return res
-      .status(404)
-      .json({ success: false, description: "No such role in database" });
-    }}
+      {
+        return res.status(404).json({ success: false, description: 'No such role in database' });
+      }
+    }
     return res.status(200).json({ success: true, role });
   };
 
-  const createRole = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const createRole = async (req: IRequest, res: Response, _next: NextFunction) => {
     const { role } = req.body;
     // Validate that the role has the required properties
     if (!role?.name) {
-    { return res
-      .status(401)
-      .json({ name: "Error", description: "role name inexistent" });
-    }}
-    if (!role?.permissions) {
-    { return res
-      .status(401)
-      .json({ name: "Error", description: "No permission set" });
-    }}
-    if (
-      !role?.permissions.some((permission: IPermission) => EResource.has(permission.resource.toUpperCase()),
-      )
-    ) {
-    { return res
-      .status(401)
-      .json({ name: "Error", description: "resource is not valid" });
-    }}
-    if (
-      role.permissions.some(
-        (permission: IPermission) => !Array.isArray(permission.actions),
-      )
-    ) {
-    { return res.status(401).json({
-      name: "Error",
-      description: "actions are not properly formated",
-    });
-    }}
-    if (
-      !role.permissions.some((permission: IPermission) => permission.actions?.some((action: IAction) => EAction.has(action.name.toUpperCase()),
-      ))
-    ) {
-    { return res
-      .status(401)
-      .json({ name: "Error", description: "permission is not valid" });
+      {
+        return res.status(401).json({ name: 'Error', description: 'role name inexistent' });
+      }
     }
-  }
+    if (!role?.permissions) {
+      {
+        return res.status(401).json({ name: 'Error', description: 'No permission set' });
+      }
+    }
+    if (
+      !role?.permissions.some((permission: IPermission) =>
+        EResource.has(permission.resource.toUpperCase()),
+      )
+    ) {
+      {
+        return res.status(401).json({ name: 'Error', description: 'resource is not valid' });
+      }
+    }
+    if (role.permissions.some((permission: IPermission) => !Array.isArray(permission.actions))) {
+      {
+        return res.status(401).json({
+          name: 'Error',
+          description: 'actions are not properly formated',
+        });
+      }
+    }
+    if (
+      !role.permissions.some((permission: IPermission) =>
+        permission.actions?.some((action: IAction) => EAction.has(action.name.toUpperCase())),
+      )
+    ) {
+      {
+        return res.status(401).json({ name: 'Error', description: 'permission is not valid' });
+      }
+    }
     //
 
     const projectId = req.context?.projectId
@@ -329,16 +273,10 @@ export const projectController = () => {
     theProject?.roles.push(newRole);
     await theProject?.save();
 
-    return res
-      .status(200)
-      .json({ success: true, project: theProject, newRole });
+    return res.status(200).json({ success: true, project: theProject, newRole });
   };
 
-  const updateUserRole = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const updateUserRole = async (req: IRequest, res: Response, _next: NextFunction) => {
     const { roleName } = req.body;
     // Handle optional route path params
     const projectId = req.context?.projectId
@@ -350,26 +288,26 @@ export const projectController = () => {
 
     const role = await Role.findOne({ name: roleName, project: projectId });
     if (!role) {
-    { return res
-      .status(404)
-      .json({ success: false, description: "role not found" });
-    }}
+      {
+        return res.status(404).json({ success: false, description: 'role not found' });
+      }
+    }
     const user = await User.findById(userId).populate(['projects', 'roles']);
     if (!user) {
-    { return res
-      .status(404)
-      .json({ sucess: false, description: "User not found" });
-    }}
+      {
+        return res.status(404).json({ sucess: false, description: 'User not found' });
+      }
+    }
     // Check if user has the project before editing its role
     const userProject = user.projects.find((project) => {
       if (!project._id || !projectId) return false;
       project._id.toString() === projectId.toString();
     });
     if (!userProject) {
-    { return res
-      .status(404)
-      .json({ success: false, description: "user is not in the project" });
-    }}
+      {
+        return res.status(404).json({ success: false, description: 'user is not in the project' });
+      }
+    }
     // Remove user actual role
     user.roles = user.roles.filter((roleFromUserRaw) => {
       const roleFromUser = roleFromUserRaw as IRole;
@@ -382,11 +320,7 @@ export const projectController = () => {
     return res.status(201).json({ success: true, user });
   };
 
-  const deleteProject = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const deleteProject = async (req: IRequest, res: Response, _next: NextFunction) => {
     // =========== TODO ============= MOVE TO AUTHORIZE NEXT ITERATION =============
     // === verify that the user has this project in his list. Otherwise denegate === //
     const project: HydratedDocument<IProject> | null = await Project.findById(
@@ -408,8 +342,8 @@ export const projectController = () => {
             const role = roleRaw as IRole;
             if (!role.project || !req.context.projectId) return false;
             if (
-              role.project.toString() === req.context.projectId.toString()
-              && role.name.toLowerCase() === 'admin'
+              role.project.toString() === req.context.projectId.toString() &&
+              role.name.toLowerCase() === 'admin'
             ) {
               return role;
             }
@@ -420,10 +354,10 @@ export const projectController = () => {
       }
     });
     if (project.users.length < 1) {
-    { return res
-      .status(404)
-      .send("User is not in the project, or does not have the access");
-    }}
+      {
+        return res.status(404).send('User is not in the project, or does not have the access');
+      }
+    }
 
     // for each user in the project remove the project and the related role from their list
     project.users.map(async (userRaw) => {

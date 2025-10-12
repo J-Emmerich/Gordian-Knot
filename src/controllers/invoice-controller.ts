@@ -2,21 +2,12 @@ import { join } from 'path';
 import { Customer, Invoice } from '@models';
 import { IRequest } from '@commons/types';
 import { NextFunction, Response } from 'express';
-import {
-  saveToPdf,
-  dayjsFormat,
-  validateInvoiceOwnerUniqueness,
-  logger,
-} from '@utilities';
+import { saveToPdf, dayjsFormat, validateInvoiceOwnerUniqueness, logger } from '@utilities';
 
 const root = join(__dirname, '../../client/output');
 
 export const invoiceController = () => {
-  async function fetchInvoice(
-    req: IRequest,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async function fetchInvoice(req: IRequest, res: Response, next: NextFunction) {
     try {
       logger.debug(`${req.context.invoiceId} invoice id to fetch`);
       const invoice = await Invoice.findById(req.context.invoiceId);
@@ -28,11 +19,7 @@ export const invoiceController = () => {
     }
   }
 
-  async function fetchAllInvoices(
-    req: IRequest,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async function fetchAllInvoices(req: IRequest, res: Response, next: NextFunction) {
     try {
       const invoices = await Invoice.find({
         project: req.context.currentProject._id,
@@ -43,11 +30,7 @@ export const invoiceController = () => {
     }
   }
 
-  async function createInvoice(
-    req: IRequest,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async function createInvoice(req: IRequest, res: Response, next: NextFunction) {
     try {
       const invoice = req.body;
       const date = dayjsFormat(invoice.invoiceDate);
@@ -75,35 +58,24 @@ export const invoiceController = () => {
     }
   }
 
-  async function deleteInvoice(
-    req: IRequest,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async function deleteInvoice(req: IRequest, res: Response, next: NextFunction) {
     try {
-      const result = await Invoice.deleteOne(
-        { _id: req.context.invoiceId },
-        {},
-      );
+      const result = await Invoice.deleteOne({ _id: req.context.invoiceId }, {});
       if (result.deletedCount === 0) {
-      { return res
-        .status(404)
-        .json({ success: false, data: { message: "document not found" } });
-      }}
+        {
+          return res.status(404).json({ success: false, data: { message: 'document not found' } });
+        }
+      }
       res.status(200).json({ success: true, data: { message: 'deleted' } });
     } catch (err) {
       next(err);
     }
   }
 
-  async function fetchInvoicePdf(
-    req: IRequest,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async function fetchInvoicePdf(req: IRequest, res: Response, next: NextFunction) {
     try {
       const invoice = await Invoice.findById(req.context.invoiceId);
-      // this is one functionality
+      // this is one functionality // TOD
       await saveToPdf(invoice._id, invoice.invoiceNumber, req.context.token); // File System
       // this is another functionality
       res.download(`${root}/${invoice.invoiceNumber}.pdf`);
@@ -112,11 +84,7 @@ export const invoiceController = () => {
     }
   }
 
-  async function editOwnerOfInvoice(
-    req: IRequest,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async function editOwnerOfInvoice(req: IRequest, res: Response, next: NextFunction) {
     try {
       const owner = await Customer.findById(req.context.customerId);
       if (!owner) throw Error('No customer');
@@ -124,9 +92,7 @@ export const invoiceController = () => {
       if (!invoice) throw new Error('No invoice');
       // Check that the owner is not already in the array
       if (invoice?.invoiceOwners.length) {
-        invoice.invoiceOwners = validateInvoiceOwnerUniqueness(
-          invoice.invoiceOwners,
-        );
+        invoice.invoiceOwners = validateInvoiceOwnerUniqueness(invoice.invoiceOwners);
       } else {
         invoice.invoiceOwners.push(owner._id);
       }

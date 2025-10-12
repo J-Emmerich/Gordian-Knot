@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const customerSchema = new Schema({
-  project: { type: Schema.Types.ObjectId, ref: "Project", required: true },
+  project: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
   name: { type: String, required: true },
   estadoContrato: String,
   modeloContrato: String,
@@ -13,7 +13,7 @@ const customerSchema = new Schema({
       comment: String,
     },
   ],
-  invoices: [{ type: Schema.Types.ObjectId, ref: "Invoice" }],
+  invoices: [{ type: Schema.Types.ObjectId, ref: 'Invoice' }],
 });
 
-export const Customer = model("Customer", customerSchema);
+export const Customer = model('Customer', customerSchema);

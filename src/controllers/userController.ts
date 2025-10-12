@@ -3,18 +3,14 @@ import { User } from '@models';
 import { NextFunction, Response } from 'express';
 
 export const userController = () => {
-  const updateCurrentProject = async (
-    req: IRequest,
-    res: Response,
-    _next: NextFunction,
-  ) => {
+  const updateCurrentProject = async (req: IRequest, res: Response, _next: NextFunction) => {
     const { projectName, isDefault } = req.body;
 
     if (!projectName && !isDefault) {
-    { return res
-      .status(401)
-      .json({ success: false, description: "Bad Request" });
-    }}
+      {
+        return res.status(401).json({ success: false, description: 'Bad Request' });
+      }
+    }
     // verify that the user has the project
     if (!req.context.user!.populated('projects')) await req.context.user?.populate('projects');
 
@@ -31,10 +27,10 @@ export const userController = () => {
       });
     }
     if (!project) {
-    { return res
-      .status(401)
-      .json({ success: false, description: "User dont have this project" });
-    }}
+      {
+        return res.status(401).json({ success: false, description: 'User dont have this project' });
+      }
+    }
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.context.user!._id },
       { currentProject: project._id },
