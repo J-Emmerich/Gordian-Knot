@@ -89,7 +89,7 @@ export const invoiceController = () => {
       { return res
         .status(404)
         .json({ success: false, data: { message: "document not found" } });
-      }
+      }}
       res.status(200).json({ success: true, data: { message: 'deleted' } });
     } catch (err) {
       next(err);

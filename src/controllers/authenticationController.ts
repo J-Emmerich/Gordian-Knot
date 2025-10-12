@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Response , RequestHandler} from "express";
 import { IRequest } from "@commons/types";
 import {
   loginUser,
@@ -9,7 +9,7 @@ import {
 import { logger } from "@utilities";
 
 export const authenticationController = () => {
-  const login = async (req: IRequest, res: Response, next: NextFunction) => {
+  const login :  RequestHandler = async (req: IRequest, res:Response, next:NextFunction) => {
     try {
       const { name, password } = req.body;
       const user = await loginUser(name, password);
@@ -20,7 +20,7 @@ export const authenticationController = () => {
     }
   };
 
-  const register = async (req: IRequest, res: Response, next: NextFunction) => {
+  const register :  RequestHandler = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
       const { name, password, email } = req.body;
       const user = await registerUser(name, password, email);
@@ -31,7 +31,7 @@ export const authenticationController = () => {
       next(err);
     }
   };
-  const forgotPassword = async (
+  const forgotPassword :  RequestHandler = async (
     req: IRequest,
     res: Response,
     next: NextFunction
@@ -47,7 +47,7 @@ export const authenticationController = () => {
     }
   };
 
-  const resetPassword = async (
+  const resetPassword :  RequestHandler = async (
     req: IRequest,
     res: Response,
     next: NextFunction

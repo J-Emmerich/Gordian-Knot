@@ -21,12 +21,12 @@ export const customersController = () => {
       }
 
       return res.status(200).json({ success: true, data: customers });
-    } catch (err) {
+    }} catch (err) {
       logger.error(err, 'getAllCustomersFromAProject');
 
       next(err);
     }
-  }
+  };
   async function getOneCustomer(
     req: IRequest,
     res: Response,

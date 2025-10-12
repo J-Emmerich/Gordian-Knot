@@ -1,5 +1,5 @@
-import { NextFunction, Response, Errback } from 'express';
-import { IRequest } from '@commons/types';
+import { NextFunction, Response } from 'express';
+import { IRequest,IErrback } from '@commons/types';
 import { ErrorResponse } from '@utilities';
 import { MongoError } from 'mongodb';
 import { Error } from 'mongoose';
@@ -30,24 +30,29 @@ const sendHttpResponse = (
     error: err.message || "Server Error",
   });
   }
-};
+}};
 
 
 // Get the 4 arguments of Express Error Handling
-// eslint-disable-next-line no-unused-vars
 export const errorHandler = (
-  err: Errback,
+  err: IErrback,
   req: IRequest,
   res: Response,
   _next: NextFunction,
 ) => {
   let message: string;
   let status: number;
-
-  if (err instanceof MongoError) {
+if (err.route = "Auth"){
+  message="Authentication error"
+  status=401;
+  const errorResponse = new ErrorResponse(message, 500,err.route);
+  sendHttpResponse(errorResponse, req, res);
+} else if (err instanceof MongoError) {
     if (err.code === 11000) {
       message = 'Duplicate Field Error';
       status = 401;
+        const errorResponse = new ErrorResponse(message, 500);
+  sendHttpResponse(errorResponse, req, res);
     }
   } else if (err instanceof Error.ValidationError) {
     message = Object.values(err.errors).map(
@@ -64,7 +69,7 @@ export const errorHandler = (
 };
 
 export const logError = (
-  err: Errback,
+  err: IErrback,
   _req: IRequest,
   _res: Response,
   next: NextFunction,

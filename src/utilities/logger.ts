@@ -1,8 +1,9 @@
-import pino from "pino";
+import * as pino from "pino";
 import { normalize } from "path";
 import { context } from "./asyncContext";
-
-const uuid = require("uuid");
+import { IRequest } from "@commons/types";
+import { NextFunction, RequestHandler,Response } from "express";
+import { v4 as uuidv4 } from 'uuid';
 
 const { PINO_LOG_LEVEL } = process.env;
 
@@ -40,8 +41,8 @@ export const logger = new Proxy(loggerBase, {
 
 // Generate a unique ID for each incoming request and store a child logger in context
 // to always log the request ID
-export const loggerMiddleware = (req, res, next) => {
-  const child = logger.child({ requestId: uuid.v4() });
+export const loggerMiddleware : RequestHandler = (_req:IRequest, _res:Response, next:NextFunction) => {
+  const child = logger.child({ requestId: uuidv4() });
   const store = new Map();
   store.set("logger", child);
 

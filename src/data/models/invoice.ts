@@ -28,8 +28,8 @@ const invoiceSchema = new Schema({
 });
 
 invoiceSchema.set("toJSON", {
-  transform: (document, returnedObject) => {
-    returnedObject.articles = returnedObject.articles.map((article) => {
+  transform: (_document, returnedObject) => {
+    returnedObject.articles = returnedObject.articles.map((article: { totalPrice: { toString: () => any; }; pricePerUnit: { toString: () => any; }; }) => {
       article.totalPrice = article.totalPrice
         ? article.totalPrice.toString()
         : "";

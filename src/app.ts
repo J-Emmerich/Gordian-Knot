@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable import/first */
-require("dotenv").config("../.env");
-
+import "dotenv/config";  
 import "module-alias/register";
 import * as express from "express";
 import helmet from "helmet";
 import { errorHandler, logError, authenticate } from "@middlewares";
 import { createContext, loggerMiddleware, logger } from "@utilities";
 import { join } from "path";
-
 import {
   projectRouter,
   authenticationRouter,
@@ -17,10 +13,8 @@ import {
   customerRouter,
 } from "./routes";
 // import { debugRouter } from "./routes/debug";
-
 // Connects to MongoDB Atlas
-// eslint-disable-next-line import/extensions, no-unused-vars, @typescript-eslint/no-unused-vars
-const connection = require("./data/connection");
+import "./data/connection";
 
 const app = express();
 const port = 3000;
@@ -44,7 +38,7 @@ app.use("/api/invoice", invoiceRouter());
 app.use("/api/customer", customerRouter());
 
 // why is this here?
-app.get("*", (req, res) => {
+app.get("*", (_req, res) => {
   res.sendFile(join(__dirname, "../client/build/index.html"));
 });
 

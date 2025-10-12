@@ -19,7 +19,7 @@ export const projectRouter = () => {
         .json({ success: false, description: "Bad format of id" });
     }
   });
-  router.param("secondaryUserId", async (req: IRequest, res, next) => {
+  router.param("secondaryUserId", async (req: IRequest, _res, next) => {
     const secondaryUserId = new Types.ObjectId(req.params.secondaryUserId);
     req.context.secondaryUserId = secondaryUserId;
     next();

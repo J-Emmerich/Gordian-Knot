@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
 import { User } from "@models";
-import { IProject, IRequest, IUser } from "@commons/types";
+import { IProject, IRequest} from "@commons/types";
 import { setDefaultProjectForUser } from "@utilities";
 import { HydratedDocument, Types } from "mongoose";
 
@@ -34,7 +34,8 @@ export const authenticate = async (
       throw new Error("No user");
     }
   } catch (error) {
-    error.route = "Auth";
-    next(error);
+    const route = "Auth";
+    const err = {error, route}
+    next(err);
   }
 };

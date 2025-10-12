@@ -10,7 +10,7 @@ export const customerRouter = () => {
 
   router.param(
     "customerId",
-    async (req: IRequest, res: Response, next: NextFunction) => {
+    async (req: IRequest, _res: Response, next: NextFunction) => {
       const customerId = new Types.ObjectId(req.params.customerId);
       req.context.customerId = customerId;
       next();

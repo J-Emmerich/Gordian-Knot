@@ -14,7 +14,7 @@ export const userController = () => {
     { return res
       .status(401)
       .json({ success: false, description: "Bad Request" });
-    }
+    }}
     // verify that the user has the project
     if (!req.context.user!.populated('projects')) await req.context.user?.populate('projects');
 
@@ -34,7 +34,7 @@ export const userController = () => {
     { return res
       .status(401)
       .json({ success: false, description: "User dont have this project" });
-    }
+    }}
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.context.user!._id },
       { currentProject: project._id },

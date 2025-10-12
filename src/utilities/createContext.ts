@@ -3,7 +3,7 @@ import { IRequest } from "@commons/types";
 
 export const createContext = (
   req: IRequest,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) => {
   req.context = {};

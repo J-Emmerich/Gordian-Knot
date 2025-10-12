@@ -1,3 +1,7 @@
+import {
+  ParamsDictionary,
+  Query,
+} from "express-serve-static-core";
 import { Errback, Request } from "express";
 import { Error, HydratedDocument, Types } from "mongoose";
 
@@ -38,8 +42,16 @@ export interface IUser {
   resetTokenHash?: string;
 }
 
-export interface IRequest extends Request {
-  context: {
+export interface IRequest
+  extends Request<
+    // keep the defaults – you can specialise any of them if you need to
+    ParamsDictionary,
+    any,
+    any,
+    Query,
+    Record<string, any>
+  > {
+  context?: {
     projectId?: Types.ObjectId;
     user?: HydratedDocument<IUser>;
     resourceName?: string;
@@ -52,4 +64,6 @@ export interface IRequest extends Request {
   };
 }
 
-export interface IErrback extends Errback, Error {}
+export interface IErrback extends Errback, Error {
+  route?: string;
+}

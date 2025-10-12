@@ -1,7 +1,4 @@
-import { HydratedDocument } from "mongoose";
 import { IPermission, IRole } from "@commons/types";
-
-import { Role } from "@models";
 
 // Create the roles and permissions in the database
 
@@ -68,11 +65,11 @@ export const roles: IRole[] = [
   { name: "User", permissions: userPermissions },
 ];
 
-const findRoleAndSave: Function = async (role: IRole) => {
+/* const findRoleAndSave: Function = async (role: IRole) => {
   const newRole: HydratedDocument<IRole> = new Role({
     name: role.name,
     permissions: role.permissions,
   });
 
   await newRole.save();
-};
+*/

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Response, NextFunction } from 'express';
 import {
   IRequest,
@@ -15,6 +14,7 @@ import { createProjectAndSaveUser } from '@dbmethods/projects';
 import { EAction, EResource } from '@commons/enumerators';
 
 export const projectController = () => {
+
   const getAllProjectsFromUser = async (
     req: IRequest,
     res: Response,
@@ -164,7 +164,7 @@ export const projectController = () => {
     { return res
       .status(404)
       .send("User can't be removed, is not in the project");
-    }
+    }}
     project.users = project.users.filter((user) => {
       const logged = req.context.secondaryUserId;
       if (!logged) return -1; // no user
@@ -210,12 +210,12 @@ export const projectController = () => {
     { return res
       .status(401)
       .json({ name: "Error", description: "role name inexistent" });
-    }
+    }}
     if (!role?.permissions) {
     { return res
       .status(401)
       .json({ name: "Error", description: "No permission set" });
-    }
+    }}
     if (
       !role?.permissions.some((permission: IPermission) => EResource.has(permission.resource.toUpperCase()),
       )
@@ -223,7 +223,7 @@ export const projectController = () => {
     { return res
       .status(401)
       .json({ name: "Error", description: "resource is not valid" });
-    }
+    }}
     if (
       role.permissions.some(
         (permission: IPermission) => !Array.isArray(permission.actions),
@@ -232,7 +232,7 @@ export const projectController = () => {
     { return res.status(401).json({
       name: "Error",
       description: "actions are not properly formated",
-    });
+    })};
     }
     if (
       !role.permissions.some((permission: IPermission) => permission.actions?.some((action: IAction) => EAction.has(action.name.toUpperCase()),
@@ -241,7 +241,7 @@ export const projectController = () => {
     { return res
       .status(401)
       .json({ name: "Error", description: "permission is not valid" });
-    }
+    }}
     //
 
     //
@@ -269,7 +269,7 @@ export const projectController = () => {
     { return res
       .status(404)
       .json({ success: false, description: "No such role in database" });
-    }
+    }}
     return res.status(200).json({ success: true, role });
   };
 
@@ -284,12 +284,12 @@ export const projectController = () => {
     { return res
       .status(401)
       .json({ name: "Error", description: "role name inexistent" });
-    }
+    }}
     if (!role?.permissions) {
     { return res
       .status(401)
       .json({ name: "Error", description: "No permission set" });
-    }
+    }}
     if (
       !role?.permissions.some((permission: IPermission) => EResource.has(permission.resource.toUpperCase()),
       )
@@ -297,7 +297,7 @@ export const projectController = () => {
     { return res
       .status(401)
       .json({ name: "Error", description: "resource is not valid" });
-    }
+    }}
     if (
       role.permissions.some(
         (permission: IPermission) => !Array.isArray(permission.actions),
@@ -307,7 +307,7 @@ export const projectController = () => {
       name: "Error",
       description: "actions are not properly formated",
     });
-    }
+    }}
     if (
       !role.permissions.some((permission: IPermission) => permission.actions?.some((action: IAction) => EAction.has(action.name.toUpperCase()),
       ))
@@ -316,6 +316,7 @@ export const projectController = () => {
       .status(401)
       .json({ name: "Error", description: "permission is not valid" });
     }
+  }
     //
 
     const projectId = req.context?.projectId
@@ -352,13 +353,13 @@ export const projectController = () => {
     { return res
       .status(404)
       .json({ success: false, description: "role not found" });
-    }
+    }}
     const user = await User.findById(userId).populate(['projects', 'roles']);
     if (!user) {
     { return res
       .status(404)
       .json({ sucess: false, description: "User not found" });
-    }
+    }}
     // Check if user has the project before editing its role
     const userProject = user.projects.find((project) => {
       if (!project._id || !projectId) return false;
@@ -368,7 +369,7 @@ export const projectController = () => {
     { return res
       .status(404)
       .json({ success: false, description: "user is not in the project" });
-    }
+    }}
     // Remove user actual role
     user.roles = user.roles.filter((roleFromUserRaw) => {
       const roleFromUser = roleFromUserRaw as IRole;
@@ -422,7 +423,7 @@ export const projectController = () => {
     { return res
       .status(404)
       .send("User is not in the project, or does not have the access");
-    }
+    }}
 
     // for each user in the project remove the project and the related role from their list
     project.users.map(async (userRaw) => {

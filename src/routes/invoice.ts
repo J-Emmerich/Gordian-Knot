@@ -11,7 +11,7 @@ export const invoiceRouter = () => {
 
   router.param(
     "invoiceId",
-    async (req: IRequest, res: Response, next: NextFunction) => {
+    async (req: IRequest, _res: Response, next: NextFunction) => {
       const invoiceId = new Types.ObjectId(req.params.invoiceId);
       req.context.invoiceId = invoiceId;
       next();
@@ -19,7 +19,7 @@ export const invoiceRouter = () => {
   );
   router.param(
     "customerId",
-    async (req: IRequest, res: Response, next: NextFunction) => {
+    async (req: IRequest, _res: Response, next: NextFunction) => {
       const customerId = new Types.ObjectId(req.params.customerId);
       req.context.customerId = customerId;
       next();

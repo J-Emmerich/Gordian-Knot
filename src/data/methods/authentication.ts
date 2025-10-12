@@ -52,15 +52,16 @@ export const loginUser = async (name: string, password: string) => {
   };
 };
 
-export const resetUserPassword = async (resetToken, password) => {
+export const resetUserPassword = async (resetToken:string, password:string) => {
   const resetTokenHash = createHash("sha256").update(resetToken).digest("hex");
   const user = await findOneWithResetToken(resetTokenHash);
+  if (!user) throw new Error("user not found");
   const salt = await bcrypt.genSalt();
   const passwordHash = await bcrypt.hash(password, salt);
   await updatePassword(user, passwordHash);
 };
 
-export const userForgotPassword = async (email) => {
+export const userForgotPassword = async (email:string) => {
   const user = await findOneWithEmail({ email });
   try {
     const resetToken = await setResetToken(user);
@@ -72,7 +73,7 @@ export const userForgotPassword = async (email) => {
   }
 };
 
-const sendResetTokenEmail = async (email, token) => {
+const sendResetTokenEmail = async (email:string, token:string) => {
   const resetUrl = `${BASE_FRONTEND_URL}/passwordreset/${token}`;
   const message = `
       <h1>You requested to reset your password</h1>
@@ -86,14 +87,14 @@ const sendResetTokenEmail = async (email, token) => {
   });
 };
 
-async function unsetResetToken(receivedUser) {
+async function unsetResetToken(receivedUser:HydratedDocument<IUser>) {
   const user = receivedUser; // So it doesn't reassign the parameter value.
   user.resetTokenHash = undefined;
   user.resetPasswordExpire = undefined;
   await user.save({ validateModifiedOnly: true });
 }
 
-async function findOneWithResetToken(resetTokenHash) {
+async function findOneWithResetToken(resetTokenHash:string) {
   const user = await User.findOne({
     resetTokenHash,
     resetPasswordExpire: { $gt: Date.now() },
@@ -112,7 +113,7 @@ async function setResetToken(receivedUser: HydratedDocument<IUser>) {
   return resetToken;
 }
 
-const findOneWithEmail = async ({ email }) => {
+const findOneWithEmail = async ({ email }:{email:string}) => {
   try {
     const user = await User.findOne({ email });
     if (!user) throw new Error("Credenciales incorrectas");
@@ -123,7 +124,7 @@ const findOneWithEmail = async ({ email }) => {
   }
 };
 
-async function updatePassword(receivedUser, passwordHash) {
+async function updatePassword(receivedUser:HydratedDocument<IUser>, passwordHash:string) {
   const user = receivedUser;
   user.passwordHash = passwordHash;
   await user.save({ validateModifiedOnly: true });

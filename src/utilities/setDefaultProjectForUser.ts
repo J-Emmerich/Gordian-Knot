@@ -13,11 +13,16 @@ export const setDefaultProjectForUser = async (
     );
 
     projectId = populatedUser.projects.find(
-      (project: IProject) => project.name === populatedUser._id.toString()
+      (projectRaw) => {
+      const project = projectRaw as IProject;
+        project.name === populatedUser._id.toString()}
     );
-    // If finds a default project with the user id as same then sets the id. Otherwise use the first found
+
+    // If finds a default project with the user id as same then sets the id.
+    //  Otherwise use the first found
     if (projectId) projectId = projectId?._id;
     if (!projectId) projectId = populatedUser.projects[0]._id;
+
   } else projectId = project;
 
   // save as the current project
@@ -36,7 +41,9 @@ export const setDefaultProjectForUserWithoutSave = async (
       "projects"
     );
     projectId = populatedUser.projects.find(
-      (project: IProject) => project.name === populatedUser._id.toString()
+      (projectRaw) => {
+        const project = projectRaw as IProject;
+        project.name === populatedUser._id.toString()}
     );
     // If finds a default project with the user id as same then sets the id. Otherwise use the first found
     if (projectId) projectId = projectId?._id;

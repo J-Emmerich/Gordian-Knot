@@ -1,24 +1,32 @@
-// Why is this here?
 import { logger } from "@utilities";
-
 process.stdin.resume();
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const mongoose = require("mongoose");
 
-const { DB_USER, DB_PASSWORD, DB } = process.env;
-const uri = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.3dgxs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+import mongoose from 'mongoose';
+
+const { DB_USER, DB_PASSWORD} = process.env;
+const user = encodeURIComponent(DB_USER);
+const pass = encodeURIComponent(DB_PASSWORD);
+// const DB = encodeURIComponent(DB_ENV); // required in some cases
+
+const uri = `mongodb+srv://${user}:${pass}@cluster0.3dgxs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const options = {
-  // strictPopulate: false
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
 };
 
 // start the connection when the file is loaded
-
-try {
-  mongoose.connect(uri, options);
-} catch (error) {
-  logger.error(error);
+async function initMongoose(){
+  try {
+    mongoose.connect(uri, options);
+  } catch (error) {
+    logger.error(error);
+  process.exit(1);
+  }
 }
+
+initMongoose();
 
 mongoose.connection.on("connected", () => {
   logger.info("Connected to Mongoose");
@@ -36,9 +44,16 @@ mongoose.connection.on("error", (err: string) => {
 
 // Disconnect from mongoose when server is killed
 
-process.on("SIGINT", async () => {
+const gracefulShutdown = async (signal: string) => {
+  logger.info(`Received ${signal}. Closing Mongoose connection...`);
   await mongoose.disconnect();
-  process.exit();
-});
+  process.exit(0);
+};
 
-module.exports = mongoose;
+process.on('SIGINT',  () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGUSR2', () => gracefulShutdown('SIGUSR2'));
+process.on('SIGQUIT', () => gracefulShutdown('SIGQUIT'));
+
+export type Mongoose = typeof mongoose;
+export default mongoose;

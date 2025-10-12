@@ -1,4 +1,4 @@
-import { Role, User } from "@models";
+import { User } from "@models";
 import { Types } from "mongoose";
 
 export const addRoleToUser = async (roleId: string) => {
