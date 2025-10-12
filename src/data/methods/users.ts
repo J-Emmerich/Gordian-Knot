@@ -1,15 +1,15 @@
 import { IUser, IRole } from "@commons/types";
 import { Role, User } from "@models";
-import {logger} from "@utilities";
+import { logger } from "@utilities";
 
-//needed to access the mongoose methods
+// needed to access the mongoose methods
 import { HydratedDocument, Types } from "mongoose";
 
 export const createUser: Function = async (
   name: string
 ): Promise<IUser | null> => {
   try {
-    const newUser: HydratedDocument<IUser> = await User.create({ name: name });
+    const newUser: HydratedDocument<IUser> = await User.create({ name });
     await newUser.save();
     return newUser;
   } catch (error) {
@@ -21,15 +21,13 @@ export const findUserByName: Function = async (
   name: string
 ): Promise<IUser | undefined> => {
   try {
-    const foundUser: IUser | null = await User.findOne({ name: name });
+    const foundUser: IUser | null = await User.findOne({ name });
     if (foundUser) {
       return foundUser;
-    } else {
-      return undefined;
     }
+    return undefined;
   } catch (error) {
     logger.error(error);
-    return;
   }
 };
 
@@ -47,7 +45,6 @@ export const assignToUserByIdRoleByName = async (
       await user.save();
     }
     return role;
-  } else {
-    return null;
   }
+  return null;
 };

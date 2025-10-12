@@ -6,8 +6,9 @@ import "module-alias/register";
 import * as express from "express";
 import helmet from "helmet";
 import { errorHandler, logError, authenticate } from "@middlewares";
-import { createContext } from "@utilities";
+import { createContext, loggerMiddleware, logger } from "@utilities";
 import { join } from "path";
+
 import {
   projectRouter,
   authenticationRouter,
@@ -15,8 +16,7 @@ import {
   invoiceRouter,
   customerRouter,
 } from "./routes";
-import { debugRouter } from "./routes/debug";
-import {loggerMiddleware, logger} from '@utilities'
+// import { debugRouter } from "./routes/debug";
 
 // Connects to MongoDB Atlas
 // eslint-disable-next-line import/extensions, no-unused-vars, @typescript-eslint/no-unused-vars
@@ -34,7 +34,7 @@ app.use(express.static(join(__dirname, "../client/build")));
 app.use(express.json());
 app.all("*", createContext);
 
-app.use("/debug", debugRouter());
+// app.use("/debug", debugRouter());
 
 app.use("/user", authenticationRouter());
 app.all("/api/*", authenticate);

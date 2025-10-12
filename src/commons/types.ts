@@ -1,14 +1,13 @@
 import { Errback, Request } from "express";
-import { MongoError } from "mongodb";
-import { Error, HydratedDocument, MongooseError, Types } from "mongoose";
+import { Error, HydratedDocument, Types } from "mongoose";
 
 export interface IProject {
   _id?: Types.ObjectId;
   name: string;
   users: Array<IUser | Types.ObjectId>;
   roles: Array<IRole | Types.ObjectId>;
-  isPrivate?: Boolean;
-  isDefault?: Boolean;
+  isPrivate?: boolean;
+  isDefault?: boolean;
 }
 
 export interface IPermission {
@@ -53,5 +52,4 @@ export interface IRequest extends Request {
   };
 }
 
-export interface IErrback extends Errback, Error {
-}
+export interface IErrback extends Errback, Error {}

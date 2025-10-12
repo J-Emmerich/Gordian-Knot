@@ -13,6 +13,7 @@ import {
 import { saveToPdf } from "./save-to-pdf";
 import { validateInvoiceOwnerUniqueness } from "./validateInvoiceOwnerUniqueness";
 import { logger, loggerMiddleware } from "./logger";
+
 export {
   validateInvoiceOwnerUniqueness,
   dayjsFormat,
@@ -26,5 +27,6 @@ export {
   setDefaultProjectForUser,
   createContext,
   isRoleInBothArrays,
-  logger, loggerMiddleware
+  logger,
+  loggerMiddleware,
 };

@@ -1,11 +1,12 @@
-import { HydratedDocument, Types } from "mongoose";
+import { HydratedDocument } from "mongoose";
 import { User } from "@models";
 import { ErrorResponse, setDefaultProjectForUser } from "@utilities";
-const { logger } = require("../../utilities/logger"); // importer un enregistreur
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 import { createHash, randomBytes } from "crypto";
 import { IUser } from "@commons/types";
+
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { logger } = require("../../utilities/logger"); // importer un enregistreur
 
 const { JWT_SECRET, JWT_EXPIRE, BASE_FRONTEND_URL } = process.env;
 
@@ -29,13 +30,16 @@ export const registerUser = async (
 };
 
 export const loginUser = async (name: string, password: string) => {
-
-  const user = await User.findOne({ name: name }).select("+passwordHash");
-  if (!user) { 
-    logger.error("No user found with this name"); throw new Error("Invalid credentials");
+  const user = await User.findOne({ name }).select("+passwordHash");
+  if (!user) {
+    logger.error("No user found with this name");
+    throw new Error("Invalid credentials");
   }
   const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
-  if (!isPasswordCorrect) {logger.error("invalid password"); throw new Error("Invalid Credentials");}
+  if (!isPasswordCorrect) {
+    logger.error("invalid password");
+    throw new Error("Invalid Credentials");
+  }
   if (!user.currentProject?._id) await setDefaultProjectForUser(user);
   const payload = {
     user: user._id,
@@ -114,7 +118,7 @@ const findOneWithEmail = async ({ email }) => {
     if (!user) throw new Error("Credenciales incorrectas");
     return user;
   } catch (error) {
-    logger.error(error,`findOneWithEmail: ${email}`);
+    logger.error(error, `findOneWithEmail: ${email}`);
     throw error;
   }
 };

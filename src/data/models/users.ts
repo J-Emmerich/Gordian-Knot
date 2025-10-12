@@ -29,7 +29,12 @@ const createDefaultProject = async (userDoc: types.IUser) => {
 const UserSchema = new Schema<types.IUser>({
   name: { type: String, required: true, lowercase: true },
   passwordHash: { type: String, select: false, required: true },
-  email: { type: String, required: true, unique: true, lowercase: true },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+  },
   roles: [{ type: Schema.Types.ObjectId, ref: "Role" }],
   projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
   currentProject: { type: Schema.Types.ObjectId, ref: "Project" },

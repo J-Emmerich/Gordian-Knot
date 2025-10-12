@@ -16,5 +16,6 @@ export const filterRolePermissionsByHTTPMethod = (
     )
   ) {
     return role;
-  } else return null;
+  }
+  return null;
 };

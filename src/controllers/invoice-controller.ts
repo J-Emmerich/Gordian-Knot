@@ -1,29 +1,29 @@
-import { join } from "path";
-import { Customer, Invoice } from "@models";
-import { IRequest } from "@commons/types";
-import { NextFunction, Response } from "express";
+import { join } from 'path';
+import { Customer, Invoice } from '@models';
+import { IRequest } from '@commons/types';
+import { NextFunction, Response } from 'express';
 import {
   saveToPdf,
   dayjsFormat,
-  validateInvoiceOwnerUniqueness,logger
-} from "@utilities";
+  validateInvoiceOwnerUniqueness,
+  logger,
+} from '@utilities';
 
-const root = join(__dirname, "../../client/output");
+const root = join(__dirname, '../../client/output');
 
 export const invoiceController = () => {
   async function fetchInvoice(
     req: IRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
-      
       logger.debug(`${req.context.invoiceId} invoice id to fetch`);
       const invoice = await Invoice.findById(req.context.invoiceId);
-      if (!invoice) throw Error("Nothing found");
+      if (!invoice) throw Error('Nothing found');
       res.status(200).json({ success: true, data: invoice });
     } catch (err) {
-      logger.error(err, "fetchInvoice")
+      logger.error(err, 'fetchInvoice');
       next(err);
     }
   }
@@ -31,7 +31,7 @@ export const invoiceController = () => {
   async function fetchAllInvoices(
     req: IRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
       const invoices = await Invoice.find({
@@ -39,7 +39,6 @@ export const invoiceController = () => {
       });
       res.status(200).json({ success: true, data: invoices });
     } catch (err) {
-  
       next(err);
     }
   }
@@ -47,7 +46,7 @@ export const invoiceController = () => {
   async function createInvoice(
     req: IRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
       const invoice = req.body;
@@ -68,7 +67,7 @@ export const invoiceController = () => {
       const editedInvoice = await Invoice.findOneAndUpdate(
         { _id: req.context.invoiceId },
         newInvoice,
-        { new: true }
+        { new: true },
       );
       res.status(200).json({ success: true, data: editedInvoice });
     } catch (err) {
@@ -79,18 +78,19 @@ export const invoiceController = () => {
   async function deleteInvoice(
     req: IRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
       const result = await Invoice.deleteOne(
         { _id: req.context.invoiceId },
-        {}
+        {},
       );
-      if (result.deletedCount === 0)
-        return res
-          .status(404)
-          .json({ success: false, data: { message: "document not found" } });
-      res.status(200).json({ success: true, data: {message: "deleted"} });
+      if (result.deletedCount === 0) {
+      { return res
+        .status(404)
+        .json({ success: false, data: { message: "document not found" } });
+      }
+      res.status(200).json({ success: true, data: { message: 'deleted' } });
     } catch (err) {
       next(err);
     }
@@ -99,7 +99,7 @@ export const invoiceController = () => {
   async function fetchInvoicePdf(
     req: IRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
       const invoice = await Invoice.findById(req.context.invoiceId);
@@ -115,17 +115,17 @@ export const invoiceController = () => {
   async function editOwnerOfInvoice(
     req: IRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) {
     try {
       const owner = await Customer.findById(req.context.customerId);
-      if (!owner) throw Error("No customer");
+      if (!owner) throw Error('No customer');
       let invoice = await Invoice.findById(req.context.invoiceId);
-      if (!invoice) throw new Error("No invoice");
+      if (!invoice) throw new Error('No invoice');
       // Check that the owner is not already in the array
       if (invoice?.invoiceOwners.length) {
         invoice.invoiceOwners = validateInvoiceOwnerUniqueness(
-          invoice.invoiceOwners
+          invoice.invoiceOwners,
         );
       } else {
         invoice.invoiceOwners.push(owner._id);

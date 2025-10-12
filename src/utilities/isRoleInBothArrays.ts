@@ -4,7 +4,7 @@ import { IRole } from "@commons/types";
 export const isRoleInBothArrays = (
   fthArr: IRole[],
   secArr: IRole[]
-): Boolean => {
+): boolean => {
   let answer = false;
 
   for (let i = 0; i < fthArr.length; i++) {

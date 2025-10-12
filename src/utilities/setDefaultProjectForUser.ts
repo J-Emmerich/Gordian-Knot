@@ -8,7 +8,7 @@ export const setDefaultProjectForUser = async (
   let projectId;
   // Use default project if none is defined
   if (!project) {
-    let populatedUser: HydratedDocument<IUser> = await user.populate(
+    const populatedUser: HydratedDocument<IUser> = await user.populate(
       "projects"
     );
 
@@ -32,7 +32,7 @@ export const setDefaultProjectForUserWithoutSave = async (
   let projectId;
   // Use default project if none is defined
   if (!project) {
-    let populatedUser: HydratedDocument<IUser> = await user.populate(
+    const populatedUser: HydratedDocument<IUser> = await user.populate(
       "projects"
     );
     projectId = populatedUser.projects.find(

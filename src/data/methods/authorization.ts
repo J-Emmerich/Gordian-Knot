@@ -76,4 +76,3 @@ const findRoleAndSave: Function = async (role: IRole) => {
 
   await newRole.save();
 };
-

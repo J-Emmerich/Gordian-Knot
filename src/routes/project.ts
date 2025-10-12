@@ -57,10 +57,7 @@ export const projectRouter = () => {
     controller.removeUserFromProject
   );
 
-  /* 
-
-
-
+  /*
 
   router.delete("/:projectId", controller.deleteOneProject);
 */

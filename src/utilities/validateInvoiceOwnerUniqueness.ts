@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
-import {logger } from "@utilities";
+import { logger } from "@utilities";
+
 export const validateInvoiceOwnerUniqueness = (
   owners: Types.ObjectId[]
 ): Types.ObjectId[] => {

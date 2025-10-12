@@ -9,15 +9,13 @@ import {
 import { logger } from "@utilities";
 
 export const authenticationController = () => {
-
-
   const login = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
       const { name, password } = req.body;
       const user = await loginUser(name, password);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      logger.error(err, "login")
+      logger.error(err, "login");
       next(err);
     }
   };
@@ -28,24 +26,32 @@ export const authenticationController = () => {
       const user = await registerUser(name, password, email);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      logger.error(err, "register")
+      logger.error(err, "register");
 
       next(err);
     }
   };
-  const forgotPassword = async (req, res, next) => {
+  const forgotPassword = async (
+    req: IRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const { email } = req.body;
       await userForgotPassword(email);
       res.status(200).json({ success: true, data: "Email Sent" });
     } catch (err) {
-      logger.error(err, "forgotPassword")
+      logger.error(err, "forgotPassword");
 
       next(err);
     }
   };
 
-  const resetPassword = async (req, res, next) => {
+  const resetPassword = async (
+    req: IRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const { resetToken } = req.params;
       const { password } = req.body;
@@ -55,11 +61,16 @@ export const authenticationController = () => {
         data: "Password reset",
       });
     } catch (err) {
-      logger.error(err, "resetPassword")
+      logger.error(err, "resetPassword");
 
       next(err);
     }
   };
 
-  return { login, register, forgotPassword, resetPassword };
+  return {
+    login,
+    register,
+    forgotPassword,
+    resetPassword,
+  };
 };

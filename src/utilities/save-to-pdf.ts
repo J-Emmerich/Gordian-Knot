@@ -1,6 +1,6 @@
 import * as puppeteer from "puppeteer";
 import { join } from "path";
-import { logger} from "@utilities";
+import { logger } from "@utilities";
 
 const { BASE_FRONTEND_URL } = process.env;
 
@@ -28,7 +28,7 @@ const setDomainLocalStorage = async (browser, url, values) => {
     }, values);
     await page.close();
   } catch (error) {
-    logger.error(error,"setDomainLocalStorage");
+    logger.error(error, "setDomainLocalStorage");
   }
 };
 

@@ -36,6 +36,5 @@ export const invoiceRouter = () => {
   router.get("/download/:invoiceId", controller.fetchInvoicePdf);
   router.put("/:invoiceId/owner/:customerId", controller.editOwnerOfInvoice);
 
-
   return router;
 };

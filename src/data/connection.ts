@@ -1,11 +1,11 @@
 // Why is this here?
+import { logger } from "@utilities";
+
 process.stdin.resume();
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mongoose = require("mongoose");
 
-import {logger} from '@utilities'
-
-const {DB_USER, DB_PASSWORD, DB } = process.env
+const { DB_USER, DB_PASSWORD, DB } = process.env;
 const uri = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.3dgxs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const options = {
