@@ -1,4 +1,4 @@
-import * as pino from 'pino';
+import pino from 'pino';
 import { normalize } from 'path';
 import { context } from './asyncContext';
 import { IRequest } from '@commons/types';

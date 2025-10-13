@@ -4,7 +4,7 @@ import { IProject, IUser } from '@commons/types';
 export const setDefaultProjectForUser = async (
   user: HydratedDocument<IUser>,
   project?: Types.ObjectId,
-) => {
+): Promise<void> => {
   let projectId;
   // Use default project if none is defined
   if (!project) {
@@ -12,7 +12,7 @@ export const setDefaultProjectForUser = async (
 
     projectId = populatedUser.projects.find((projectRaw) => {
       const project = projectRaw as IProject;
-      project.name === populatedUser._id.toString();
+      return project.name === populatedUser._id.toString();
     });
 
     // If finds a default project with the user id as same then sets the id.
@@ -29,14 +29,14 @@ export const setDefaultProjectForUser = async (
 export const setDefaultProjectForUserWithoutSave = async (
   user: HydratedDocument<IUser>,
   project?: Types.ObjectId,
-) => {
-  let projectId;
+): Promise<void> => {
+  let projectId: Types.ObjectId | IProject;
   // Use default project if none is defined
   if (!project) {
     const populatedUser: HydratedDocument<IUser> = await user.populate('projects');
     projectId = populatedUser.projects.find((projectRaw) => {
       const project = projectRaw as IProject;
-      project.name === populatedUser._id.toString();
+      return project.name === populatedUser._id.toString();
     });
     // If finds a default project with the user id as same then sets the id. Otherwise use the first found
     if (projectId) projectId = projectId?._id;

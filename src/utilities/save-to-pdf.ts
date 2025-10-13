@@ -39,7 +39,7 @@ export const saveToPdf = async (
   id: Types.ObjectId,
   invoiceNumber: string,
   contextToken: string,
-) => {
+): Promise<void> => {
   try {
     const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],

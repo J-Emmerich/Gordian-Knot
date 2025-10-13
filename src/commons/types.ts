@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ParamsDictionary, Query } from 'express-serve-static-core';
 import { Errback, Request } from 'express';
 import { Error, HydratedDocument, Types } from 'mongoose';

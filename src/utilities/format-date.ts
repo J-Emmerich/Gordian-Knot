@@ -1,7 +1,7 @@
-import * as dayjs from 'dayjs';
-import * as advancedFormat from 'dayjs/plugin/advancedFormat';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 
-export function formatDate(dateToParse: string | number | Date) {
+export function formatDate(dateToParse: string | number | Date): string {
   const date = new Date(dateToParse);
   const day = date.getDate();
   const month = date.getMonth() + 1;
@@ -12,4 +12,5 @@ export function formatDate(dateToParse: string | number | Date) {
 
 dayjs.extend(advancedFormat);
 
-export const dayjsFormat = (dateAsString: string) => dayjs(dateAsString, 'DD/MM/YYYY').format();
+export const dayjsFormat = (dateAsString: string): string =>
+  dayjs(dateAsString, 'DD/MM/YYYY').format();
