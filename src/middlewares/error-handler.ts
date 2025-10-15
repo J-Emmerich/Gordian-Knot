@@ -4,7 +4,7 @@ import { ErrorResponse } from '@utilities';
 import { MongoError } from 'mongodb';
 import { Error } from 'mongoose';
 
-const sendHttpResponse = (err: ErrorResponse, _req: IRequest, res: Response) => {
+const sendHttpResponse = (err: ErrorResponse, _req: IRequest, res: Response): void => {
   if (err.statusCode === 500) {
     res.status(500).json({
       success: false,
@@ -31,10 +31,15 @@ const sendHttpResponse = (err: ErrorResponse, _req: IRequest, res: Response) => 
 };
 
 // Get the 4 arguments of Express Error Handling
-export const errorHandler = (err: IErrback, req: IRequest, res: Response, _next: NextFunction) => {
+export const errorHandler = (
+  err: IErrback,
+  req: IRequest,
+  res: Response,
+  _next: NextFunction,
+): void => {
   let message: string;
   let status: number;
-  if ((err.route = 'Auth')) {
+  if (err.route === 'Auth') {
     message = 'Authentication error';
     status = 401;
     const errorResponse = new ErrorResponse(message, 500, err.route);
@@ -58,5 +63,5 @@ export const errorHandler = (err: IErrback, req: IRequest, res: Response, _next:
   }
 };
 
-export const logError = (err: IErrback, _req: IRequest, _res: Response, next: NextFunction) =>
+export const logError = (err: IErrback, _req: IRequest, _res: Response, next: NextFunction): void =>
   next(err);

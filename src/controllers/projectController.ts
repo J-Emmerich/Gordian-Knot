@@ -1,12 +1,20 @@
 import { Response, NextFunction } from 'express';
-import { IRequest, IRole, IUser, IProject, IPermission, IAction } from '@commons/types';
+import {
+  IRequest,
+  IRole,
+  IUser,
+  IProject,
+  IPermission,
+  IAction,
+  IProjectControllerReturn,
+} from '@commons/types';
 import { Project, Role, User } from '@models';
 
 import { HydratedDocument, Types } from 'mongoose';
 import { createProjectAndSaveUser } from '@dbmethods/projects';
 import { EAction, EResource } from '@commons/enumerators';
 
-export const projectController = () => {
+export const projectController = (): IProjectControllerReturn => {
   const getAllProjectsFromUser = async (req: IRequest, res: Response, _next: NextFunction) => {
     const populatedUser = await User.findById(req.context.user!._id).populate('projects', 'name');
     if (!populatedUser?.populated('projects')) return res.status(404).send('not populated');
@@ -51,7 +59,7 @@ export const projectController = () => {
       const logged = req.context.user;
       if (!logged) return false; // no user
       if (!user._id || !logged._id) return false; // no id
-      user._id.toString() === logged._id.toString();
+      return user._id.toString() === logged._id.toString();
     });
     if (project.users.length < 1) return res.status(404).send('User is not in the project');
     // === // Shouldn't this be done by the authorize function?
@@ -71,7 +79,7 @@ export const projectController = () => {
     if (!project.populated('roles')) await project.populate('roles');
     const projectRole = project.roles.find((roleRaw) => {
       const role = roleRaw as IRole;
-      role.name.toLowerCase() === req.body.roleName.toLowerCase();
+      return role.name.toLowerCase() === req.body.roleName.toLowerCase();
     });
     if (!projectRole) return res.status(401).send("Role don't exist in project");
     //
@@ -109,7 +117,7 @@ export const projectController = () => {
       const logged = req.context.user;
       if (!logged) return false; // no user
       if (!user._id || !logged._id) return false; // no id
-      user._id.toString() === logged._id.toString();
+      return user._id.toString() === logged._id.toString();
     });
     if (isUserInProject === -1) return res.status(404).send('User is not in the project');
     // === // Shouldn't this be done by the authorize function?
@@ -119,7 +127,7 @@ export const projectController = () => {
       const logged = req.context.secondaryUserId;
       if (!logged) return -1; // no user
       if (!user._id) return -1; // no id
-      user._id.toString() === req.context.secondaryUserId.toString();
+      return user._id.toString() === req.context.secondaryUserId.toString();
     });
     if (indexOfUserToRemove === -1) {
       {
@@ -130,7 +138,7 @@ export const projectController = () => {
       const logged = req.context.secondaryUserId;
       if (!logged) return -1; // no user
       if (!user._id) return -1; // no id
-      user._id.toString() !== logged.toString();
+      return user._id.toString() !== logged.toString();
     });
 
     await project.save(); // this will remove the user even if the user has been deleted from Database
@@ -138,18 +146,18 @@ export const projectController = () => {
     if (!secondaryUser) return res.status(404).send('User is not found');
     const isProjectInUserList: number = secondaryUser.projects.findIndex((secondaryUserProject) => {
       if (!secondaryUserProject._id || !project._id) return -1;
-      secondaryUserProject._id.toString() === project._id.toString();
+      return secondaryUserProject._id.toString() === project._id.toString();
     });
     if (isProjectInUserList === -1) return res.status(404).send('This project is not in user list');
     secondaryUser.projects = secondaryUser.projects.filter((projectFromUser) => {
       if (!projectFromUser._id || !project._id) return false;
-      projectFromUser._id.toString() !== project._id.toString();
+      return projectFromUser._id.toString() !== project._id.toString();
     });
     if (!secondaryUser.populated('roles')) await secondaryUser.populate('roles');
     secondaryUser.roles = secondaryUser.roles.filter((roleRaw) => {
       const secondaryUserRole = roleRaw as IRole;
       if (!secondaryUserRole.project) return false;
-      secondaryUserRole.project._id.toString() !== project._id.toString();
+      return secondaryUserRole.project._id.toString() !== project._id.toString();
     });
     await secondaryUser.save();
     return res.status(201).json({ project, secondaryUser });
@@ -301,7 +309,7 @@ export const projectController = () => {
     // Check if user has the project before editing its role
     const userProject = user.projects.find((project) => {
       if (!project._id || !projectId) return false;
-      project._id.toString() === projectId.toString();
+      return project._id.toString() === projectId.toString();
     });
     if (!userProject) {
       {
@@ -312,7 +320,7 @@ export const projectController = () => {
     user.roles = user.roles.filter((roleFromUserRaw) => {
       const roleFromUser = roleFromUserRaw as IRole;
       if (!roleFromUser.project || !projectId) return false;
-      roleFromUser.project.toString() !== projectId.toString();
+      return roleFromUser.project.toString() !== projectId.toString();
     });
     user.roles.push(role);
     await user.save();
@@ -364,12 +372,12 @@ export const projectController = () => {
       const user = userRaw as HydratedDocument<IUser>;
       user.projects = user.projects.filter((UserProjectRaw) => {
         const UserProject = UserProjectRaw as IProject;
-        UserProject._id?.toString() !== project._id.toString();
+        return UserProject._id?.toString() !== project._id.toString();
       });
       user.roles = user.roles.filter((UserRoleRaw) => {
         const UserRole = UserRoleRaw as IRole;
         if (!UserRole.project) return false;
-        UserRole.project.toString() !== project._id.toString();
+        return UserRole.project.toString() !== project._id.toString();
       });
       await user.save();
     });

@@ -4,7 +4,7 @@ import { NextFunction, Response, Router } from 'express';
 import { Types } from 'mongoose';
 import { customersController } from '../controllers/customers-controller';
 
-export const customerRouter = () => {
+export const customerRouter = (): Router => {
   const router = Router();
   const controller = customersController();
 

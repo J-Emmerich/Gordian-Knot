@@ -1,12 +1,16 @@
 import { NextFunction, Response } from 'express';
 import { User } from '@models';
-import { IProject, IRequest } from '@commons/types';
+import { IPayload, IProject, IRequest } from '@commons/types';
 import { setDefaultProjectForUser } from '@utilities';
 import { HydratedDocument, Types } from 'mongoose';
 
-const jwt = require('jsonwebtoken');
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-export const authenticate = async (req: IRequest, res: Response, next: NextFunction) => {
+export const authenticate = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<Response | void> => {
   try {
     if (!req.headers.authorization) return res.status(401).send('Not authorized, missing header');
 
@@ -14,8 +18,10 @@ export const authenticate = async (req: IRequest, res: Response, next: NextFunct
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET, {
       complete: true,
     });
-    let id = decodedToken.payload.user;
-    id = new Types.ObjectId(id);
+    const payLoad: IPayload = decodedToken.payload as JwtPayload;
+    if (!payLoad.user) throw new Error('No user');
+
+    const id: Types.ObjectId = new Types.ObjectId(payLoad.user);
 
     const user = await User.findById(id).populate('currentProject');
     if (user) {

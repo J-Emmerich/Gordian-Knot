@@ -13,7 +13,7 @@ import {
 import { saveToPdf } from './save-to-pdf';
 import { validateInvoiceOwnerUniqueness } from './validateInvoiceOwnerUniqueness';
 import { logger, loggerMiddleware } from './logger';
-
+import { sendEmail } from './send-email';
 export {
   validateInvoiceOwnerUniqueness,
   dayjsFormat,
@@ -29,4 +29,5 @@ export {
   isRoleInBothArrays,
   logger,
   loggerMiddleware,
+  sendEmail,
 };

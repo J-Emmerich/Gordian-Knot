@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ParamsDictionary, Query } from 'express-serve-static-core';
+import { ParamsDictionary, Query, RequestHandler } from 'express-serve-static-core';
 import { Errback, Request } from 'express';
 import { Error, HydratedDocument, Types } from 'mongoose';
+import { JwtPayload } from 'jsonwebtoken';
 
 export interface IProject {
   _id?: Types.ObjectId;
@@ -64,4 +65,51 @@ export interface IRequest
 
 export interface IErrback extends Errback, Error {
   route?: string;
+}
+
+type GenericHandler = RequestHandler<ParamsDictionary, any, any, Query, Record<string, any>>;
+
+export interface IAuthControllerReturn {
+  login: GenericHandler;
+  register: GenericHandler;
+  forgotPassword: GenericHandler;
+  resetPassword: GenericHandler;
+}
+
+export interface ICustomersControllerReturn {
+  getOneCustomer: GenericHandler;
+  getAllCustomersFromAProject: GenericHandler;
+  createCustomer: GenericHandler;
+  deleteCustomer: GenericHandler;
+  editCustomer: GenericHandler;
+}
+export interface IInvoiceControllerReturn {
+  editOwnerOfInvoice: GenericHandler;
+  fetchAllInvoices: GenericHandler;
+  fetchInvoice: GenericHandler;
+  createInvoice: GenericHandler;
+  editInvoice: GenericHandler;
+  deleteInvoice: GenericHandler;
+  fetchInvoicePdf: GenericHandler;
+}
+
+export interface IProjectControllerReturn {
+  getCurrentProject: GenericHandler;
+  updateUserRole: GenericHandler;
+  createRole: GenericHandler;
+  getRoleDetails: GenericHandler;
+  deleteProject: GenericHandler;
+  createNewProject: GenericHandler;
+  removeUserFromProject: GenericHandler;
+  getAllProjectsFromUser: GenericHandler;
+  addUserToOneProject: GenericHandler;
+  getOneProject: GenericHandler;
+  editProjectDetails: GenericHandler;
+}
+export interface IUserControllerReturn {
+  updateCurrentProject: GenericHandler;
+}
+
+export interface IPayload extends JwtPayload {
+  user?: string;
 }

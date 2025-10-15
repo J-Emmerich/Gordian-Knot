@@ -4,7 +4,7 @@ import * as types from '@commons/types';
 import { Project, Role } from '@models';
 import { adminPermissions } from '@dbmethods/authorization';
 
-const uniqueValidator = require('mongoose-unique-validator');
+import uniqueValidator from 'mongoose-unique-validator';
 
 const createDefaultProject = async (userDoc: types.IUser) => {
   const project: HydratedDocument<types.IProject> = new Project({

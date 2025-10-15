@@ -1,7 +1,11 @@
 import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 import * as nodemailer from 'nodemailer';
 
-const sendEmail = (options: { to: string; subject: string; text: string }) => {
+export const sendEmail = (options: {
+  to: string;
+  subject: string;
+  text: string;
+}): Promise<SMTPTransport.SentMessageInfo> => {
   const transportOptions: SMTPTransport.Options = {
     host: process.env.EMAIL_HOST,
     port: Number(process.env.EMAIL_PORT),
@@ -21,5 +25,3 @@ const sendEmail = (options: { to: string; subject: string; text: string }) => {
 
   return transporter.sendMail(mailOptions);
 };
-
-module.exports = sendEmail;

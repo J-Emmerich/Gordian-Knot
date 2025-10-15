@@ -1,9 +1,13 @@
-import { NextFunction } from 'express';
+import { NextFunction, Response } from 'express';
 import { HydratedDocument } from 'mongoose';
-import { IUser, IRole } from '@commons/types';
+import { IUser, IRole, IRequest } from '@commons/types';
 import { filterRolePermissionsByHTTPMethod, isRoleInBothArrays } from '@utilities';
 
-export const authorize = async (req: any, res: any, next: NextFunction) => {
+export const authorize = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<Response | void> => {
   const user: HydratedDocument<IUser> | null | undefined = await req.context.user.populate({
     path: 'roles',
   });

@@ -1,10 +1,10 @@
-import { IRequest } from '@commons/types';
+import { ICustomersControllerReturn, IRequest } from '@commons/types';
 import { Customer } from '@models';
 import { NextFunction, Response } from 'express';
 import { Types } from 'mongoose';
 import { logger } from '@utilities';
 
-export const customersController = () => {
+export const customersController = (): ICustomersControllerReturn => {
   async function getAllCustomersFromAProject(req: IRequest, res: Response, next: NextFunction) {
     try {
       const customers = await Customer.find({

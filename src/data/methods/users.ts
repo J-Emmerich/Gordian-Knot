@@ -5,17 +5,17 @@ import { logger } from '@utilities';
 // needed to access the mongoose methods
 import { HydratedDocument, Types } from 'mongoose';
 
-export const createUser: Function = async (name: string): Promise<IUser | null> => {
+export const createUser = async (name: string): Promise<IUser | null | unknown> => {
   try {
     const newUser: HydratedDocument<IUser> = await User.create({ name });
     await newUser.save();
     return newUser;
   } catch (error) {
-    return null;
+    logger.error(error);
   }
 };
 
-export const findUserByName: Function = async (name: string): Promise<IUser | undefined> => {
+export const findUserByName = async (name: string): Promise<IUser | undefined> => {
   try {
     const foundUser: IUser | null = await User.findOne({ name });
     if (foundUser) {

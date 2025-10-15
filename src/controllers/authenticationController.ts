@@ -1,5 +1,5 @@
 import { NextFunction, Response, RequestHandler } from 'express';
-import { IRequest } from '@commons/types';
+import { IAuthControllerReturn, IRequest } from '@commons/types';
 import {
   loginUser,
   registerUser,
@@ -8,7 +8,7 @@ import {
 } from '@dbmethods/authentication';
 import { logger } from '@utilities';
 
-export const authenticationController = () => {
+export const authenticationController = (): IAuthControllerReturn => {
   const login: RequestHandler = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
       const { name, password } = req.body;

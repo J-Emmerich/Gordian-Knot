@@ -1,11 +1,12 @@
-import * as express from 'express';
 import { authorize, context } from '@middlewares';
 import { Types } from 'mongoose';
 import { IRequest } from '@commons/types';
 import { projectController } from '../controllers/projectController';
+import { Router } from 'express';
+import { logger } from '@utilities';
 
-export const projectRouter = () => {
-  const router = express.Router();
+export const projectRouter = (): Router => {
+  const router = Router();
   const controller = projectController();
 
   router.param('projectId', async (req: IRequest, res, next) => {
@@ -14,6 +15,7 @@ export const projectRouter = () => {
       req.context.projectId = projectId;
       next();
     } catch (err) {
+      logger.error(err);
       return res.status(401).json({ success: false, description: 'Bad format of id' });
     }
   });

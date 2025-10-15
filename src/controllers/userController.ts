@@ -1,8 +1,8 @@
-import { IProject, IRequest } from '@commons/types';
+import { IProject, IRequest, IUserControllerReturn } from '@commons/types';
 import { User } from '@models';
 import { NextFunction, Response } from 'express';
 
-export const userController = () => {
+export const userController = (): IUserControllerReturn => {
   const updateCurrentProject = async (req: IRequest, res: Response, _next: NextFunction) => {
     const { projectName, isDefault } = req.body;
 
@@ -18,12 +18,12 @@ export const userController = () => {
     if (isDefault) {
       project = req.context.user?.projects.find((projectFromContextRaw) => {
         const projectFromContext = projectFromContextRaw as IProject;
-        projectFromContext.isDefault === true;
+        return projectFromContext.isDefault === true;
       });
     } else {
       project = req.context.user?.projects.find((projectFromContextRaw) => {
         const projectFromContext = projectFromContextRaw as IProject;
-        projectFromContext.name === projectName;
+        return projectFromContext.name === projectName;
       });
     }
     if (!project) {

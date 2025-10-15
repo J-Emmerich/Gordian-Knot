@@ -7,7 +7,7 @@ export const createProjectAndSaveUser = async (
   projectName: string,
   role: IRole,
   isPrivate: boolean,
-) => {
+): Promise<IProject> => {
   const project: HydratedDocument<IProject> = new Project({
     name: projectName,
     isPrivate,

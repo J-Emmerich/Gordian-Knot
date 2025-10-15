@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import * as express from 'express';
 import { IUser } from '@commons/types';
 import { getAllUsersFromDatabase, purgeModel } from '@utilities';

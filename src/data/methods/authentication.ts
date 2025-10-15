@@ -3,14 +3,18 @@ import { User } from '@models';
 import { ErrorResponse, setDefaultProjectForUser } from '@utilities';
 import { createHash, randomBytes } from 'crypto';
 import { IUser } from '@commons/types';
+import { sendEmail } from '@utilities';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { logger } from '../../utilities/logger'; // importer un enregistreur
 
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { logger } = require('../../utilities/logger'); // importer un enregistreur
-
-const { JWT_SECRET, JWT_EXPIRE, BASE_FRONTEND_URL } = process.env;
-
-export const registerUser = async (name: string, password: string, email: string) => {
+const { JWT_SECRET, JWT_EXPIRE_Number, BASE_FRONTEND_URL } = process.env;
+const JWT_EXPIRE = Number(JWT_EXPIRE_Number) * 60;
+export const registerUser = async (
+  name: string,
+  password: string,
+  email: string,
+): Promise<object> => {
   if (password.length < 3) {
     throw new Error('invalid password');
   }
@@ -21,11 +25,13 @@ export const registerUser = async (name: string, password: string, email: string
   const payload = {
     user: user._id,
   };
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRE });
+  const token = jwt.sign(payload, JWT_SECRET, {
+    expiresIn: JWT_EXPIRE,
+  });
   return { user: user._id, token };
 };
 
-export const loginUser = async (name: string, password: string) => {
+export const loginUser = async (name: string, password: string): Promise<object> => {
   const user = await User.findOne({ name }).select('+passwordHash');
   if (!user) {
     logger.error('No user found with this name');
@@ -48,7 +54,7 @@ export const loginUser = async (name: string, password: string) => {
   };
 };
 
-export const resetUserPassword = async (resetToken: string, password: string) => {
+export const resetUserPassword = async (resetToken: string, password: string): Promise<void> => {
   const resetTokenHash = createHash('sha256').update(resetToken).digest('hex');
   const user = await findOneWithResetToken(resetTokenHash);
   if (!user) throw new Error('user not found');
@@ -57,7 +63,7 @@ export const resetUserPassword = async (resetToken: string, password: string) =>
   await updatePassword(user, passwordHash);
 };
 
-export const userForgotPassword = async (email: string) => {
+export const userForgotPassword = async (email: string): Promise<void> => {
   const user = await findOneWithEmail({ email });
   try {
     const resetToken = await setResetToken(user);

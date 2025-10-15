@@ -3,7 +3,11 @@ import { IRequest, IRole, IPermission } from '@commons/types';
 import { EResource } from '@commons/enumerators';
 
 let contextPermission;
-export const context = async (req: IRequest, res: Response, next: NextFunction) => {
+export const context = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<Response | void> => {
   // Trim the /api/ part of the base url and convert to uppercase
   const indexOfLastPath = req.baseUrl.lastIndexOf('/') + 1;
   const resource = req.baseUrl.substring(indexOfLastPath).toUpperCase();

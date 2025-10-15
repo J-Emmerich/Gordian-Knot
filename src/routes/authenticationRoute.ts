@@ -1,8 +1,8 @@
-import * as express from 'express';
 import { authenticationController } from '../controllers/authenticationController';
+import { Router } from 'express';
 
-export const authenticationRouter = () => {
-  const router = express.Router();
+export const authenticationRouter = (): Router => {
+  const router = Router();
   const controller = authenticationController();
 
   router.get('/login', controller.login);

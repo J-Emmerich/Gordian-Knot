@@ -1,12 +1,12 @@
 import { join } from 'path';
 import { Customer, Invoice } from '@models';
-import { IRequest } from '@commons/types';
+import { IInvoiceControllerReturn, IRequest } from '@commons/types';
 import { NextFunction, Response } from 'express';
 import { saveToPdf, dayjsFormat, validateInvoiceOwnerUniqueness, logger } from '@utilities';
 
 const root = join(__dirname, '../../client/output');
 
-export const invoiceController = () => {
+export const invoiceController = (): IInvoiceControllerReturn => {
   async function fetchInvoice(req: IRequest, res: Response, next: NextFunction) {
     try {
       logger.debug(`${req.context.invoiceId} invoice id to fetch`);

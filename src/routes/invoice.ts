@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 
 import { invoiceController } from '../controllers/invoice-controller';
 
-export const invoiceRouter = () => {
+export const invoiceRouter = (): Router => {
   const router = Router();
   const controller = invoiceController();
 
