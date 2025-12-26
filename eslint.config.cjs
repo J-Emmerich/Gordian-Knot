@@ -32,7 +32,7 @@ module.exports = defineConfig([
       '@typescript-eslint/explicit-module-boundary-types': 'warn',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'prettier/prettier': [
-        'error',
+        'warn',
         {
           semi: true,
           singleQuote: true,

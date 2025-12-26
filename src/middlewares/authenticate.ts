@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { User } from '@models';
 import { IPayload, IProject, IRequest } from '@commons/types';
-import { setDefaultProjectForUser } from '@utilities';
+import { logger, setDefaultProjectForUser } from '@utilities';
 import { HydratedDocument, Types } from 'mongoose';
 
 import jwt, { JwtPayload } from 'jsonwebtoken';
@@ -12,8 +12,10 @@ export const authenticate = async (
   next: NextFunction,
 ): Promise<Response | void> => {
   try {
-    if (!req.headers.authorization) return res.status(401).send('Not authorized, missing header');
-
+    if (!req.headers.authorization) {
+      logger.error('AuthenticaMiddleware - Missing header');
+      return res.status(401).send('Not authorized, missing header');
+    }
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET, {
       complete: true,

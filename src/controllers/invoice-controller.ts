@@ -4,12 +4,12 @@ import { IInvoiceControllerReturn, IRequest } from '@commons/types';
 import { NextFunction, Response } from 'express';
 import { saveToPdf, dayjsFormat, validateInvoiceOwnerUniqueness, logger } from '@utilities';
 
-const root = join(__dirname, '../../client/output');
+const root = join(__dirname, '../../../client/output');
 
 export const invoiceController = (): IInvoiceControllerReturn => {
   async function fetchInvoice(req: IRequest, res: Response, next: NextFunction) {
     try {
-      logger.debug(`${req.context.invoiceId} invoice id to fetch`);
+      logger.debug({where: 'fetchInvoice'}, `${req.context.invoiceId} invoice id to fetch`);
       const invoice = await Invoice.findById(req.context.invoiceId);
       if (!invoice) throw Error('Nothing found');
       res.status(200).json({ success: true, data: invoice });
@@ -32,6 +32,7 @@ export const invoiceController = (): IInvoiceControllerReturn => {
 
   async function createInvoice(req: IRequest, res: Response, next: NextFunction) {
     try {
+      logger.debug({ invoice:req.body, where: 'createInvoice' });
       const invoice = req.body;
       const date = dayjsFormat(invoice.invoiceDate);
       invoice.invoiceDate = date;
@@ -74,11 +75,13 @@ export const invoiceController = (): IInvoiceControllerReturn => {
 
   async function fetchInvoicePdf(req: IRequest, res: Response, next: NextFunction) {
     try {
+      logger.trace(`${req.context.invoiceId} invoice id to fetch`);
       const invoice = await Invoice.findById(req.context.invoiceId);
+      logger.debug({where: 'fetchInvoicePdf',ID: invoice._id, InvoiceNumber: invoice.invoiceNumber, Token: req.context.token})
       // this is one functionality // TOD
       await saveToPdf(invoice._id, invoice.invoiceNumber, req.context.token); // File System
       // this is another functionality
-      res.download(`${root}/${invoice.invoiceNumber}.pdf`);
+    res.download(`${root}/${invoice.invoiceNumber}.pdf`);
     } catch (err) {
       next(err);
     }

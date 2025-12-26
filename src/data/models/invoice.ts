@@ -22,7 +22,7 @@ const invoiceSchema = new Schema({
   invoiceTotal: Types.Decimal128,
   invoiceSubTotal: Types.Decimal128,
   invoiceTax: Types.Decimal128,
-  customerNameOnInvoice: String,
+  clientName: String,
   pathToInvoiceFile: String,
 });
 

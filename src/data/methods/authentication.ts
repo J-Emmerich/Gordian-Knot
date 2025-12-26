@@ -31,8 +31,8 @@ export const registerUser = async (
   return { user: user._id, token };
 };
 
-export const loginUser = async (name: string, password: string): Promise<object> => {
-  const user = await User.findOne({ name }).select('+passwordHash');
+export const loginUser = async (email: string, password: string): Promise<object> => {
+  const user = await User.findOne({ email }).select('+passwordHash');
   if (!user) {
     logger.error('No user found with this name');
     throw new Error('Invalid credentials');

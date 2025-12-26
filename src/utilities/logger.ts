@@ -46,7 +46,7 @@ export const loggerMiddleware: RequestHandler = (
   _res: Response,
   next: NextFunction,
 ) => {
-  const child = logger.child({ requestId: uuidv4() });
+  const child = loggerBase.child({ requestId: uuidv4() });
   const store = new Map();
   store.set('logger', child);
 

@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 
 const { BASE_FRONTEND_URL } = process.env;
 
-const fileOutputPath = join(__dirname, '../../client/output');
+const fileOutputPath = join(__dirname, '../../../client/output');
 
 const setDomainLocalStorage = async (
   browser: puppeteer.Browser,
@@ -53,6 +53,8 @@ export const saveToPdf = async (
       waitUntil: 'networkidle2',
     });
     await page.emulateMediaType('screen');
+
+    // need to check if the folder exists and if does then save
     await page.pdf({
       path: `${fileOutputPath}/${invoiceNumber}.pdf`,
       format: 'a4',

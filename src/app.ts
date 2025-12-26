@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import 'module-alias/register';
-import * as express from 'express';
+import express from 'express';
 import helmet from 'helmet';
 import { errorHandler, logError, authenticate } from '@middlewares';
 import { createContext, loggerMiddleware, logger } from '@utilities';
@@ -17,12 +17,13 @@ import {
 import './data/connection';
 
 const app = express();
-const port = 3000;
+const { PORT } = process.env;
 
 // A bit of security
 app.use(helmet());
 app.use(loggerMiddleware);
-// For react
+// Serves the compiled React static assets (JS, CSS, images) 
+// directly from the client/build folder.
 app.use(express.static(join(__dirname, '../client/build')));
 
 app.use(express.json());
@@ -30,14 +31,16 @@ app.all('*', createContext);
 
 // app.use("/debug", debugRouter());
 
-app.use('/user', authenticationRouter());
+app.use('/public/auth', authenticationRouter());
 app.all('/api/*', authenticate);
 app.use('/api/project', projectRouter());
 app.use('/api/user', userRouter());
 app.use('/api/invoice', invoiceRouter());
 app.use('/api/customer', customerRouter());
 
-// why is this here?
+// fallback for any non‑API GET request
+// returning index.html so the React router can take over on the client side.
+
 app.get('*', (_req, res) => {
   res.sendFile(join(__dirname, '../client/build/index.html'));
 });
@@ -45,4 +48,4 @@ app.get('*', (_req, res) => {
 app.use(logError);
 app.use(errorHandler);
 
-app.listen(port, () => logger.info(`App is listening to port ${port}`));
+app.listen(PORT, () => logger.info(`App is listening to port ${PORT}`));

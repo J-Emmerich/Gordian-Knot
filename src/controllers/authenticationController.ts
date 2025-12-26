@@ -11,23 +11,23 @@ import { logger } from '@utilities';
 export const authenticationController = (): IAuthControllerReturn => {
   const login: RequestHandler = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
-      const { name, password } = req.body;
-      const user = await loginUser(name, password);
+      logger.trace({where: 'Login', data: req.body});
+      const { email, password } = req.body;
+      const user = await loginUser(email, password);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      logger.error(err, 'login');
       next(err);
     }
   };
 
   const register: RequestHandler = async (req: IRequest, res: Response, next: NextFunction) => {
     try {
-      const { name, password, email } = req.body;
-      const user = await registerUser(name, password, email);
+      logger.trace({where: 'Login', data: req.body});
+      const { username, password, email } = req.body;
+      const user = await registerUser(username, password, email);
       res.status(200).json({ success: true, data: user });
     } catch (err) {
-      logger.error(err, 'register');
-
+      logger.error(err, "RegisterRoute");
       next(err);
     }
   };
